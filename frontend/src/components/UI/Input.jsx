@@ -17,7 +17,7 @@ export const Input = ({
         onChange={onChange}
         required={required}
         maxLength={maxLength}
-        className={`border text-black px-3 py-1 text-md bg-inherit rounded-sm outline-none ${className}`}
+        className={`text-black text-md bg-inherit ${className}`}
     />
   );
 };
