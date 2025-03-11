@@ -32,7 +32,7 @@ export const Signup = () => {
                     </div>
                 </div>
             </div>
-            <div className="w-full py-4 px-8">
+            {/* <div className="w-full py-4 px-8">
             <Box sx={{ width: "100%", padding: 4 }}>
                 <Stepper activeStep={activeStep} alternativeLabel>
                     {steps.map((label, index) => (
@@ -60,7 +60,7 @@ export const Signup = () => {
                     </div>
                 </Box>
                 </Box>
-            </div>
+            </div> */}
             <div className='md:w-[40%] w-[100%] bg-gray-100 h-[100vh] pt-20'>
                 <div className='mt-6 w-[70%] mx-auto'>
                     <h1 className='text-4xl font-semibold'>Join us!</h1>
