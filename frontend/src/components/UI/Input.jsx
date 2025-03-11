@@ -17,7 +17,7 @@ export const Input = ({
         onChange={onChange}
         required={required}
         maxLength={maxLength}
-        className={`text-black text-md bg-inherit ${className}`}
+        className={`text-black font-semibold text-md bg-inherit ${className}`}
     />
   );
 };

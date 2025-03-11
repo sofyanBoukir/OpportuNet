@@ -17,7 +17,7 @@ export const Login = () => {
                 <div>
                     <img src='/lightingwith.png' className='w-[25%] ' />
                 </div>
-                <h1 className="text-6xl font-bold 2xl:text-7xl mt-10">Welcom</h1>
+                <h1 className="text-6xl font-bold 2xl:text-7xl mt-10">Welcome</h1>
                 <h1 className="text-6xl font-bold 2xl:text-7xl mt-6">OpportuNet!</h1>
                 <div className="mt-10 w-[70%]">
                 <p className="text-lg font-medium 2xl:text-2xl">
@@ -30,7 +30,7 @@ export const Login = () => {
             <div className='md:w-[40%] w-[100%] bg-gray-100 h-[100vh] pt-20'>
                 <div className='mt-6 w-[70%] mx-auto'>
                     <h1 className='text-4xl font-semibold'>Login</h1>
-                    <p className='text-gray-500 font-semibold mt-2'>You d'ont have an account? <Link className='underline text-black'>Create account</Link><br></br>
+                    <p className='text-gray-500 font-semibold mt-2'>You d'ont have an account? <Link className='underline text-black' to={'/user/sign_up'}>Create account</Link><br></br>
                     it's FREE! Takes less than a minute.
                     </p>
                     <div className='mt-8 flex flex-col gap-3'>
@@ -54,7 +54,7 @@ export const Login = () => {
                             <div className='mt-5'>
                                 <Button type={'submit'} text={'Join now'} className={'bg-blue-500 text-white w-[100%] hover:bg-blue-600'}/>
                             </div>
-                            <p className='text-gray-500 font-semibold mt-2 text-center'>forget password <Link className='underline text-black'>Click here</Link><br></br>
+                            <p className='text-gray-500 font-semibold mt-2 text-center'>forget password <Link className='underline text-black' to={'/user/forgot_password'}>Click here</Link><br></br>
                             </p>
                     </div>
                 </div>
