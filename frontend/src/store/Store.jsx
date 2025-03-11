@@ -1,12 +1,12 @@
-import { configureStore } from "@reduxjs/toolkit";
 import { Children } from "react";
 import { Provider } from "react-redux";
-import userSlice from "../features/userSlice";
+import { legacy_createStore } from "redux";
+import { appReducer } from "../features/appReducer";
 
 export const AppStore = () => {
-  const store = configureStore({ reducer: userSlice });
+  const store = legacy_createStore(appReducer);
 
   return <Provider store={store}>{Children}</Provider>;
 };
 
-export const userSelector = (state) => console.log(state);
+// export const userSelector = (state) => console.log(state);

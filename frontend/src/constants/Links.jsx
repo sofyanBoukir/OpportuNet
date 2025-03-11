@@ -1,34 +1,36 @@
-import {
-  HomeIcon,
-  BriefcaseIcon,
-  ChatBubbleLeftEllipsisIcon,
-  BellIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
+import HomeIcon from "@mui/icons-material/Home";
+import WorkIcon from "@mui/icons-material/Work";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import ForumIcon from "@mui/icons-material/Forum";
+
 const role = "recruteur";
+
+const currentPath = window.location.pathname;
 
 export const dataHeader = [
   {
     // ROLE: "admin",
-    SVG: <HomeIcon strokeWidth="1" className="w-6 h-6" />,
+    SVG: <HomeIcon strokeWidth="1" className="w-10 h-10 text-gray-600" />,
     TEXT: "Home",
     LINK: `/${role}/home`,
   },
   {
     // ROLE: "admin",
-    SVG: <BriefcaseIcon strokeWidth="1" className="w-6 h-6" />,
-    TEXT: "Jobs",
+    SVG: <WorkIcon strokeWidth="1" className="w-10 h-10 text-gray-600" />,
+    TEXT: role == "recruteur" ? "post" : "Jobs",
     LINK: `/${role}/jobs`,
   },
   {
     // ROLE: "admin",
-    SVG: <ChatBubbleLeftEllipsisIcon strokeWidth="1" className="w-6 h-6" />,
+    SVG: <ForumIcon strokeWidth="1" className="w-10 h-10 text-gray-600" />,
     TEXT: "Messaging",
     LINK: `/${role}/messaging`,
   },
   {
     // ROLE: "admin",
-    SVG: <BellIcon strokeWidth="1" className="w-6 h-6" />,
+    SVG: (
+      <NotificationsIcon strokeWidth="1" className="w-10 h-10 text-gray-600" />
+    ),
     TEXT: "Notifications",
     LINK: `/${role}/notifications`,
   },

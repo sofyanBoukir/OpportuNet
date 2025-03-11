@@ -7,10 +7,10 @@ import { AppStore } from "./store/Store.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    {/* <AppStore> */}
     <BrowserRouter>
-      <AppStore>
-        <App />
-      </AppStore>
+      <App />
     </BrowserRouter>
+    {/* </AppStore> */}
   </StrictMode>
 );
