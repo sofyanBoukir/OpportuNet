@@ -23,7 +23,7 @@ export const ForgotPassword = () => {
                 </div>
                 <div className='flex flex-col gap-2'>
                     <Button type={'submit'} text={'Reset password'} className={'bg-blue-500 text-white w-[100%] hover:bg-blue-600'}/>
-                    <Button type={'submit'} text={'Back to login'} className={'bg-white w-[100%] text-gray-500 border border-gray-500 hover:bg-gray-100'}/>
+                    <Button type={'button'} text={'Back to login'} className={'bg-white w-[100%] text-gray-500 border border-gray-500 hover:bg-gray-100'}/>
                 </div>
             </div>
         </div>
