@@ -15,3 +15,18 @@ export const signedInButNotVerified = async (email) =>{
     const response = await axios.post(`${authService}/auth/signInNotVerified`,{email});
     return response;
 }
+
+export const checkVcode = async (email,vcode) =>{
+    const response = await axios.post(`${authService}/auth/checkVCode`,{email,vcode});
+    return response;
+}
+
+export const sendResetLink = async (email) =>{
+    const response = await axios.post(`${authService}/auth/sendResetLink`,{email});
+    return response;
+}
+
+export const resetPassword = async (formData) =>{
+    const response = await axios.post(`${authService}/auth/resetPassword`,formData);
+    return response;
+}

@@ -22,8 +22,10 @@ export const Signup = () => {
     // };
 
     const [loading,setLoading] = useState(false);
-    const [error,setError] = useState();
+    const [error,setError] = useState(null);
     const [sent,setSent] = useState(localStorage.getItem('isSent') || '');
+    const [terms,setTerms] = useState(false);
+    const [readTerms,setRedTerms] = useState(false);
 
     const [formData,setFormData] = useState({
         name : '',
@@ -39,6 +41,15 @@ export const Signup = () => {
 
     const handleSubmit = async (e) =>{
         e.preventDefault();
+        setError(null)
+        if(formData.password !== formData.retypePassword){
+            setError({type:"password",message:"Passwords Mismatch"})
+            return
+        }
+        if(!terms || !readTerms){
+            setError({type:"termsNotChecked",message:"Please accept our terms and privacy"})
+            return
+        }
         try{
             setLoading(true);
             const response = await signUp(formData);
@@ -58,10 +69,10 @@ export const Signup = () => {
             setLoading(false)
             switch(err.response.status){
                 case 401:
-                    setError(err.response.data.message)
+                    setError({type:"fromServer",message:err.response.data.message})
                     break
                 case 500:
-                    setError(ERROR_MESSAGES.SOMETHING_WENT_WRONG)
+                    setError({type:"fromServer",message:ERROR_MESSAGES.SOMETHING_WENT_WRONG})
                     break
             }
         }
@@ -144,7 +155,7 @@ export const Signup = () => {
                                         className={'px-3 py-1 rounded-sm border-2 outline-none border-md border-gray-300'}
                                         />
                                     {
-                                        error && <span className='text-red-500 text-sm font-semibold'>{error}</span>
+                                        error && error.type === 'fromServer' && <span className='text-red-500 text-sm font-semibold'>{error.message}</span>
                                     }
                                 </div>
                                 <div className='flex flex-col gap-1'>
@@ -156,6 +167,9 @@ export const Signup = () => {
                                         placeholder={'*********'}
                                         className={'px-3 py-1 rounded-sm border-2 outline-none border-md border-gray-300'}
                                         />
+                                    {
+                                        error && error.type === 'password' && <span className='text-red-500 text-sm font-semibold'>{error.message}</span>
+                                    }
                                 </div>
                                 <div className='flex flex-col gap-1'>
                                     <Label text={'Retype password'} className={'font-semibold text-gray-500'}/>
@@ -166,16 +180,24 @@ export const Signup = () => {
                                         placeholder={'*********'}
                                         className={'px-3 py-1 rounded-sm border-2 outline-none border-md border-gray-300'}
                                         />
+                                    {
+                                        error && error.type === 'password' && <span className='text-red-500 text-sm font-semibold'>{error.message}</span>
+                                    }
                                 </div>
                                 <div>
                                     <div>
-                                        <input type='checkbox' className='cursor-pointer' id='agree'/>
+                                        <input type='checkbox' className='cursor-pointer' id='agree' value={terms} onChange={() => setTerms(!terms)}/>
                                         <label htmlFor='agree' className='pl-1 text-sm text-gray-600 cursor-pointer'>I agree to the </label>
                                         <Link className='text-blue-400 text-sm'>Terms & conditions</Link>
                                     </div>
                                     <div>
-                                        <input type='checkbox' className='cursor-pointer' id='read'/>
+                                        <input type='checkbox' className='cursor-pointer' id='read' onChange={() => setRedTerms(!readTerms)}/>
                                         <label htmlFor='read' className='pl-1 text-sm text-gray-600 cursor-pointer'> I have read and accept the Privacy Policy </label>
+                                    </div>
+                                    <div>
+                                        {
+                                            error && error.type === 'termsNotChecked' && <span className='text-red-500 text-sm font-semibold'>{error.message}</span>
+                                        }
                                     </div>
                                 </div>
                                 <div>

@@ -43,6 +43,7 @@ export const Login = () => {
                         )
                         break;
                     }
+                    setLoading(false);
                     localStorage.setItem('token',response.data.token)
                     // dispatch({type:"UPDATE_USERDATA",payload:response.data.userData})
                     break;
