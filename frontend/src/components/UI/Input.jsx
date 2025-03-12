@@ -10,14 +10,14 @@ export const Input = ({
 }) => {
   return (
     <input
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        required={required}
-        maxLength={maxLength}
-        className={`text-black text-md bg-inherit ${className}`}
+      type={type}
+      name={name}
+      placeholder={placeholder}
+      value={value}
+      onChange={onChange}
+      required={required}
+      maxLength={maxLength}
+      className={`text-black text-md ${className}`}
     />
   );
 };

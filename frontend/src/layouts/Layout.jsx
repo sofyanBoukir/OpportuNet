@@ -31,7 +31,7 @@ export const Layout = () => {
           />
           <Input
             placeholder="Search"
-            className={`hidden sm:block pl-[35px] h-[70%] my-auto bg-gray-100`}
+            className={`hidden sm:block pl-[35px] w-[80%] h-[70%] my-auto bg-gray-100`}
           />
         </div>
         <div className="w-[90%] flex justify-around items-center sm:justify-evenly sm:w-[33%] bg-am)ber-200 ">
