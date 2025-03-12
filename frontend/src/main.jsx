@@ -4,8 +4,8 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
 import { legacy_createStore } from "redux";
-import { AppReducer } from "./features/appReducer.js";
 import { Provider } from "react-redux";
+import { AppReducer } from "./features/AppReducer.js";
 
 const store = legacy_createStore(AppReducer);
 

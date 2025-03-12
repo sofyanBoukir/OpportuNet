@@ -24,7 +24,13 @@ export const SingleLink = ({ link, svg, text }) => {
         link === currentPath ? "text-black sm:border-b-2" : null
       } w-[60px] flex flex-col items-center justify-center cursor-pointer hover:text-gray-200) duration-200`}
     >
-      <div className="mt-[3px]">{svg}</div>
+      <div
+        className={`mt-[3px] ${
+          link === currentPath ? "text-black" : " text-gray-600"
+        }`}
+      >
+        {svg}
+      </div>
       <div>
         <span
           className={`text-sm font-semiboldbold hidden lg:block ${

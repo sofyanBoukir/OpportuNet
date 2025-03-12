@@ -17,7 +17,7 @@ function App() {
         <Route path="/user/forgot_password" element={<ForgotPassword />} />
 
         <Route path="/" element={<Layout />}>
-          <Route path="/recruteur/home" element={<Home />} />
+          <Route path="/condidate/home" element={<Home />} />
         </Route>
       </Routes>
     </>
