@@ -7,6 +7,7 @@ import { useLocation, useParams } from 'react-router-dom'
 import { resetPassword } from '../../services/auth'
 import { ERROR_MESSAGES } from '../../constants/Errors'
 import { Notification } from '../../components/UI/Notification'
+
 export const NewPassword = () => {
     const [loading,setLoading] = useState(false);
     const [notification,setNotification] = useState(null)
@@ -58,13 +59,16 @@ export const NewPassword = () => {
 
 
   return (
-    <div className='md:w-[35%] w-[80%] mx-auto mt-40'>
-        <div className='flex justify-center'>
-            <img src={appName} className='w-52'/>
-        </div>
-        <div className='bg-gray-100 rounded-md px-10 py-5 text-center mt-5'>
-            <h1 className='text-xl font-semibold'>Set a new Password</h1>
-            <p className='text-gray-500 font-semibold text-sm mt-2'>Your new password must be different from your previus used passwords to avoid forgotten</p>
+    <div className="md:w-[35%] w-[80%] mx-auto mt-40">
+      <div className="flex justify-center">
+        <img src={appName} className="w-52" />
+      </div>
+      <div className="bg-gray-100 rounded-md px-10 py-5 text-center mt-5">
+        <h1 className="text-xl font-semibold">Set a new Password</h1>
+        <p className="text-gray-500 font-semibold text-sm mt-2">
+          Your new password must be different from your previus used passwords
+          to avoid forgotten
+        </p>
 
             <form className='mt-2 flex flex-col gap-4' onSubmit={handleSubmit}>
                 <div className='flex flex-col gap-1'>
@@ -96,5 +100,5 @@ export const NewPassword = () => {
             notification && <Notification type={notification.type} message={notification.message} />
         }
     </div>
-  )
-}
+  );
+};

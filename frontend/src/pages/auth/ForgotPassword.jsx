@@ -6,6 +6,11 @@ import { Button } from '../../components/UI/Button'
 import { useNavigate } from 'react-router-dom'
 import { ERROR_MESSAGES } from '../../constants/Errors'
 import { sendResetLink } from '../../services/auth'
+import React from "react";
+import appName from "../../../public/appLogo.png";
+import { Label } from "../../components/UI/Label";
+import { Input } from "../../components/UI/Input";
+import { Button } from "../../components/UI/Button";
 export const ForgotPassword = () => {
     const navigate = useNavigate();
     const [email,setEmail] = useState('');
@@ -70,6 +75,7 @@ export const ForgotPassword = () => {
                 </div>
             </form>
         </div>
+      </div>
     </div>
-  )
-}
+  );
+};

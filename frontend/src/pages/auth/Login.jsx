@@ -133,5 +133,5 @@ export const Login = () => {
             emailNotVerified === 'true' && <VerifyCode setClose={setEmailNotVerified}/>
         }
     </div>
-  )
-}
+  );
+};

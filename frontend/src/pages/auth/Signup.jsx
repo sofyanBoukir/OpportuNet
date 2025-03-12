@@ -8,6 +8,7 @@ import { signUp } from '../../services/auth'
 import { ERROR_MESSAGES } from '../../constants/Errors'
 import { VerifyCode } from './VerifyCode'
 
+
 const steps = ["Step 1", "Step 2", "Step 3", "Step 4"];
 
 export const Signup = () => {
@@ -38,6 +39,7 @@ export const Signup = () => {
         const { name, value } = e.target;
         setFormData((prevState) => ({ ...prevState, [name]: value }));
     };
+
 
     const handleSubmit = async (e) =>{
         e.preventDefault();
@@ -108,6 +110,7 @@ export const Signup = () => {
                         </Step>
                         ))}
                     </Stepper>
+
 
                     <Box sx={{ mt: 4 }}>
                         <div>
@@ -206,6 +209,16 @@ export const Signup = () => {
                         </form>
                     </div>
                 </div>
+              </div>
+              <div>
+                <Button
+                  type={"submit"}
+                  text={"Join now"}
+                  className={
+                    "bg-blue-500 text-white w-[100%] hover:bg-blue-600"
+                  }
+                />
+              </div>
             </div>
             :null
         }
@@ -213,5 +226,5 @@ export const Signup = () => {
             sent === 'true' && <VerifyCode setClose={setSent}/>
         }
     </div>
-  )
-}
+  );
+};
