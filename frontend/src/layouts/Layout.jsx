@@ -7,22 +7,27 @@ import { dataHeader } from "../constants/Links";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { AppSelector } from "../selectors/AppSelector";
+import { useDispatch } from "react-redux";
 
 export const Layout = () => {
   const [showProfil, setShowProfil] = useState(false);
+  const dispatch = useDispatch();
 
-  // const [searchMobil, setSearchMobil] = useState(false);
-
-  const { isMessaged, isNotified } = AppSelector();
+  const { isMessaged, isNotified, userData } = AppSelector();
 
   const showProfil_FUNCTION = (e) => {
     e.stopPropagation();
     showProfil === false ? setShowProfil(true) : setShowProfil(false);
   };
 
+  const handleClickDark = () => {
+    console.log("object");
+    dispatch({ type: "UPDATE_THEME", payload: "dark" });
+  };
+
   return (
-    <div className="relative top-0" onClick={() => setShowProfil(false)}>
-      <header className="fixed top-0 w-[100vw] z-20 h-[50px] bord)er bor)der-red-500 bg-[#FFFFFF] flex sm:justify-center justify-around ">
+    <div className={`relative top-0`} onClick={() => setShowProfil(false)}>
+      <header className="bg-white fixed top-0 w-[100vw] z-20 h-[50px] flex sm:justify-center justify-around ">
         <div className={`w-[10%] mx-1 my-auto sm:flex sm:w-[25%] sm:h-full`}>
           <img
             src="../../public/images/scren.png"
@@ -40,15 +45,16 @@ export const Layout = () => {
           >
             <SearchIcon strokeWidth="1" className="w-10 h-10" />
           </div>
-
-          {dataHeader.map((element) => (
-            <SingleLink
-              key={element.LINK}
-              link={element.LINK}
-              svg={element.SVG}
-              text={element.TEXT}
-            />
-          ))}
+          {dataHeader
+            .filter((item) => item.ROLE === userData.role)
+            .map((element) => (
+              <SingleLink
+                key={element.LINK}
+                link={element.LINK}
+                svg={element.SVG}
+                text={element.TEXT}
+              />
+            ))}
           <div
             className={`w-[60px] flex flex-col items-center justify-center mt-[3px] cursor-pointer hover:text-blue-500`}
             onClick={showProfil_FUNCTION}
@@ -76,20 +82,23 @@ export const Layout = () => {
               <h1 className="font-semibold text-xl">Said kachoud</h1>
               <h6>devloper</h6>
             </div>
-            <button className="font-semibold absolute border-2 border-blue-600 text-blue-600 w-[250px] rounded-2xl top-[36%] left-[3.5%] text-center cursor-pointer">
+            <button className="font-semibold absolute border-2 border-blue-600 text-blue-600 w-[250px] rounded-2xl top-[36%] left-[3.5%] text-center cursor-pointer hover:bg-blue-200 hover:text-blue-500 hover:border-blue-600 hover:border-3 hover:font-medium">
               view profil
             </button>
           </div>
           <hr className="absolute text-gray-300 w-[95%] left-[2.5%] top-[53%]" />
           <div className="absolute top-[55%] w-full h-[85px]">
-            <div className="w-full h-[50%] pl-2 pt-2 cursor-pointer">
+            <div
+              className="w-full h-[50%] pl-2 pt-2 cursor-pointer hover:bg-gray-100"
+              onClick={handleClickDark}
+            >
               <ContrastIcon
                 strokeWidth="1"
                 className="w-6 h-6 mr-1 text-gray-700"
               />
               <span>Dark mode</span>
             </div>
-            <div className="w-full h-[50%] pl-2 pt-1 cursor-pointer">
+            <div className="w-full h-[50%] pl-3 pt-1 cursor-pointer hover:bg-gray-100">
               <LogoutIcon
                 strokeWidth="1"
                 className="w-6 h-6 mr-1 text-gray-700"
@@ -109,7 +118,7 @@ export const Layout = () => {
         <span
           className={
             isMessaged
-              ? "bg-red-500 rounded w-2 h-2 absolute right-[180px] top-4 sm:right-[600px] sm:top-1"
+              ? "bg-red-500 rounded w-2 h-2 fixed right-[180px] top-4 sm:right-[585px] sm:top-1"
               : "hidden"
           }
         ></span>

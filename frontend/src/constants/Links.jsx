@@ -4,48 +4,67 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import ForumIcon from "@mui/icons-material/Forum";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { AppSelector } from "../selectors/AppSelector";
-
-// const { userData } = AppSelector();
-// console.log("userdata", userData);
-const userRole = () => {
-  const { userData } = AppSelector();
-  return userData.role;
-};
-// const role = userRole();
-
-const role = "recruteur";
+import { Outlet } from "react-router-dom";
 
 export const dataHeader = [
   {
-    // ROLE: "admin",
-    SVG: <HomeIcon strokeWidth="1" className="w-10 h-10 text-gray-600" />,
+    ROLE: "condidate",
+    SVG: <HomeIcon strokeWidth="1" className="w-10 h-10" />,
     TEXT: "Home",
-    LINK: `/${role}/home`,
+    LINK: `/condidate/home`,
   },
   {
-    // ROLE: "admin",
-    SVG: <WorkIcon strokeWidth="1" className="w-10 h-10 text-gray-600" />,
-    TEXT: role == "recruteur" ? "post" : "Jobs",
-    LINK: `/${role}/jobs`,
+    ROLE: "condidate",
+    SVG: <WorkIcon strokeWidth="1" className="w-10 h-10" />,
+    TEXT: "Jobs",
+    LINK: `/condidate/jobs`,
   },
   {
-    // ROLE: "admin",
-    SVG: <ForumIcon strokeWidth="1" className="w-10 h-10 text-gray-600" />,
+    ROLE: "condidate",
+    SVG: <ForumIcon strokeWidth="1" className="w-10 h-10" />,
     TEXT: "Messaging",
-    LINK: `/${role}/messaging`,
+    LINK: `/condidate/messaging`,
   },
   {
-    // ROLE: "admin",
-    SVG: (
-      <NotificationsIcon strokeWidth="1" className="w-10 h-10 text-gray-600" />
-    ),
+    ROLE: "condidate",
+    SVG: <NotificationsIcon strokeWidth="1" className="w-10 h-10" />,
     TEXT: "Notifications",
-    LINK: `/${role}/notifications`,
+    LINK: `/condidate/notifications`,
   },
   {
-    // ROLE: "admin",
-    SVG: <BookmarkIcon strokeWidth="1" className="w-10 h-10 text-gray-600" />,
+    ROLE: "condidate",
+    SVG: <BookmarkIcon strokeWidth="1" className="w-10 h-10" />,
     TEXT: "Saved",
-    LINK: `/${role}/saved/{id}`,
+    LINK: `/condidate/saved/{id}`,
+  },
+  {
+    ROLE: "recuiter",
+    SVG: <HomeIcon strokeWidth="1" className="w-10 h-10" />,
+    TEXT: "Home",
+    LINK: `/recuiter/home`,
+  },
+  {
+    ROLE: "recuiter",
+    SVG: <WorkIcon strokeWidth="1" className="w-10 h-10" />,
+    TEXT: "Jobs",
+    LINK: `/recuiter/post`,
+  },
+  {
+    ROLE: "recuiter",
+    SVG: <ForumIcon strokeWidth="1" className="w-10 h-10" />,
+    TEXT: "Messaging",
+    LINK: `/recuiter/messaging`,
+  },
+  {
+    ROLE: "recuiter",
+    SVG: <NotificationsIcon strokeWidth="1" className="w-10 h-10" />,
+    TEXT: "Notifications",
+    LINK: `/recuiter/notifications`,
+  },
+  {
+    ROLE: "recuiter",
+    SVG: <BookmarkIcon strokeWidth="1" className="w-10 h-10" />,
+    TEXT: "Saved",
+    LINK: `/recuiter/saved/{id}`,
   },
 ];
