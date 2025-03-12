@@ -2,10 +2,18 @@ import HomeIcon from "@mui/icons-material/Home";
 import WorkIcon from "@mui/icons-material/Work";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ForumIcon from "@mui/icons-material/Forum";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import { AppSelector } from "../selectors/AppSelector";
+
+// const { userData } = AppSelector();
+// console.log("userdata", userData);
+const userRole = () => {
+  const { userData } = AppSelector();
+  return userData.role;
+};
+// const role = userRole();
 
 const role = "recruteur";
-
-const currentPath = window.location.pathname;
 
 export const dataHeader = [
   {
@@ -34,10 +42,10 @@ export const dataHeader = [
     TEXT: "Notifications",
     LINK: `/${role}/notifications`,
   },
-  //   {
-  //     // ROLE: "admin",
-  //     SVG: <UserIcon strokeWidth="1" className="w-6 h-6" />,
-  //     TEXT: "Profil   ",
-  //     LINK: `/${role}/Profil`,
-  //   },
+  {
+    // ROLE: "admin",
+    SVG: <BookmarkIcon strokeWidth="1" className="w-10 h-10 text-gray-600" />,
+    TEXT: "Saved",
+    LINK: `/${role}/saved/{id}`,
+  },
 ];

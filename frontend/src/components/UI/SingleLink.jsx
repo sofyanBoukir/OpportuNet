@@ -1,5 +1,6 @@
 import { LinkSlashIcon } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export const SingleLink = ({ link, svg, text }) => {
@@ -17,6 +18,7 @@ export const SingleLink = ({ link, svg, text }) => {
     <div
       onClick={() => {
         navigate(link);
+        console.log(link);
       }}
       className={`${
         link === currentPath ? "text-black sm:border-b-2" : null
@@ -34,4 +36,9 @@ export const SingleLink = ({ link, svg, text }) => {
       </div>
     </div>
   );
+};
+
+export const Selector = () => {
+  const user = useSelector((state) => state.userData);
+  return user;
 };

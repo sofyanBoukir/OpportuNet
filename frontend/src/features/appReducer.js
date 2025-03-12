@@ -1,10 +1,10 @@
 const appState = {
-  userData: {},
-  isMessaged: false,
+  userData: { name: "said", role: "condidate" },
+  isMessaged: true,
   isNotified: false,
 };
 
-export const appReducer = (state = appState, action) => {
+export const AppReducer = (state = appState, action) => {
   switch (action.type) {
     case "UPDATE_USERDATA":
       return { ...state, userData: action.payload };
