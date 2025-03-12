@@ -5,7 +5,8 @@ import { VerifyCode } from "./pages/auth/VerifyCode";
 import { ForgotPassword } from "./pages/auth/ForgotPassword";
 import { Login } from "./pages/auth/login";
 import { Layout } from "./layouts/Layout";
-import { Home } from "./pages/user/Home";
+import { Home } from "./shared/Home";
+import Profil from "./shared/Profil";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
 
         <Route path="/" element={<Layout />}>
           <Route path="/condidate/home" element={<Home />} />
+          <Route path="/condidate/profil" element={<Profil />} />
         </Route>
       </Routes>
     </>

@@ -27,6 +27,7 @@ export const Layout = () => {
 
   return (
     <div className={`relative top-0`} onClick={() => setShowProfil(false)}>
+      {/* <div className="w-[100vw]"> */}
       <header className="bg-white fixed top-0 w-[100vw] z-20 h-[50px] flex sm:justify-center justify-around ">
         <div className={`w-[10%] mx-1 my-auto sm:flex sm:w-[25%] sm:h-full`}>
           <img
@@ -123,9 +124,10 @@ export const Layout = () => {
           }
         ></span>
       </header>
-      <div className="absolute top-[50px] w-[100vw]">
-        <Outlet />
-      </div>
+      {/* </div> */}
+      {/* <div className="relative top-[50px] h-[100vh] w-full bg-[#F4F2EE] h-[100px])"> */}
+      <Outlet />
+      {/* </div> */}
     </div>
   );
 };
