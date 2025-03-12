@@ -1,6 +1,4 @@
-import React from "react";
-
-const Profil = () => {
+export const Profil = () => {
   return (
     <>
       <div className="w-full fixed bg-[#F4F2EE] h-screen"></div>
@@ -33,5 +31,3 @@ const Profil = () => {
     </>
   );
 };
-
-export default Profil;
