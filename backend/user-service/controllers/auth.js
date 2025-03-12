@@ -9,11 +9,38 @@ require("dotenv").config()
 
 let invalidTokens = new Set();
 
+
+const getUserData = async (request,response) =>{
+    try{
+        const token = request.headers['authorization']?.split(' ')[1];
+        if(!token){
+            return response.status(401).json({
+                'message' : 'No token provided in the request'
+            });
+        }
+
+        jwt.verify(token,process.env.JWT_SECRET, async (err,usr) =>{
+            if(err){
+                return response.status(400).json({
+                    'message' : err.message
+                })
+            }
+            const user = await User.findById(usr.id)
+            return response.json({
+                'userData' : user
+            })
+        })
+    }catch(error){
+        return response.status(500).json({
+            'messahe' : error.message
+        })
+    }
+}
 const signIn = async (request,response) => {
     try{
         const {email,password} = request.body;
         const user = await User.findOne({email});
-
+        
         if(!user){
             return response.status(401).json({
                 'message' : 'Email or password incorrect'
@@ -38,7 +65,8 @@ const signIn = async (request,response) => {
 
         return response.json({
             'userData' : userData,
-            'token' : token
+            'token' : token,
+            'isVerified' : userData.isVerified
         });
 
     }catch(error){
@@ -48,58 +76,64 @@ const signIn = async (request,response) => {
     }
 }
 
-const signUp = async (request,response) =>{
+const signInButNotVerified = async (request,response) =>{
     try{
-        const {name,email,password,vcode} = request.body;
-        const isCredentialsValid = await VerificationCode.findOne({
-            email,
-            code:vcode,
-            expires_at: { $gt: new Date() }
-        })
-
-        if(!isCredentialsValid){
+        const { email } = request.body;
+        const user = await User.findOne({email});
+        
+        if(!user){
             return response.status(401).json({
-                'message' : 'Verification code incorrect or expired'
+                'message' : 'Email or password incorrect'
             })
         }
-        const hashedPass = await bcrypt.hash(password,10);
 
-        const user = new User({
-            name,
-            email,
-            password:hashedPass
+        const verificationCode = Math.floor(100000 + Math.random() * 900000);
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: process.env.SMTP_MAIL, 
+              pass: process.env.SMTP_PASS
+            }
         });
-        await user.save();
-        const userData = user.toObject()
-        delete userData.password;
-
-        const token = jwt.sign(
-            {id:user._id},
-            process.env.JWT_SECRET,
-            { expiresIn: "200h" }
-        );
-
-        return response.json({
-            'message' : 'Registred successfully!',
-            'userData' : userData,
-            'token' : token
-        })
-
-    }catch(error){
+          
+        const mailOptions = {
+            from: process.env.FROM_MAIL,  
+            to: email,  
+            subject: 'Verification code', 
+            html: generateEmailHTML_FORVCODE(user.name,"OpportuNet",verificationCode)
+        };
+        
+        transporter.sendMail(mailOptions, async (error, info) => {
+            if (error) {
+                return response.status(400).json({
+                    'message' : 'An error occured'
+                })
+            } else {
+                const vCode = new VerificationCode({
+                    email,
+                    code:verificationCode,
+                });
+                await vCode.save();
+                return response.json({
+                    'sent' : true,
+                })
+            }
+        });
+    }catch(err){
         return response.status(500).json({
-            'message' : error.message
+            'message' : err.message
         })
     }
 }
-
-const sendVCode = async (request,response) =>{
+const signUp = async (request,response) =>{
     try{
-        const {name,email} = request.body;
+        const {name,email,password} = request.body;
+        
         const alreadyExists = await User.findOne({email});
-
-        if(alreadyExists){
+        if(alreadyExists) {
             return response.status(401).json({
-                'message' : 'A user with this email already exists'
+                'message' : 'User with this email already exists'
             })
         }
 
@@ -131,12 +165,59 @@ const sendVCode = async (request,response) =>{
                     code:verificationCode,
                 });
                 await vCode.save();
+                const hashedPass = await bcrypt.hash(password,10);
+                const user = new User({
+                    name,
+                    email,
+                    password:hashedPass
+                });
+                await user.save();
                 return response.json({
-                    'message' : "A verification code sent to your email"
+                    'sent' : true,
                 })
             }
         });
 
+    }catch(error){
+        return response.status(500).json({
+            'message' : error.message
+        })
+    }
+}
+
+const checkVcode = async (request,response) =>{
+    try{
+        const {email,vcode} = request.body;
+        const isCredentialsValid = await VerificationCode.findOne({
+            email,
+            code:vcode,
+            expires_at: { $gt: new Date() }
+        })
+
+        if(!isCredentialsValid){
+            return response.status(401).json({
+                'message' : 'Verification code incorrect or expired'
+            })
+        }
+
+        const user = await User.findOne({email});
+        user.isVerified = true;
+        await user.save();
+
+        const userData = user.toObject()
+        delete userData.password;
+
+        const token = jwt.sign(
+            {id:user._id},
+            process.env.JWT_SECRET,
+            { expiresIn: "200h" }
+        );
+
+        return response.json({
+            'message' : 'Registred successfully',
+            'userData' : userData,
+            'token' : token
+        })
 
     }catch(error){
         return response.status(500).json({
@@ -254,4 +335,4 @@ const logout = (request,response) =>{
     }
 }
 
-module.exports = { signIn, signUp, sendVCode, sendResetLink, resetPassword, logout }
+module.exports = { getUserData, signIn, signInButNotVerified, signUp, checkVcode, sendResetLink, resetPassword, logout }

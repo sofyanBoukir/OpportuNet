@@ -13,8 +13,8 @@ export const Notification = ({type,message}) => {
             variant="filled"
             sx={{
                 width: '100%',
-                backgroundColor: 'white',
-                color: 'black',
+                backgroundColor: `${type === 'error' ? 'rgb(256, 100, 100)' : 'rgb(72, 145, 72)'}`,
+                color: 'white',
                 boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
             }}
         >
