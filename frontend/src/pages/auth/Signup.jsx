@@ -183,131 +183,16 @@ export const Signup = () => {
                     }
                   />
                 </div>
-                <div className="flex flex-col gap-1">
-                  <Label
-                    text={"Email"}
-                    className={"font-semibold text-gray-500"}
-                  />
-                  <Input
-                    type={"email"}
-                    name={"email"}
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder={"Ex: your.mail@gmail.com"}
-                    className={
-                      "px-3 py-1 rounded-sm border-2 outline-none border-md border-gray-300"
-                    }
-                  />
-                  {error && error.type === "fromServer" && (
-                    <span className="text-red-500 text-sm font-semibold">
-                      {error.message}
-                    </span>
-                  )}
-                </div>
-                <div className="flex flex-col gap-1">
-                  <Label
-                    text={"Password"}
-                    className={"font-semibold text-gray-500"}
-                  />
-                  <Input
-                    type={"password"}
-                    name={"password"}
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder={"*********"}
-                    className={
-                      "px-3 py-1 rounded-sm border-2 outline-none border-md border-gray-300"
-                    }
-                  />
-                  {error && error.type === "password" && (
-                    <span className="text-red-500 text-sm font-semibold">
-                      {error.message}
-                    </span>
-                  )}
-                </div>
-                <div className="flex flex-col gap-1">
-                  <Label
-                    text={"Retype password"}
-                    className={"font-semibold text-gray-500"}
-                  />
-                  <Input
-                    type={"password"}
-                    name={"retypePassword"}
-                    value={formData.retypePassword}
-                    onChange={handleChange}
-                    placeholder={"*********"}
-                    className={
-                      "px-3 py-1 rounded-sm border-2 outline-none border-md border-gray-300"
-                    }
-                  />
-                  {error && error.type === "password" && (
-                    <span className="text-red-500 text-sm font-semibold">
-                      {error.message}
-                    </span>
-                  )}
-                </div>
-                <div>
-                  <div>
-                    <input
-                      type="checkbox"
-                      className="cursor-pointer"
-                      id="agree"
-                      value={terms}
-                      onChange={() => setTerms(!terms)}
-                    />
-                    <label
-                      htmlFor="agree"
-                      className="pl-1 text-sm text-gray-600 cursor-pointer"
-                    >
-                      I agree to the{" "}
-                    </label>
-                    <Link className="text-blue-400 text-sm">
-                      Terms & conditions
-                    </Link>
-                  </div>
-                  <div>
-                    <input
-                      type="checkbox"
-                      className="cursor-pointer"
-                      id="read"
-                      onChange={() => setRedTerms(!readTerms)}
-                    />
-                    <label
-                      htmlFor="read"
-                      className="pl-1 text-sm text-gray-600 cursor-pointer"
-                    >
-                      {" "}
-                      I have read and accept the Privacy Policy{" "}
-                    </label>
-                  </div>
-                  <div>
-                    {error && error.type === "termsNotChecked" && (
-                      <span className="text-red-500 text-sm font-semibold">
-                        {error.message}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <Button
-                    type={"submit"}
-                    loading={loading}
-                    text={"Join now"}
-                    className={
-                      "bg-blue-500 text-white w-[100%] hover:bg-blue-600"
-                    }
-                  />
-                </div>
               </form>
             </div>
-          </div>
-          {/* </div> */}
-          <div>
-            <Button
-              type={"submit"}
-              text={"Join now"}
-              className={"bg-blue-500 text-white w-[100%] hover:bg-blue-600"}
-            />
+            {/* <div>
+               <Button
+                   type={"submit"}
+                   text={"Join now"}
+                   className={
+                     "bg-blue-500 text-white w-[100%] hover:bg-blue-600"
+                   }
+                 />*/}
           </div>
         </div>
       ) : null}
