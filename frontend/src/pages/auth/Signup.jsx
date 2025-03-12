@@ -210,16 +210,16 @@ export const Signup = () => {
                     </div>
                 </div>
               </div>
-              <div>
-                <Button
-                  type={"submit"}
-                  text={"Join now"}
-                  className={
-                    "bg-blue-500 text-white w-[100%] hover:bg-blue-600"
-                  }
-                />
-              </div>
-            </div>
+            //   <div>
+            //     <Button
+            //       type={"submit"}
+            //       text={"Join now"}
+            //       className={
+            //         "bg-blue-500 text-white w-[100%] hover:bg-blue-600"
+            //       }
+            //     />
+            //   </div>
+            // </div>
             :null
         }
         {
