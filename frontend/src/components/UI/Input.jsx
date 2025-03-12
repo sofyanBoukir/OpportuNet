@@ -10,14 +10,14 @@ export const Input = ({
 }) => {
   return (
     <input
-      type={type}
-      name={name}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      required={required}
-      maxLength={maxLength}
-      className={`border) text-black px-3 py-1 text-md bg-inh)erit rounded-sm outline-none ${className}`}
+        type={type}
+        name={name}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        required={required}
+        maxLength={maxLength}
+        className={`text-black text-md bg-inherit ${className}`}
     />
   );
 };
