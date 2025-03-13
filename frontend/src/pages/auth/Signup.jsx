@@ -3,24 +3,13 @@ import { Input } from '../../components/UI/Input'
 import { Label } from '../../components/UI/Label'
 import { Button } from '../../components/UI/Button'
 import React, { useState } from 'react'
-import { Stepper, Step, StepLabel, Button as Buttonn, Box } from "@mui/material";
 import { signUp } from '../../services/auth'
 import { ERROR_MESSAGES } from '../../constants/Errors'
 import { VerifyCode } from './VerifyCode'
 
 
-const steps = ["Step 1", "Step 2", "Step 3", "Step 4"];
 
 export const Signup = () => {
-    // const [activeStep, setActiveStep] = useState(0);
-
-    // const handleNext = () => {
-    //     setActiveStep((prevStep) => prevStep + 1);
-    // };
-
-    // const handleBack = () => {
-    //     setActiveStep((prevStep) => prevStep - 1);
-    // };
 
     const [loading,setLoading] = useState(false);
     const [error,setError] = useState(null);
@@ -101,36 +90,6 @@ export const Signup = () => {
                         </div>
                     </div>
                 </div>
-                {/* <div className="w-full py-4 px-8">
-                <Box sx={{ width: "100%", padding: 4 }}>
-                    <Stepper activeStep={activeStep} alternativeLabel>
-                        {steps.map((label, index) => (
-                        <Step key={index}>
-                            <StepLabel>{label}</StepLabel>
-                        </Step>
-                        ))}
-                    </Stepper>
-
-
-                    <Box sx={{ mt: 4 }}>
-                        <div>
-                        <p>Content for {steps[activeStep]}</p>
-                        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-                            <Buttonn disabled={activeStep === 0} onClick={handleBack}>
-                            Back
-                            </Buttonn>
-                            <Buttonn
-                            variant="contained"
-                            onClick={handleNext}
-                            disabled={activeStep === steps.length - 1}
-                            >
-                            {activeStep === steps.length - 1 ? "Finish" : "Next"}
-                            </Buttonn>
-                        </Box>
-                        </div>
-                    </Box>
-                    </Box>
-                </div> */}
                 <div className='md:w-[40%] w-[100%] bg-gray-100 h-[100vh] pt-20'>
                     <div className='mt-6 w-[70%] mx-auto'>
                         <h1 className='text-4xl font-semibold'>Join us!</h1>
@@ -210,16 +169,6 @@ export const Signup = () => {
                     </div>
                 </div>
               </div>
-            //   <div>
-            //     <Button
-            //       type={"submit"}
-            //       text={"Join now"}
-            //       className={
-            //         "bg-blue-500 text-white w-[100%] hover:bg-blue-600"
-            //       }
-            //     />
-            //   </div>
-            // </div>
             :null
         }
         {

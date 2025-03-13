@@ -12,30 +12,43 @@ let invalidTokens = new Set();
 
 const getUserData = async (request,response) =>{
     try{
-        const token = request.headers['authorization']?.split(' ')[1];
-        if(!token){
-            return response.status(401).json({
-                'message' : 'No token provided in the request'
-            });
-        }
+        const userId = request.user.id;
+        const user = await User.findById(userId);
 
-        jwt.verify(token,process.env.JWT_SECRET, async (err,usr) =>{
-            if(err){
-                return response.status(400).json({
-                    'message' : err.message
-                })
-            }
-            const user = await User.findById(usr.id)
+        if(user){
             return response.json({
-                'userData' : user
+                'userData' : user,
             })
-        })
+        }
     }catch(error){
         return response.status(500).json({
             'messahe' : error.message
         })
     }
 }
+
+const isNewUser = async (request,response) =>{
+    try{
+        const userId = request.user.id;
+        const user = await User.findById(userId);
+
+        if(user){
+            const userObject = user.toObject();
+            delete userObject.password
+            return response.json({
+                'newUser' : userObject.isNewUser,
+                'userData' : userObject
+            })
+        }
+
+    }catch(error){
+        return response.status(500).json({
+            'messahe' : error.message
+        })
+    }
+}
+
+
 const signIn = async (request,response) => {
     try{
         const {email,password} = request.body;
@@ -335,4 +348,4 @@ const logout = (request,response) =>{
     }
 }
 
-module.exports = { getUserData, signIn, signInButNotVerified, signUp, checkVcode, sendResetLink, resetPassword, logout }
+module.exports = { getUserData, isNewUser, signIn, signInButNotVerified, signUp, checkVcode, sendResetLink, resetPassword, logout }

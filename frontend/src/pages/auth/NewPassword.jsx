@@ -3,7 +3,7 @@ import appName from '../../../public/appLogo.png'
 import { Label } from '../../components/UI/Label'
 import { Input } from '../../components/UI/Input'
 import { Button } from '../../components/UI/Button'
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { resetPassword } from '../../services/auth'
 import { ERROR_MESSAGES } from '../../constants/Errors'
 import { Notification } from '../../components/UI/Notification'
@@ -15,6 +15,7 @@ export const NewPassword = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const email = queryParams.get("email");
+    const navigate = useNavigate()
 
     const [formData,setFormData] = useState({
         token : token,
@@ -91,8 +92,9 @@ export const NewPassword = () => {
                         className={'px-3 py-1 rounded-sm border-2 outline-none border-md border-gray-300'}
                         />
                 </div>
-                <div>
-                    <Button type={'submit'} text={'Reset password'} className={'bg-blue-500 text-white w-[100%] hover:bg-blue-600'}/>
+                <div className='flex flex-col gap-2'>
+                    <Button loading={loading} type={'submit'} text={'Reset password'} className={'bg-blue-500 text-white w-[100%] hover:bg-blue-600'}/>
+                    <Button type={'button'} text={'Back to login'} onClick={() => navigate('/user/sign_in')} className={'bg-white w-[100%] text-gray-500 border border-gray-500 hover:bg-gray-100'}/>                    
                 </div>
             </form>
         </div>

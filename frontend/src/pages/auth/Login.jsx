@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Input } from '../../components/UI/Input'
 import { Label } from '../../components/UI/Label'
 import { Button } from '../../components/UI/Button'
@@ -7,13 +7,17 @@ import { login, signedInButNotVerified } from '../../services/auth'
 import { ERROR_MESSAGES } from '../../constants/Errors'
 import { useDispatch } from 'react-redux'
 import { VerifyCode } from './VerifyCode'
+import { ExtraLoading } from '../../components/App/ExtraLoading'
 
 export const Login = () => {
 
     const [loading,setLoading] = useState(false);
     const [error,setError] = useState();
     const [emailNotVerified,setEmailNotVerified] = useState(localStorage.getItem('emailNotVerified') || '');
-    // const dispatch = useDispatch()
+    const [extraLoading,setExtraLoading] = useState(false);
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    
     
     const [formData,setFormData] = useState({
         email : '',
@@ -45,8 +49,19 @@ export const Login = () => {
                     }
                     setLoading(false);
                     localStorage.setItem('token',response.data.token)
-                    // dispatch({type:"UPDATE_USERDATA",payload:response.data.userData})
-                    break;
+                    if(response.data.userData.isNewUser){
+                        setExtraLoading(true)
+                        setTimeout(() => {
+                            setExtraLoading(false);
+                            navigate('/user/completeRegistration')
+                        }, 2000);
+                        break;
+                    }
+                    else{
+                        dispatch({type:"UPDATE_USERDATA",payload:response.data.userData})
+                        navigate('/feed')
+                        break;
+                    }
             }
         }catch(err){
             setLoading(false)
@@ -131,6 +146,9 @@ export const Login = () => {
         }
         {
             emailNotVerified === 'true' && <VerifyCode setClose={setEmailNotVerified}/>
+        }
+        {
+            extraLoading && <ExtraLoading />
         }
     </div>
   );
