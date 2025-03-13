@@ -5,12 +5,15 @@ import { MuiOtpInput } from 'mui-one-time-password-input';
 import { ERROR_MESSAGES } from '../../constants/Errors';
 import { checkVcode } from '../../services/auth';
 import { Notification } from '../../components/UI/Notification';
+import { useNavigate } from 'react-router-dom';
+import { ExtraLoading } from '../../components/App/ExtraLoading';
 export const VerifyCode = ({setClose}) => {
     const [vCode, setVcode] = useState('')
     const email = localStorage.getItem('email')
-    const [error,setError] = useState('')
     const [loading,setLoading] = useState(false);
     const [notification,setNotification] = useState(null);
+    const navigate = useNavigate();
+    const [extraLoading,setExtraLoading] = useState(false);
 
     const handleChange = (newValue) => {
         setVcode(newValue)
@@ -27,10 +30,19 @@ export const VerifyCode = ({setClose}) => {
             const response = await checkVcode(email,vCode)
             setLoading(false)
             if(response.status === 200){
-                alert('logged in successfully');
-                return;
+                localStorage.clear();
+                localStorage.setItem('token',response.data.token);
+                if(response.data.userData.isNewUser){
+                    setExtraLoading(true)
+                    setTimeout(() => {
+                        setExtraLoading(false);
+                        navigate('/user/completeRegistration');
+                        return
+                    }, 3000);
+                }else{
+                    navigate('/feed');
+                }
             }
-
 
         }catch(err){
             setLoading(false)
@@ -67,6 +79,9 @@ export const VerifyCode = ({setClose}) => {
                 </div>
                 {
                     notification && <Notification type={notification.type} message={notification.message} />
+                }
+                {
+                    extraLoading && <ExtraLoading />
                 }
             </form>
         </div>

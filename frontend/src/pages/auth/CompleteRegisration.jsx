@@ -7,13 +7,22 @@ import { getInterests } from '../../services/interest';
 import { ERROR_MESSAGES } from '../../constants/Errors';
 import { Input } from '../../components/UI/Input';
 import { Label } from '../../components/UI/Label';
+import { ExtraLoading } from '../../components/App/ExtraLoading';
+import { useSelector } from 'react-redux';
+import { completeRegistration } from '../../services/profile';
+import { Notification } from '../../components/UI/Notification';
+import { useNavigate } from 'react-router-dom';
 
 const steps = ["", "", "", ""];
 export const CompleteRegisration = () => {
     const [activeStep, setActiveStep] = useState(0);
     const [interests,setInterests] = useState([]);
-    const [error,setError] = useState(false);
-
+    const [notification,setNotification] = useState(null);
+    const [error,setError] = useState()
+    const appStore = useSelector(data => data);
+    const [loading,setLoading] = useState(false);
+    const [extraLoading,setExtraLoading] = useState(false);
+    const navigate = useNavigate()
 
     const [formData,setFormData] = useState({
         role : '',
@@ -22,10 +31,9 @@ export const CompleteRegisration = () => {
         companyName : ''
     })
 
-    const getInterests_FUNCTION = async () =>{
+    const _getInterests = async () =>{
         try{
             const response = await getInterests();
-            console.log(response);
             
             response.status === 200 &&
             setInterests(response.data.interests)
@@ -40,11 +48,64 @@ export const CompleteRegisration = () => {
             }
         }
     }
+
+    const _completeRegistration = async () =>{
+        setNotification(null)
+        try{
+            setLoading(true);
+            const response = await completeRegistration(localStorage.getItem('token'),formData);
+            console.log(response);
+            
+            setLoading(false);
+            if(response.status === 200){
+                setExtraLoading(true);
+                setTimeout(() => {
+                    setExtraLoading(false);
+                    navigate('/feed')
+                }, 3000);
+            }
+        }catch(err){
+            setLoading(false);
+            switch(err.response.status){
+                case 403:
+                    setNotification({type:"error",message:err.response.data.message})
+                    break
+                case 500:
+                    setNotification({type:"error",message:ERROR_MESSAGES.SOMETHING_WENT_WRONG})
+                    break
+            }
+        }
+    }
     useEffect(() =>{
-        getInterests_FUNCTION()
+        _getInterests()
     },[])
 
+    console.log(activeStep);
+    
     const handleNext = () => {
+        
+        if(activeStep === 0 && formData.role === ''){
+            return;
+        }
+
+        else if(activeStep === 1 && formData.interests.length < 5){
+            return;
+        }
+
+        else if(formData.role === 'candidate' && activeStep === 2 && formData.headLine === ''){
+            return;
+        }
+
+        else if(activeStep === 2 && formData.role === 'recuiter' && (formData.headLine === '' || formData.companyName === '')){
+            return;
+        }
+
+        if(activeStep === 3){
+            _completeRegistration()
+            return
+        }
+        
+
         setActiveStep((prevStep) => prevStep + 1);
     };
 
@@ -53,14 +114,14 @@ export const CompleteRegisration = () => {
     };
   return (
     <div>
-        <div className="w-[90%] py-4 px-8 mx-auto mt-10 md:w-[60%] lg:w-[50%]">
+        <div className="w-[90%] py-4 px-8 mx-auto mt-10 md:w-[60%] lg:w-[60%]">
             <img src={appName} className='w-52 mx-auto'/>
             
             <Box sx={{ width: "100%", padding: 4 }}>
                 <Stepper activeStep={activeStep} alternativeLabel
                 sx={{
                     "& .MuiStepConnector-line": {
-                        borderColor: "gray.400", // Change the line color to blue
+                        borderColor: "gray.400",
                         borderWidth: 1,
                         margin: 1,
                         marginTop:1.4,
@@ -92,12 +153,16 @@ export const CompleteRegisration = () => {
                                     <span className='text-gray-600'>This question helps us tailor the platform to your needs. Are you here to find a job, or hire top talent?</span>
 
                                     <div className='flex mt-2 gap-2 justify-center'>
-                                        <div className='border-2 px-3 py-1 w-[40%] text-start cursor-pointer hover:bg-gray-100 duration-200 border-black rounded-sm'>
+                                        <div onClick={() => setFormData({...formData,role:'candidate'})} 
+                                        className={`border-2 px-3 shadow-lg py-1 w-[50%] md:w-[30%] text-start cursor-pointer hover:bg-gray-100 duration-200 border-black rounded-sm
+                                        ${formData.role === 'candidate' ? 'bg-gray-100 border-blue-600 text-blue-800' :null}`}>
                                             <UserIcon className='w-12 h-12' strokeWidth={0.7}/>
                                             <p className='text-ld font-semibold'>Candidate</p>
                                             <span>Looking for job,internship ... and showcasing your skills.</span>
                                         </div>
-                                        <div className='border-2 px-3 py-1 w-[40%] text-start cursor-pointer hover:bg-gray-100 duration-200 border-black rounded-sm'>
+                                        <div onClick={() => setFormData({...formData,role:'recuiter'})} 
+                                        className={`border-2 px-3 shadow-lg py-1 w-[50%] md:w-[30%] text-start cursor-pointer hover:bg-gray-100 duration-200 border-black rounded-sm
+                                        ${formData.role === 'recuiter' ? 'bg-gray-100 border-blue-600 text-blue-800' :null}`}>
                                             <BriefcaseIcon className='w-12 h-12' strokeWidth={0.7}/>
                                             <p className='text-ld font-semibold'>Recruiter</p>
                                             <span> Searching for top talent, posting job openings.</span>
@@ -114,11 +179,24 @@ export const CompleteRegisration = () => {
                                     <br></br>
                                     <span className='text-gray-600'>Choose topics that matter to you the most. Your feed will be customized based on your selections. At least 5 interests</span>
 
-                                    <div className='flex mt-2 flex-wrap gap-2'>
+                                    <div className='flex mt-2 flex-wrap justify-center gap-2'>
                                         {
                                             interests && interests.length?
                                                 interests.map((interest) =>{
-                                                    return <div className='px-3 py-1 rounded-sm border border-gray-400 cursor-pointer hover:bg-gray-100 duration-200'>
+                                                    return <div onClick={() =>
+                                                        formData.interests.includes(interest._id)
+                                                          ? setFormData({
+                                                              ...formData,
+                                                              interests: formData.interests.filter((item) => item !== interest._id),
+                                                            })
+                                                          : setFormData({
+                                                              ...formData,
+                                                              interests: [...formData.interests, interest._id],
+                                                            })
+                                                      }
+                                                    className={`px-4 py-2 shadow rounded-sm border cursor-pointer hover:bg-gray-100 duration-200
+                                                    ${formData.interests.includes(interest._id) ? 'bg-gray-100 border-blue-700 text-blue-800' : null}
+                                                    `}>
                                                         {interest.interest}
                                                     </div>
                                                 })
@@ -129,7 +207,7 @@ export const CompleteRegisration = () => {
                             </div>
                         }
 
-{
+                        {
                             activeStep === 2 && <div className='flex justify-center text-center'>
                                 <div>
                                     <h1 className='text-3xl font-semibold text-center'>What describes you!</h1>
@@ -138,43 +216,55 @@ export const CompleteRegisration = () => {
 
                                     <div className='flex mt-2 flex-col gap-4'>
                                         <div className='flex flex-col'>
-                                            <Label text={'Postion'} className={'text-start text-gray-600'}/>
-                                            <Input type={'text'} placeholder={'Ex: Software developer'} 
+                                            <Label text={'HeadLine'} className={'text-start text-gray-600'}/>
+                                            <Input type={'text'} placeholder={'Ex: Software developer'} value={formData.headLine} onChange={(e) => setFormData({...formData,headLine:e.target.value})}
                                             className={'py-2 px-3 border-2 border-gray-400 rounded-sm'}/>
                                         </div>
 
-                                        <div className='flex flex-col'>
-                                            <Label text={'Company name'} className={'text-start text-gray-600'}/>
-                                            <Input type={'text'} placeholder={'Ex: IAM'} 
-                                            className={'py-2 px-3 border-2 border-gray-400 rounded-sm'}/>
-                                        </div>
+                                        {
+                                            formData.role === 'recuiter' ?
+                                            <div className='flex flex-col'>
+                                                <Label text={'Company name'} className={'text-start text-gray-600'}/>
+                                                <Input type={'text'} placeholder={'Ex: IAM'} value={formData.companyName} onChange={(e) => setFormData({...formData,companyName:e.target.value})}
+                                                className={'py-2 px-3 border-2 border-gray-400 rounded-sm'}/>
+                                            </div> : null
+                                        }
                                     </div>
                                 </div>
                             </div>
                         }
+
+                        {
+                            activeStep === 3 && <div className='flex justify-center text-center'>
+                                <div>
+                                    <h1 className='text-3xl font-semibold text-center'>Congrutulations {appStore.userData.name}!</h1>
+                                    <br></br>
+                                    <span className='text-gray-600'>Let's move forward and explore the best opportunities—whether you're looking to hire top talent or discover your next career move!</span>
+
+                                    
+                                </div>
+                            </div>
+                        }
                         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-                                {/* <Button disabled={activeStep === 0} onClick={handleBack}>
-                                Back
-                                </Button>
-                                <Button
-                                variant="contained"
-                                onClick={handleNext}
-                                disabled={activeStep === steps.length - 1}
-                                >
-                                {activeStep === steps.length - 1 ? "Finish" : "Next"}
-                                </Button> */}
                                 <div className='w-[100%] flex justify-end gap-2'>
                                     <Button text={'Back'}
                                     disabled={activeStep === 0} onClick={handleBack}
                                     className={'bg-white py-2 text-gray-500 border border-gray-500 hover:bg-gray-100'} />
 
-                                    <Button text={'Next'}
+                                    <Button text={`${activeStep === 3 ? 'Finish' : 'Next'}`}
                                     onClick={handleNext}
-                                    disabled={activeStep === steps.length - 1} 
+                                    disabled={activeStep === steps.length} 
+                                    loading={activeStep === 3 && loading}
                                     className={'bg-blue-600 py-2 text-white hover:bg-blue-800'} />
                                 </div>
                         </Box>
                     </div>
+                    {
+                        notification && <Notification type={notification.type} message={notification.message} />
+                    }
+                    {
+                        extraLoading && <ExtraLoading />
+                    }
                 </Box>
             </Box>
         </div>
