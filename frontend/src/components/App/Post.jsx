@@ -55,9 +55,9 @@ export const Post = () => {
                 >
                     
                     <MenuItem onClick={handleClose}><div className='flex flex-row items-center gap-2'>
-                        <FlagIcon className='text-black w-6 h-6'/><h1>Report</h1></div>
+                        <FlagIcon className='text-black w-6 h-6' strokeWidth={1.2}/><h1>Report</h1></div>
                     </MenuItem><MenuItem onClick={handleClose}><div className='flex flex-row items-center gap-2'>
-                        <LinkIcon className='text-black w-6 h-6'/><h1>Coppy Link</h1></div>
+                        <LinkIcon className='text-black w-6 h-6' strokeWidth={1.2}/><h1>Coppy Link</h1></div>
                     </MenuItem>
                     
                 </Menu>
@@ -70,7 +70,7 @@ export const Post = () => {
                     <span>{isExpanded ? text : text.slice(0, 20) + "..."}</span>
                     <button
                         onClick={toggleText}
-                        className="text-gray-500  ml-2"
+                        className="text-gray-500 underline text-sm ml-2 cursor-pointer"
                     >
                         {isExpanded ? "See Less" : "See More"}
                     </button>
@@ -99,7 +99,7 @@ export const Post = () => {
                 </button>
             </div>
         </div>
-        {openModalPost && <PostModal />}
+        {openModalPost && <PostModal setOpenModalPost={setOpenModalPost}/>}
     </div>
     
   )
