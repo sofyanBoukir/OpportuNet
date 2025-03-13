@@ -5,6 +5,10 @@ import { ForgotPassword } from "./pages/auth/ForgotPassword"
 import { Login } from "./pages/auth/Login"
 import { Layout } from "./layouts/Layout";
 import { Home } from "./pages/user/Home";
+
+import { Post } from "./components/App/Post";
+import { PostModal } from "./components/modals/PostModal";
+
 import { CompleteRegisration } from "./pages/auth/CompleteRegisration"
 import { IsNewUser } from "./protectedRoutes/CompleteReg"
 import { PersisReload } from "./protectedRoutes/PersisReload"
