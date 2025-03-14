@@ -1,6 +1,3 @@
-import { LinkSlashIcon } from "@heroicons/react/24/outline";
-import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export const SingleLink = ({ link, svg, text }) => {
@@ -44,7 +41,7 @@ export const SingleLink = ({ link, svg, text }) => {
   );
 };
 
-export const Selector = () => {
-  const user = useSelector((state) => state.userData);
-  return user;
-};
+// export const Selector = () => {
+//   const user = useSelector((state) => state.userData);
+//   return user;
+// };
