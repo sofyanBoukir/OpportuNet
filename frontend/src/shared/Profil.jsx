@@ -1,33 +1,62 @@
-export const Profil = () => {
-  return (
-    <>
-      <div className="w-full fixed bg-[#F4F2EE] h-screen"></div>
+import { data } from "react-router-dom";
+import profilImg from "../../public/images/said-kachoud.jpg";
+import { AboutModal } from "../components/modals/AboutModal";
+import { EducationsModal } from "../components/modals/EducationsModal";
+import { ProfilInfoModal } from "../components/modals/ProfilInfoModal";
+import { ExperiencesModal } from "../components/modals/ExperiencesModal";
+import { SkillsModal } from "../components/modals/SkillsModal";
+import { InterestsModal } from "../components/modals/InterestsModal";
+import { SuggestionsModal } from "../components/modals/SuggestionsModal";
+import { UrlProfilModal } from "../components/modals/UrlProfilModal";
 
-      <div className="w-[45%] bg-amber-500 h-[600px] rounded-md absolute top-[70px] left-[325px] z-10"></div>
-      <div className="w-[50%] bg-amber-500 h-[600px] rounded-md absolute top-[700px] left-[100px] z-10">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Error molestiae
-        similique tempora ut itaque et molestias mollitia in, explicabo dolores
-        cupiditate magni perspiciatis, distinctio fuga magnam repellendus
-        ducimus doloribus aut laborum eum nostrum eaque iure! Esse quisquam fuga
-        animi voluptas quis! A, alias officiis? Obcaecati suscipit, nam
-        accusamus veritatis sunt eligendi ducimus laboriosam natus harum! Quos,
-        totam consequatur itaque, debitis quas veniam dolorum perspiciatis
-        accusamus ut ratione rerum architecto praesentium voluptatem voluptate
-        nulla modi incidunt cum quod id hic expedita autem ipsam repudiandae?
-        Voluptas consequatur delectus incidunt eos facere aliquid accusamus et
-        earum ipsa, deserunt non doloribus nostrum libero similique officiis,
-        quod neque dolore fugiat repellendus? Doloribus blanditiis sequi
-        distinctio animi natus obcaecati ullam tenetur ea deleniti at facere
-        officia, cum culpa similique, omnis neque velit dolores repellendus!
-        Error repellat dolores temporibus, voluptates atque modi consequatur
-        architecto, saepe et assumenda excepturi officia. Cupiditate quis
-        doloribus dolore enim sunt ipsam distinctio, modi natus exercitationem
-        eius nemo magnam alias. Adipisci maiores mollitia quidem distinctio
-        voluptatum voluptatibus repellat blanditiis quasi, nihil minima a magni
-        harum vel dolorum itaque cumque animi voluptate, rem non sed officiis
-        molestias? Fugiat expedita rerum tenetur fuga eaque assumenda,
-        voluptatum beatae quas alias, odit labore a voluptate non doloribus!
+export const Profil = () => {
+  const dataInfo = {
+    name: "Said kachoud",
+    headLine: "Full stack devloper",
+    address: "Tiznit, Souss-Massa, Morocco",
+    github: "https://github.com/saidKachoud",
+    profile_picture: profilImg,
+    followers: 300,
+    following: 100,
+    education: [
+      { nameSchool: "Ofppt tiznit tscttp", date: "2020-2021" },
+      { nameSchool: "Ofppt tiznit tsccttp", date: "2023-2024" },
+    ],
+    experience: [
+      { namePost: "devloper backend", date: "2020-2021" },
+      { namePost: "devloper front end", date: "2023-2024" },
+    ],
+    skills: ["React", "Laravel", "Tailwind", "Express", "Nodejs", "Mongodb"],
+    interests: ["microsoft", "apple", "google", "meta"],
+    content: `Lorem ipsum dolor si amet consectetur adipisicing elit. Magni nostrum
+            consequatur itaque nulla dignissimos non fugiat exercitationem dolor,
+            alias mollitia quas vero iure aliquam consectetur excepturi deserunt
+            maxime.`,
+    suggestions: [
+      { sugName: "Ayoub Mhainid", sugHead: "Devloper Front-end" },
+      { sugName: "Soufiane Boukir", sugHead: "Devloper Back-End" },
+    ],
+  };
+
+  return (
+    <div>
+      <div className="w-full fixed bg-[#F4F2EE] h-screen"></div>
+      <div className="h-[100px] w-full 2xl:w-[80%] relative top-[50px] 2xl:left-[10%]">
+        <ProfilInfoModal dataInfo={dataInfo} />
+        {dataInfo.content && <AboutModal content={dataInfo.content} />}
+        {dataInfo.education && (
+          <EducationsModal educationList={dataInfo.education} />
+        )}
+        {dataInfo.experience && (
+          <ExperiencesModal experienceList={dataInfo.experience} />
+        )}
+        {dataInfo.skills && <SkillsModal skillList={dataInfo.skills} />}
+        {dataInfo.interests && (
+          <InterestsModal interestList={dataInfo.interests} />
+        )}
+        {<SuggestionsModal suggestionList={dataInfo.suggestions} />}
+        {<UrlProfilModal />}
       </div>
-    </>
+    </div>
   );
 };

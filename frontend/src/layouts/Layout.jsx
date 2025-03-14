@@ -81,7 +81,7 @@ export const Layout = () => {
             </div>
             <div className="w-[70%] h-[45%] pt-1">
               <h1 className="font-semibold text-xl">Said kachoud</h1>
-              <h6>devloper</h6>
+              <h6 className="font-normal">devloper</h6>
             </div>
             <button className="font-semibold absolute border-2 border-blue-600 text-blue-600 w-[250px] rounded-2xl top-[36%] left-[3.5%] text-center cursor-pointer hover:bg-blue-200 hover:text-blue-500 hover:border-blue-600 hover:border-3 hover:font-medium">
               view profil
@@ -119,7 +119,7 @@ export const Layout = () => {
         <span
           className={
             isMessaged
-              ? "bg-red-500 rounded w-2 h-2 fixed right-[180px] top-4 sm:right-[585px] sm:top-1"
+              ? "bg-red-500 rounded w-2 h-2 fixed right-[180px] top-4 sm:right-[600px] sm:top-1"
               : "hidden"
           }
         ></span>

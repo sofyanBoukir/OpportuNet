@@ -3,6 +3,8 @@ const appState = {
   isMessaged: true,
   isNotified: true,
   istheme: "light",
+  skills: [],
+  interests: [],
 };
 
 export const AppReducer = (state = appState, action) => {
@@ -15,6 +17,10 @@ export const AppReducer = (state = appState, action) => {
       } else {
         return { ...state, istheme: "light" };
       }
+    case "Add_SKILLS":
+      return { ...state, skills: action.payload };
+    case "Add_INTERESTS":
+      return { ...state, interests: action.payload };
     default:
       return state;
   }
