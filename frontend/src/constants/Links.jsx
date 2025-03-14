@@ -6,40 +6,40 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 export const dataHeader = [
   {
-    ROLE: "condidate",
+    ROLE: "candidate",
     SVG: <HomeIcon strokeWidth="1" className="w-full h-full" />,
     TEXT: "Home",
-    LINK: `/condidate/home`,
+    LINK: `/feed`,
   },
   {
-    ROLE: "condidate",
+    ROLE: "candidate",
     SVG: <WorkIcon strokeWidth="1" className="w-full h-full" />,
     TEXT: "Jobs",
-    LINK: `/condidate/jobs`,
+    LINK: `/candidate/jobs`,
   },
   {
-    ROLE: "condidate",
+    ROLE: "candidate",
     SVG: <ForumIcon strokeWidth="1" className="w-full h-full" />,
     TEXT: "Messaging",
-    LINK: `/condidate/messaging`,
+    LINK: `/candidate/messaging`,
   },
   {
-    ROLE: "condidate",
+    ROLE: "candidate",
     SVG: <NotificationsIcon strokeWidth="1" className="w-full h-full" />,
     TEXT: "Notifications",
-    LINK: `/condidate/notifications`,
+    LINK: `/candidate/notifications`,
   },
   {
-    ROLE: "condidate",
+    ROLE: "candidate",
     SVG: <BookmarkIcon strokeWidth="1" className="w-full h-full" />,
     TEXT: "Saved",
-    LINK: `/condidate/saved/{id}`,
+    LINK: `/candidate/saved/{id}`,
   },
   {
     ROLE: "recuiter",
     SVG: <HomeIcon strokeWidth="1" className="w-full h-full" />,
     TEXT: "Home",
-    LINK: `/recuiter/home`,
+    LINK: `/feed`,
   },
   {
     ROLE: "recuiter",

@@ -30,3 +30,21 @@ export const resetPassword = async (formData) =>{
     const response = await axios.post(`${authService}/auth/resetPassword`,formData);
     return response;
 }
+
+export const isNewUser = async (token) =>{
+    const response = await axios.get(`${authService}/auth/isNewUser`,{
+        headers : {
+            Authorization : `Bearer ${token}`
+        }
+    });
+    return response;
+}
+
+export const getUserData = async (token) =>{
+    const response = await axios.get(`${authService}/auth/getUserData`,{
+        headers : {
+            Authorization : `Bearer ${token}`
+        }
+    });
+    return response;
+}

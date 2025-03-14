@@ -14,6 +14,8 @@ app.use(
 
 app.use(express.json());
 app.use("/auth", require("./routes/auth"));
+app.use("/interest", require("./routes/interest"));
+app.use("/profile", require("./routes/profile"));
 
 app.listen(process.env.PORT, () => {
   console.log(`User service is running on port ${process.env.PORT}`);

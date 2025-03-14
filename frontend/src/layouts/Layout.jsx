@@ -11,6 +11,7 @@ import { AppSelector } from "../selectors/AppSelector";
 export const Layout = () => {
   const [showProfil, setShowProfil] = useState(false);
   const { isMessaged, isNotified, userData } = AppSelector();
+  console.log("object", userData);
 
   const showProfil_FUNCTION = (e) => {
     e.stopPropagation();
@@ -19,10 +20,9 @@ export const Layout = () => {
 
   return (
     <div>
-      <div className="h-screen fixed bg-[#F4F2EE] w-full"></div>
       <div className="h-[55px] fixed z-15 w-full hidden 2xl:block "></div>
       <div
-        className="w-full h-[55px] bg-white fixed z-20"
+        className="w-full h-[55px] bg-white fixed top-0 z-20"
         onClick={() => setShowProfil(false)}
       >
         <div className="w-full 2xl:w-[975px] h-[55px] 2xl:relative 2xl:left-[175px] z-20">

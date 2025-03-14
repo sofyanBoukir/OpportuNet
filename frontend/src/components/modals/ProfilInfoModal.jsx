@@ -10,7 +10,7 @@ export const ProfilInfoModal = ({ dataInfo }) => {
     backgroundRepeat: "no-repeat",
   };
   return (
-    <div className="bg-white w-full md:w-[)55%] 2xl:w-[65%] h-auto rounded-t)-lg 2xl:rounded-lg absolute top-0 2xl:top-5 left-0 2xl:left-5 z-15">
+    <div className="bg-white w-full 2xl:w-[65%] h-auto 2xl:rounded-lg absolute top-0 2xl:top-5 left-0 2xl:left-5 z-15">
       <div
         style={styleCover}
         className="w-full h-[120px] md:h-[160px] 2xl:h-[200px] rounded-t-md"
@@ -38,12 +38,16 @@ export const ProfilInfoModal = ({ dataInfo }) => {
           {dataInfo.headLine}
         </h6>
         <div className="text-gray-500 text-sm">{dataInfo.address}</div>
-        <Link
-          to={dataInfo.github}
+        <a
+          href={dataInfo.github}
           className="font-semibold text-sm text-[#0A66C2] hover:underline"
         >
           {dataInfo.github}
-        </Link>
+        </a>
+        {/* <Link
+          to={dataInfo.github}
+          className="font-semibold text-sm text-[#0A66C2] hover:underline"
+        ></Link> */}
         <div className="flex text-sm font-semibold text-[#0A66C2] mt-2 mb-4">
           <div className="mr-6 border-2 border-[#0A66C2 rounded-2xl w-[110px] text-center">
             <span className="mr-1">{dataInfo.followers}</span>followers
