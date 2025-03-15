@@ -35,8 +35,8 @@ export const VerifyCode = ({setClose}) => {
                 if(response.data.userData.isNewUser){
                     setExtraLoading(true)
                     setTimeout(() => {
-                        setExtraLoading(false);
                         navigate('/user/completeRegistration');
+                        setExtraLoading(false);
                         return
                     }, 3000);
                 }else{

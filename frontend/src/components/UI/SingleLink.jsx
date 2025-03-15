@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import React from "react"
 
 export const SingleLink = ({ link, svg, text }) => {
   const navigate = useNavigate();
@@ -19,10 +20,10 @@ export const SingleLink = ({ link, svg, text }) => {
       }}
       className={`${
         link === currentPath ? "text-black sm:border-b-2" : null
-      } w-[60px] flex flex-col items-center justify-center cursor-pointer hover:text-gray-200) duration-200`}
+      } w-[60px] flex flex-col items-center justify-center cursor-pointer hover:text-gray-200 duration-200`}
     >
       <div
-        className={`mt-[3px] ${
+        className={`mt-[3px] duration-200 ${
           link === currentPath ? "text-black" : " text-[#666666] "
         }`}
       >
@@ -30,7 +31,7 @@ export const SingleLink = ({ link, svg, text }) => {
       </div>
       <div>
         <span
-          className={`text-xs font-normal hidden lg:block ${
+          className={`text-xs duration-200 font-normal hidden lg:block ${
             link === currentPath ? "text-black" : "text-gray-600"
           }`}
         >

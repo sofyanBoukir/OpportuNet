@@ -1,15 +1,32 @@
 import { Input } from "../components/UI/Input";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { ArrowRightOnRectangleIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { SingleLink } from "../components/UI/SingleLink";
 import { dataHeader } from "../constants/Links";
 import { AppSelector } from "../selectors/AppSelector";
-import ContrastIcon from "@mui/icons-material/Contrast";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import userDefaultImage from '../../public/images/profilDefault.png'
+import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
+import React from "react"
 
 export const Layout = () => {
   const [showProfil, setShowProfil] = useState(false);
   const { isMessaged, isNotified, userData } = AppSelector();
+
+
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
 
   const showProfil_FUNCTION = (e) => {
     e.stopPropagation();
@@ -19,7 +36,7 @@ export const Layout = () => {
   return (
     <div>
       <div
-        className=" bg-white py-1 lg:px-[13%] flex justify-between"
+        className="bg-white py-1 lg:px-[10%] flex justify-between" 
         onClick={() => setShowProfil(false)}
       >
         <div className="w-full lg:w-[40%] relative">
@@ -43,7 +60,7 @@ export const Layout = () => {
             />
           </div>
         </div>
-        <div className="bg-white w-full lg:w-[50%] h-[55px] lg:h-auto fixed lg:static bottom-0 flex sm:justify-center lg:justify-start gap-5">
+        <div className="bg-white w-full lg:w-[50%] h-[70px] lg:h-auto fixed lg:static bottom-0 flex sm:justify-center gap-8">
           {dataHeader
             .filter((item) => item.ROLE === userData.role)
             .map((element) => (
@@ -54,58 +71,65 @@ export const Layout = () => {
                 text={element.TEXT}
               />
             ))}
+
           <div
-            className={`w-[60px] flex flex-col items-center justify-center mt-[3px] cursor-pointer hover:text-blue-500`}
+            className={`w-[60px] flex flex-col items-center justify-center mt-[3px] cursor-pointer`}
+            onClick={() => setDarkMode(!darkMode)} >
+            {
+              darkMode ? 
+              <MoonIcon className="w-7 h-7 text-[#666666]"/>
+              : <SunIcon className="w-7 h-7 text-[#666666]"/>
+            }
+            <div className="text-xs font-normal hidden lg:block text-gray-600">
+            {
+              darkMode ? 
+                "Dark"
+              : "Light"
+            }
+            </div>
+          </div>
+          <div
+            className={`w-[60px] flex flex-col items-center justify-center mt-[3px] cursor-pointer`}
             onClick={showProfil_FUNCTION}
           >
             <img
               src="../../public/images/profilDefault.png"
-              className="w-6 h-6 rounded-xl mt-0.5"
+              className="w-7 h-7 rounded-full mt-0.5"
             />
-            <div className="font-light text-xs hidden 2xl:block">Me</div>
+            <div className="text-xs font-normal hidden lg:block text-gray-600 2xl:block">Profile</div>
           </div>
+          
         </div>
       </div>
       <div
         className={`${
           showProfil ? "block" : "hidden"
-        } w-[300px] py-2 px-3 rounded-lg shadow-lg flex flex-col bg-white absolute 2xl:left-[58%] 2xl:top-[65px] z-15`}
+        } w-[400px] py-2 px-3 rounded-xl shadow-lg flex flex-col bg-white absolute md:left-[65%] rounded-tr-none md:top-[75px] z-15`}
       >
-        <div className="flex items-center">
-          <div className="w-[45%] h-[60%] pt-1">
-            <img
-              src="../../public/images/profilDefault.png"
-              className="w-[60%] h-[60%] rounded-[50%] m-auto"
-            />
+          <div className="flex items-center gap-2">
+            <div>
+              <img src={userDefaultImage} className="rounded-full w-16 h-16"/>
+            </div>
+            <div>
+              <p className="text-lg font-semibold">Soufian boukir</p>
+              <span className="text-gray-700">Javascript developer</span>
+            </div>
           </div>
-          <div className="w-[70%] h-[45%] pt-1">
-            <h1 className="font-semibold text-xl">Said kachoud</h1>
-            <h6 className="font-normal">devloper</h6>
+          <div className="mt-2">
+            <button className="rounded-2xl font-semibold w-[100%] cursor-pointer border-2 border-blue-600 text-[#0A66C2] bg-gray-100 hover:bg-blue-50 duration-200">
+              View profile
+            </button>
           </div>
-        </div>
-        <button className="mx-auto mt-3 mb-2 font-semibold border-2 border-[#0A66C2] text-[#0A66C2] w-[270px] rounded-2xl text-center cursor-pointer hover:bg-sky-100 hover:text-[#0A66C2] hover:border-[#0A66C2] hover:border-2 hover:font-medium">
-          view profil
-        </button>
-        <hr className="text-gray-400" />
-        <div className="w-full h-[85px]">
-          <div
-            className="w-full h-[50%] pl-2 pt-2 flex items-center cursor-pointer hover:bg-gray-100"
-            // onClick={handleClickDark}
-          >
-            <ContrastIcon
-              strokeWidth="1"
-              className="w-6 h-6 mr-1 text-gray-700"
-            />
-            <span>Dark mode</span>
+          <div className="mt-2">
+            <hr className="text-gray-300"></hr>
           </div>
-          <div className="w-full h-[50%] pl-3 pt-1 flex items-center cursor-pointer hover:bg-gray-100">
-            <LogoutIcon
-              strokeWidth="1"
-              className="w-6 h-6 mr-1 text-gray-700"
-            />
-            <span>Logout</span>
+          <div className="mt-2 flex gap-2 flex-col">
+            <div className="flex gap-2 items-center py-1 rounded-md cursor-pointer px-2 hover:bg-gray-100 duration-200">
+              <ArrowRightOnRectangleIcon className="w-6 h-6 text-gray-700" strokeWidth={1.1}/>
+              <span className="text-gray-700 text-lg">Sign out</span>
+            </div>
           </div>
-        </div>
+      </div>
         {/* <span
             className={
               isNotified
@@ -120,7 +144,6 @@ export const Layout = () => {
                 : "hidden"
             }
           ></span> */}
-      </div>
     </div>
   );
 };

@@ -16,6 +16,7 @@ import { CompleteRegisration } from "./pages/auth/CompleteRegisration";
 import { IsNewUser } from "./protectedRoutes/CompleteReg";
 import { PersisReload } from "./protectedRoutes/PersisReload";
 import { NotFound } from "./pages/error/NotFound";
+import React from "react"
 
 function App() {
   return (
