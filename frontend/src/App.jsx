@@ -27,8 +27,6 @@ function App() {
         <Route path="/user/forgot_password" element={<ForgotPassword />} />
         <Route path="*" element={<NotFound />} />
 
-        {/* <Route path="/" element={<Layout />}>
-          <Route path="/condidate/home" element={<Home />} /> */}
         <Route element={<IsNewUser />}>
           <Route
             path="/user/completeRegistration"

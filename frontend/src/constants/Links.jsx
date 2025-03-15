@@ -2,67 +2,72 @@ import HomeIcon from "@mui/icons-material/Home";
 import WorkIcon from "@mui/icons-material/Work";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ForumIcon from "@mui/icons-material/Forum";
+import { AiFillHome } from "react-icons/ai";
+import { FaBriefcase } from "react-icons/fa6";
+import { TbMessageFilled } from "react-icons/tb";
+import { IoNotifications } from "react-icons/io5";
+// import { BookmarkIcon } from "@heroicons/react/24/outline";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 export const dataHeader = [
   {
     ROLE: "candidate",
-    SVG: <HomeIcon strokeWidth="1" className="w-full h-full" />,
+    SVG: <AiFillHome strokeWidth="1" className="w-6 h-6" />,
     TEXT: "Home",
     LINK: `/feed`,
   },
   {
     ROLE: "candidate",
-    SVG: <WorkIcon strokeWidth="1" className="w-full h-full" />,
+    SVG: <FaBriefcase strokeWidth="1" className="w-6 h-6" />,
     TEXT: "Jobs",
     LINK: `/candidate/jobs`,
   },
   {
     ROLE: "candidate",
-    SVG: <ForumIcon strokeWidth="1" className="w-full h-full" />,
+    SVG: <TbMessageFilled strokeWidth="1" className="w-6 h-6" />,
     TEXT: "Messaging",
-    LINK: `/candidate/messaging`,
+    LINK: `/messaging`,
   },
   {
     ROLE: "candidate",
-    SVG: <NotificationsIcon strokeWidth="1" className="w-full h-full" />,
+    SVG: <IoNotifications strokeWidth="1" className="w-6 h-6" />,
     TEXT: "Notifications",
-    LINK: `/candidate/notifications`,
+    LINK: `/notifications`,
   },
   {
     ROLE: "candidate",
-    SVG: <BookmarkIcon strokeWidth="1" className="w-full h-full" />,
-    TEXT: "Saved",
-    LINK: `/candidate/saved/{id}`,
+    SVG: <BookmarkIcon strokeWidth="1" className="w-6 h-6" />,
+    TEXT: "Savs",
+    LINK: `/saves`,
   },
   {
     ROLE: "recuiter",
-    SVG: <HomeIcon strokeWidth="1" className="w-full h-full" />,
+    SVG: <HomeIcon strokeWidth="1" />,
     TEXT: "Home",
     LINK: `/feed`,
   },
   {
     ROLE: "recuiter",
-    SVG: <WorkIcon strokeWidth="1" className="w-full h-full" />,
-    TEXT: "Jobs",
+    SVG: <WorkIcon strokeWidth="1" />,
+    TEXT: "Post",
     LINK: `/recuiter/post`,
   },
   {
     ROLE: "recuiter",
-    SVG: <ForumIcon strokeWidth="1" className="w-full h-full" />,
+    SVG: <ForumIcon strokeWidth="1" />,
     TEXT: "Messaging",
-    LINK: `/recuiter/messaging`,
+    LINK: `/messaging`,
   },
   {
     ROLE: "recuiter",
-    SVG: <NotificationsIcon strokeWidth="1" className="w-full h-full" />,
+    SVG: <NotificationsIcon strokeWidth="1" />,
     TEXT: "Notifications",
-    LINK: `/recuiter/notifications`,
+    LINK: `/notifications`,
   },
   {
     ROLE: "recuiter",
-    SVG: <BookmarkIcon strokeWidth="1" className="w-full h-full" />,
+    SVG: <BookmarkIcon strokeWidth="1" />,
     TEXT: "Saved",
-    LINK: `/recuiter/saved/{id}`,
+    LINK: `/saved`,
   },
 ];

@@ -1,5 +1,5 @@
 const appState = {
-  userData: { name: "said", role: "condidate" },
+  userData: { name: "said", role: "candidate" },
   isMessaged: true,
   isNotified: true,
   istheme: "light",

@@ -23,14 +23,14 @@ export const SingleLink = ({ link, svg, text }) => {
     >
       <div
         className={`mt-[3px] ${
-          link === currentPath ? "text-black" : " text-gray-600"
+          link === currentPath ? "text-black" : " text-[#666666] "
         }`}
       >
         {svg}
       </div>
       <div>
         <span
-          className={`text-sm font-semiboldbold hidden lg:block ${
+          className={`text-xs font-normal hidden lg:block ${
             link === currentPath ? "text-black" : "text-gray-600"
           }`}
         >
