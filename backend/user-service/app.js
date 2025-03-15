@@ -6,9 +6,11 @@ require('dotenv').config();
 const app = express();
 
 dbConnect()
-app.use(cors({
-    'origin' : process.env.FRONTEND_URL
-}))
+app.use(
+    cors({
+      origin: process.env.FRONTEND_URL,
+  })
+  );
 
 app.use(express.json())
 app.use('/auth',require('./routes/auth'));
