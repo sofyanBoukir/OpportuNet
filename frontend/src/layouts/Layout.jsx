@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import userDefaultImage from '../../public/images/profilDefault.png'
 import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 import React from "react"
+import { Outlet } from "react-router-dom";
 
 export const Layout = () => {
   const [showProfil, setShowProfil] = useState(false);
@@ -35,8 +36,9 @@ export const Layout = () => {
 
   return (
     <div>
+    <div>
       <div
-        className="bg-white py-1 lg:px-[10%] flex justify-between" 
+        className="bg-white py-1 lg:px-[10%] flex w-[100%] justify-between fixed z-20" 
         onClick={() => setShowProfil(false)}
       >
         <div className="w-full lg:w-[40%] relative">
@@ -144,6 +146,8 @@ export const Layout = () => {
                 : "hidden"
             }
           ></span> */}
+    </div>
+  <Outlet />
     </div>
   );
 };

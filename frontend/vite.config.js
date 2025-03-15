@@ -11,8 +11,8 @@ export default defineConfig({
     "./index.html",
   ],
   darkMode: "class",
-  // theme: {
-  //   extend: {},
-  // },
+  theme: {
+    extend: {},
+  },
   plugins: [react(), tailwindcss()],
 });
