@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { AppSelector } from "../../selectors/AppSelector";
-import { Button } from "../ui/Button";
 import { Input } from "../UI/Input";
 import { Label } from "../UI/Label";
+import { Button } from "../UI/Button";
 
 export const UpdateModal = ({ userInfobeforUpdate, toUpdate, setOpen }) => {
   const { userData } = AppSelector();

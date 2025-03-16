@@ -20,7 +20,7 @@ export const Post = () => {
         setIsExpanded(!isExpanded);
     };
   return (
-    <div className='w-[90%] md:w-[100%] bg-white mx-auto rounded-xl'>
+    <div className='w-[100%] md:w-[100%] bg-white rounded-xl'>
         <div className='w-[100%] px-4 py-4 justify-between flex flex-row items-center'>
             <div className=' flex flex-row items-center'>
                 <div className='w-[15%] lg:w-[12%]'> <img src="/profil.jpg" className=' rounded-full' alt="" /></div>
