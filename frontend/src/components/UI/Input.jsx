@@ -10,6 +10,7 @@ export const Input = ({
   required = true,
   maxLength,
   className,
+  onClick
 }) => {
   return (
     <input
@@ -17,6 +18,7 @@ export const Input = ({
       name={name}
       placeholder={placeholder}
       value={value}
+      onClick={onClick}
       onChange={onChange}
       required={required}
       maxLength={maxLength}

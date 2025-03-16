@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { AppSelector } from "../../selectors/AppSelector";
-import { Button } from "../ui/Button";
 import { Input } from "../UI/Input";
 import { Label } from "../UI/Label";
+import { Button } from "../UI/Button";
 import { updateIntroProfile } from "../../services/profile";
 
 export const UpdateModal = ({ userInfobeforUpdate, toUpdate, setOpen }) => {
@@ -52,7 +52,7 @@ export const UpdateModal = ({ userInfobeforUpdate, toUpdate, setOpen }) => {
   };
 
   return (
-    <div className="z-20 abso)lute fixed w-full inset-0 p-2 flex text-gray-700 justify-center lg:backdrop-blur-xs">
+    <div className="z-20 abso)lute fixed w-full inset-0 p-2 flex bg-black/50 text-gray-700 justify-center lg:backdrop-blur-xs">
       <div className="bg-[#ffffff] z-20 border w-full sm:w-[65%] lg:w-[50%] h-[520px] sm:h-[540px] lg:h-[555px] my-auto lg:mt-[30px] px-8 rounded-lg shadow-sm overflow-auto">
         <div className="text-center sticky top-0 pt-6 pb-2 bg-[#ffffff]">
           <h1 className="text-2xl font-semibold text-gray-800">Edit intro</h1>
@@ -158,6 +158,7 @@ export const UpdateModal = ({ userInfobeforUpdate, toUpdate, setOpen }) => {
             />
           </div>
         </form>
+        <br></br>
       </div>
     </div>
   );
