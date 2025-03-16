@@ -82,6 +82,7 @@ export const Profil = () => {
     location: userData.location,
     webSite: userData.webSit,
   };
+  console.log("object", userData);
 
   return (
     <div>

@@ -1,5 +1,6 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import { useState } from "react";
 
 export const InterestsModal = ({ showIcon, interestList }) => {
@@ -27,11 +28,13 @@ export const InterestsModal = ({ showIcon, interestList }) => {
               className="flex justify-baseline mb-4 border-b border-b-gray-300 h-[30px]"
             >
               <div className=" w-full flex justify-between pr-2">
-                <h5 className="text-md font-semibold text-black ">{item}</h5>
+                <h5 className="text-md font-semibold text-black ">
+                  {item.interest}
+                </h5>
                 {showIcon && (
                   <div className="text-gray-600 cursor-pointer hover:text-black rounded-[50%] ">
                     <span>
-                      <DeleteOutlinedIcon />
+                      <ModeEditOutlinedIcon />
                     </span>
                   </div>
                 )}
