@@ -1,6 +1,13 @@
 import { CircularProgress } from "@mui/material";
 import React from "react";
-export const Button = ({ type,disabled, loading, onClick, text, className }) => {
+export const Button = ({
+  type,
+  disabled,
+  loading,
+  onClick,
+  text,
+  className,
+}) => {
   return (
     <button
       type={type}
