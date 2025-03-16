@@ -1,5 +1,4 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import { useState } from "react";
 
