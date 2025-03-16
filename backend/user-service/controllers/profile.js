@@ -53,7 +53,7 @@ const completeRegistration = async (request,response) =>{
         }
 
         user.role = role;
-        user.headeLine = headLine;
+        user.headLine = headLine;
         user.role === 'recuiter' ? user.companyName = companyName : null;
         user.interests = interests;
         user.isNewUser = false;
@@ -93,7 +93,7 @@ const updateInfo = async (request,response) =>{
         }
 
         user.name = name;
-        user.headeLine = headLine;
+        user.headLine = headLine;
         user.role === 'recuiter' ? user.companyName = companyName : null;
         user.location = location;
         user.webSite = webSite;

@@ -1,15 +1,18 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { Post } from "../components/App/Post";
 import userDefaultImage from '../../public/images/profilDefault.png'
 import { Input } from "../components/UI/Input";
+import { Profile } from "../components/App/Profile";
 export const Home = () => {
-  const appStore = useSelector((data) => data);
+
+
   return (
     <div className="px-[12%] relative top-16">
       <div className="flex justify-center gap-[1%]">
         <div className="w-[20%]">
-          <div>Profile component</div>
+          <div>
+            <Profile />
+          </div>
           <div></div>
         </div>
 
