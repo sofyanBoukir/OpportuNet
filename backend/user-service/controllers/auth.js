@@ -13,11 +13,20 @@ let invalidTokens = new Set();
 const getUserData = async (request,response) =>{
     try{
         const userId = request.user.id;
-        const user = await User.findById(userId);
-
-        if(user){
+        const user = await User.findById(userId).populate({
+            select : 'interest',
+            path : 'interests'
+        });
+        if(!user){
+            return response.status(404).json({
+                'message' : 'User not found'
+            })
+        }
+        const userObject = user.toObject()
+        delete userObject.password;
+        if(userObject){
             return response.json({
-                'userData' : user,
+                'userData' : userObject,
             })
         }
     }catch(error){

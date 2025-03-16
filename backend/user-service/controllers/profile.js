@@ -2,6 +2,36 @@ const User = require("../models/User");
 const fs = require('fs');
 const path = require('path');
 require("dotenv").config()
+
+
+const getUserDataById = async (request,response) =>{
+    try{
+        const {userId} = request.params;
+        const user = await User.findById(userId).populate({
+            select : 'interest',
+            path : 'interests'
+        });
+
+        if(!user){
+            return response.status(404).json({
+                'message' : 'User not found'
+            })
+        }
+        const userObject = user.toObject()
+        delete userObject.password;
+        delete userObject.email;
+
+        if(userObject){
+            return response.json({
+                'userData' : userObject,
+            })
+        }
+    }catch(error){
+        return response.status(500).json({
+            'messahe' : error.message
+        })
+    }
+}
 const completeRegistration = async (request,response) =>{
     try{
         const userId = request.user.id;
@@ -110,4 +140,4 @@ const updateAbout = async (request,response) =>{
     }
 }
 
-module.exports = { completeRegistration , updateInfo ,updateAbout }
+module.exports = { getUserDataById,completeRegistration , updateInfo ,updateAbout }
