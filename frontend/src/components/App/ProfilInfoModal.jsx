@@ -1,9 +1,10 @@
+import { useState } from "react";
 import coverProfil from "../../../public/images/coverProfil.png";
 import ProfilImg from "../../../public/images/profilDefault.png";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import { IoIosCamera } from "react-icons/io";
 
-export const ProfilInfoModal = ({ showIcon, userData }) => {
+export const ProfilInfoModal = ({ setShowModal, showIcon, userData }) => {
   const styleCover = {
     backgroundImage: `url(${coverProfil})`,
     backgroundSize: "cover",
@@ -11,7 +12,7 @@ export const ProfilInfoModal = ({ showIcon, userData }) => {
     backgroundRepeat: "no-repeat",
   };
   return (
-    <div className="bg-white w-full lg:w-[55%] pb-[1px] lg:ml-[10%] relative lg:rounded-md z-15">
+    <div className="bg-white w-full lg:w-[89%] pb-[1px] lg:ml-[15%] relative lg:rounded-md z-15">
       <div
         style={styleCover}
         className="w-full h-[120px] md:h-[160px] 2xl:h-[215px] lg:rounded-t-md"
@@ -33,7 +34,10 @@ export const ProfilInfoModal = ({ showIcon, userData }) => {
         <IoIosCamera className="mx-auto mt-[1.6px]" />
       </div>
       {showIcon && (
-        <div className="float-end mt-4 mr-5 w-[40px] h-[40px] text-center pt-1 text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[50%] ">
+        <div
+          onClick={() => setShowModal(true)}
+          className="float-end mt-4 mr-5 w-[40px] h-[40px] text-center pt-1 text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[50%] "
+        >
           <ModeEditOutlinedIcon strokeWidth="1" />
         </div>
       )}

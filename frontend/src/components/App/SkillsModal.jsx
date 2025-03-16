@@ -12,7 +12,7 @@ export const SkillsModal = ({ showIcon, skillList }) => {
   };
 
   return (
-    <div className="bg-white w-full lg:w-[55%] p-[30px] lg:ml-[10%] relative lg:rounded-md z-15">
+    <div className="bg-white w-full lg:w-[89%] p-[30px] lg:ml-[15%] relative lg:rounded-md z-15">
       {showIcon && (
         <div className="absolute right-0 top-[5px] mt-4 mr-5 w-[30px] h-[30px] text-center text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[50%] ">
           <PlusIcon strokeWidth="1" />

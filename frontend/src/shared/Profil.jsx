@@ -7,10 +7,13 @@ import { SkillsModal } from "../components/App/SkillsModal";
 import { InterestsModal } from "../components/App/InterestsModal";
 import { UrlProfilModal } from "../components/App/UrlProfilModal";
 import { SuggestionsModal } from "../components/App/SuggestionsModal";
+import { AddModal } from "../components/modals/AddModal";
 import { AppSelector } from "../selectors/AppSelector";
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 export const Profil = () => {
+  const [showAddModal, setShowAddModal] = useState(false);
   const { id } = useParams();
   const { userData } = AppSelector();
   const dataInfo = {
@@ -46,9 +49,13 @@ export const Profil = () => {
   console.log("this is result", showIcon);
 
   return (
-    <div>
-      <div className="w-full pt-[55px] lg:pt-[80px] flex flex-col gap-y-2 pb-[55px] lg:pb-4">
-        <ProfilInfoModal showIcon={showIcon} userData={userData} />
+    <div className="w-full flex flex-col gap-y-2 lg:flex-row justify-start">
+      <div className="w-full lg:w-[65%] pt-[55px] lg:pt-[80px] flex flex-col gap-y-2 lg:pb-4">
+        <ProfilInfoModal
+          setShowModal={setShowAddModal}
+          showIcon={showIcon}
+          userData={userData}
+        />
         {
           // userData.content &&
           <AboutModal
@@ -93,9 +100,12 @@ export const Profil = () => {
             interestList={userData.interests}
           />
         )}
+      </div>
+      <div className="lg:w-[20%] flex flex-col gap-2 lg:pt-[80px] lg:ml-[4%]">
         {<UrlProfilModal showIcon={showIcon} />}
         {<SuggestionsModal suggestionList={dataInfo.suggestions} />}
       </div>
+      {/* {showAddModal && <AddModal setOpen={setShowAddModal} />} */}
     </div>
   );
 };
