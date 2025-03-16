@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const fs = require('fs');
 const path = require('path');
-
+require("dotenv").config()
 const completeRegistration = async (request,response) =>{
     try{
         const userId = request.user.id;
@@ -15,6 +15,13 @@ const completeRegistration = async (request,response) =>{
         }
 
         const user = await User.findById(userId);
+
+        if(!user){
+            return response.status(404).json({
+                'message' : 'User Invalid'
+            })
+        }
+
         user.role = role;
         user.headeLine = headLine;
         user.role === 'recuiter' ? user.companyName = companyName : null;
@@ -36,15 +43,20 @@ const completeRegistration = async (request,response) =>{
 }
 
 const updateInfo = async (request,response) =>{
-    try{
+     try{
         const userId = request.user.id;
-        const {name,headLine,location,webSite} = request.body;
-
-        const imageUrl = request.file ? `/users/${request.file.filename}` : user.profile_picture;
+        const {name,headLine,location,webSite,companyName} = request.body;
 
         const user = await User.findById(userId);
 
-        if (user.profile_picture) {
+        if(!user){
+            return response.status(404).json({
+                'message' : 'User Invalid'
+            })
+        }
+        const imageUrl = request.file ? `/users/${request.file.filename}` : user.profile_picture;
+
+        if (user.profile_picture && user.profile_picture !== `${process.env.SERVER_URL}/users/userDefaultImage.jpg`) {
             const imagePath = path.join(__dirname, "../public", user.profile_picture);
             fs.unlink(imagePath, (err) => {
             });
@@ -70,4 +82,32 @@ const updateInfo = async (request,response) =>{
     }
 }
 
-module.exports = { completeRegistration , updateInfo }
+
+const updateAbout = async (request,response) =>{
+    try{
+        const userId = request.user.id;
+        const { about } = request.body;
+
+        const user = await User.findById(userId);
+        if(!user){
+            return response.status(404).json({
+                'message' : 'User Invalid'
+            })
+        }
+
+        user.about = about;
+
+        await user.save();
+        
+        return response.json({
+            'message' : 'Updated successgully'
+        })
+
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+}
+
+module.exports = { completeRegistration , updateInfo ,updateAbout }
