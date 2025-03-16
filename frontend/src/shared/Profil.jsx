@@ -49,63 +49,69 @@ export const Profil = () => {
   console.log("this is result", showIcon);
 
   return (
-    <div className="w-full flex flex-col gap-y-2 lg:flex-row justify-start">
-      <div className="w-full lg:w-[65%] pt-[55px] lg:pt-[80px] flex flex-col gap-y-2 lg:pb-4">
-        <ProfilInfoModal
-          setShowModal={setShowAddModal}
-          showIcon={showIcon}
-          userData={userData}
-        />
-        {
-          // userData.content &&
-          <AboutModal
+    <div>
+      <div
+        className={`${
+          showAddModal && "fixed bg"
+        } w-full flex flex-col gap-y-2 lg:flex-row justify-start`}
+      >
+        <div className="w-full lg:w-[65%] pt-[55px] lg:pt-[80px] flex flex-col gap-y-2 lg:pb-4">
+          <ProfilInfoModal
+            setShowModal={setShowAddModal}
             showIcon={showIcon}
-            content={userData.content ? userData.content : dataInfo.content}
+            userData={userData}
           />
-        }
-        {
-          // userData.education &&
-          <EducationsModal
-            showIcon={showIcon}
-            educationList={
-              userData.education.length
-                ? userData.education
-                : dataInfo.education
-            }
-          />
-        }
-        {
-          // userData.experience &&
-          <ExperiencesModal
-            showIcon={showIcon}
-            experienceList={
-              userData.experience.length
-                ? userData.experience
-                : dataInfo.experience
-            }
-          />
-        }
-        {
-          // userData.skills &&
-          <SkillsModal
-            showIcon={showIcon}
-            skillList={
-              userData.skills.length ? userData.skills : dataInfo.skills
-            }
-          />
-        }
-        {userData.interests && (
-          <InterestsModal
-            showIcon={showIcon}
-            interestList={userData.interests}
-          />
-        )}
+          {
+            // userData.content &&
+            <AboutModal
+              showIcon={showIcon}
+              content={userData.content ? userData.content : dataInfo.content}
+            />
+          }
+          {
+            // userData.education &&
+            <EducationsModal
+              showIcon={showIcon}
+              educationList={
+                userData.education.length
+                  ? userData.education
+                  : dataInfo.education
+              }
+            />
+          }
+          {
+            // userData.experience &&
+            <ExperiencesModal
+              showIcon={showIcon}
+              experienceList={
+                userData.experience.length
+                  ? userData.experience
+                  : dataInfo.experience
+              }
+            />
+          }
+          {
+            // userData.skills &&
+            <SkillsModal
+              showIcon={showIcon}
+              skillList={
+                userData.skills.length ? userData.skills : dataInfo.skills
+              }
+            />
+          }
+          {userData.interests && (
+            <InterestsModal
+              showIcon={showIcon}
+              interestList={userData.interests}
+            />
+          )}
+        </div>
+        <div className="lg:w-[20%] flex flex-col gap-2 lg:pt-[80px] lg:ml-[4%]">
+          {<UrlProfilModal showIcon={showIcon} />}
+          {<SuggestionsModal suggestionList={dataInfo.suggestions} />}
+        </div>
       </div>
-      <div className="lg:w-[20%] flex flex-col gap-2 lg:pt-[80px] lg:ml-[4%]">
-        {<UrlProfilModal showIcon={showIcon} />}
-        {<SuggestionsModal suggestionList={dataInfo.suggestions} />}
-      </div>
-      {/* {showAddModal && <AddModal setOpen={setShowAddModal} />} */}
+      {showAddModal && <AddModal setOpen={setShowAddModal} />}
     </div>
   );
 };
