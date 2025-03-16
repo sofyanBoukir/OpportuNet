@@ -3,14 +3,16 @@ import { AppSelector } from "../../selectors/AppSelector";
 import { Button } from "../ui/Button";
 import { Input } from "../UI/Input";
 import { Label } from "../UI/Label";
+import { updateIntroProfile } from "../../services/profile";
 
 export const UpdateModal = ({ userInfobeforUpdate, toUpdate, setOpen }) => {
   const { userData } = AppSelector();
   const [userInfo, setUserInfo] = useState({ ...userInfobeforUpdate });
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [notification, setNotification] = useState(null);
 
   const handleChange = (e) => {
-    console.log(e);
     const { name, value, type, files } = e.target;
     setUserInfo((prev) => ({
       ...prev,
@@ -22,6 +24,31 @@ export const UpdateModal = ({ userInfobeforUpdate, toUpdate, setOpen }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setErrorMessage(null);
+    setNotification(null);
+    try {
+      let response;
+      switch (toUpdate) {
+        case _toUpdate:
+          response = await updateIntroProfile(
+            localStorage.getItem("token"),
+            userInfo
+          );
+          setLoading(false);
+          setNotification({ type: "success", message: response.data.message });
+          break;
+        default:
+          setNotification({ type: "error", message: "Unauthorized" });
+      }
+    } catch (error) {
+      error.response
+        ? setNotification({
+            type: "error",
+            message: error.response.data.message,
+          })
+        : setNotification({ type: "error", message: "try later again" });
+    }
   };
 
   return (
@@ -55,8 +82,8 @@ export const UpdateModal = ({ userInfobeforUpdate, toUpdate, setOpen }) => {
               />
               <Input
                 type="text"
-                name="headeLine"
-                value={userInfo.headeLine}
+                name="headLine"
+                value={userInfo.headLine}
                 onChange={handleChange}
                 className="p-2 font-normal text-sm outline-2 rounded-xs "
               />
