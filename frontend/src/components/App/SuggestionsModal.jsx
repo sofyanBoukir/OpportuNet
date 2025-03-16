@@ -1,6 +1,6 @@
 export const SuggestionsModal = ({ suggestionList }) => {
   return (
-    <div className="p-[10px] bg-white w-full lg:w-[20%] lg:rounded-lg lg:fixed lg:top-[160px] lg:left-[66.5%] z-10">
+    <div className="p-[10px] bg-white w-full lg:w-full lg:rounded-lg z-10">
       {suggestionList.map((item) => (
         <div className="p-2 w-full h-[120px] flex gap-2 relative border-b border-b-gray-300">
           <div className="w-[60px] h-[60px] pt-1">

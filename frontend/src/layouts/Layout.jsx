@@ -106,7 +106,7 @@ export const Layout = () => {
         <div
           className={`${
             showProfil ? "block" : "hidden"
-          } w-[400px] py-2 px-3 rounded-xl shadow-lg flex flex-col bg-white absolute fexid) md:left-[65%] rounded-tr-none md:top-[75px] z-15`}
+          } w-[400px] py-2 px-3 rounded-xl shadow-lg flex flex-col bg-white absolute) fixed md:left-[65%] rounded-tr-none md:top-[75px] z-40`}
         >
           <div className="flex items-center gap-2">
             <div>
