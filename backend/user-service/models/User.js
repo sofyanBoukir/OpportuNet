@@ -13,14 +13,13 @@ const userShema = new mongoose.Schema({
     about : {type:String},
     location : {type:String},
     webSite : {type:String},
-    skills : [{ type: mongoose.Schema.Types.ObjectId, ref: "Skill" }],
+    skills : [ {type:String} ],
     interests : [{type: mongoose.Schema.Types.ObjectId, ref: "Interest"}],
     education: [
         {
             degree: { type: String, required: true },
             institution: { type: String, required: true },
-            year: { type: Number },
-            description: { type: String }
+            year: { type: String },
         }
     ],
     experience: [
@@ -28,8 +27,7 @@ const userShema = new mongoose.Schema({
             position: { type: String, required: true },
             company: { type: String, required: true },
             location: { type: String },
-            startDate: { type: Date, required: true },
-            endDate: { type: Date },
+            year: { type: String },
             current: { type: Boolean, default: false },
             description: { type: String }
         }
