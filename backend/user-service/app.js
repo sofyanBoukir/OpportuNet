@@ -13,6 +13,9 @@ app.use(
 );
 
 app.use(express.json());
+
+app.use("/users", express.static("public/users"));
+
 app.use("/auth", require("./routes/auth"));
 app.use("/interest", require("./routes/interest"));
 app.use("/profile", require("./routes/profile"));

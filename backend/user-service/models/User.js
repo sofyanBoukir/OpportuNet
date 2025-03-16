@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-
+require("dotenv").config()
 const userShema = new mongoose.Schema({
     name : {type:String, required:true},
     email : {type:String, required: true, unique:true},
@@ -7,12 +7,12 @@ const userShema = new mongoose.Schema({
     role : {type:String},
     isNewUser : {type:Boolean, default:true},
     isVerified : {type:Boolean, default:false},
-    profile_picture : {type:String, default:'http://localhost:3000/users/defaultUserImage.png'},
+    profile_picture : {type:String, default:`${process.env.SERVER_URL}/users/defaultUserImage.png`},
     headeLine : {type:String},
     companyName : {type:String},
     bio : {type:String},
     location : {type:String},
-    phoneNumber : {type:String},
+    webSite : {type:String},
     skills : [{ type: mongoose.Schema.Types.ObjectId, ref: "Skill" }],
     interests : [{type: mongoose.Schema.Types.ObjectId, ref: "Interest"}],
     education: [
