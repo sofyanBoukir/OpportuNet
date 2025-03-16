@@ -8,7 +8,7 @@ const userShema = new mongoose.Schema({
     isNewUser : {type:Boolean, default:true},
     isVerified : {type:Boolean, default:false},
     profile_picture : {type:String, default:`${process.env.SERVER_URL}/users/userDefaultImage.jpg`},
-    headeLine : {type:String},
+    headLine : {type:String},
     companyName : {type:String},
     about : {type:String},
     location : {type:String},
