@@ -6,8 +6,6 @@ import { Login } from "./pages/auth/Login";
 import { Layout } from "./layouts/Layout";
 import { Home } from "./shared/Home";
 import { Profil } from "./shared/Profil";
-import { SkillsDetail } from "./shared/SkillsDetail";
-import { InterestsDetail } from "./shared/InterestsDetail";
 
 // import { Post } from "./components/App/Post";
 // import { PostModal } from "./components/modals/PostModal";
@@ -16,7 +14,7 @@ import { CompleteRegisration } from "./pages/auth/CompleteRegisration";
 import { IsNewUser } from "./protectedRoutes/CompleteReg";
 import { PersisReload } from "./protectedRoutes/PersisReload";
 import { NotFound } from "./pages/error/NotFound";
-import React from "react"
+import React from "react";
 
 function App() {
   return (
@@ -38,12 +36,7 @@ function App() {
         <Route element={<PersisReload />}>
           <Route element={<Layout />}>
             <Route path="/feed" element={<Home />} />
-            <Route path="/user/profil" element={<Profil />} />
-            <Route path="/user/detail/skills" element={<SkillsDetail />} />
-            <Route
-              path="/user/detail/interests"
-              element={<InterestsDetail />}
-            />
+            <Route path="/user/profil/:id" element={<Profil />} />
           </Route>
         </Route>
       </Routes>

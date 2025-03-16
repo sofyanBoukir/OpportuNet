@@ -1,15 +1,18 @@
-import { data } from "react-router-dom";
 import profilImg from "../../public/images/said-kachoud.jpg";
-import { AboutModal } from "../components/modals/AboutModal";
-import { EducationsModal } from "../components/modals/EducationsModal";
-import { ProfilInfoModal } from "../components/modals/ProfilInfoModal";
-import { ExperiencesModal } from "../components/modals/ExperiencesModal";
-import { SkillsModal } from "../components/modals/SkillsModal";
-import { InterestsModal } from "../components/modals/InterestsModal";
-import { SuggestionsModal } from "../components/modals/SuggestionsModal";
-import { UrlProfilModal } from "../components/modals/UrlProfilModal";
+import { ProfilInfoModal } from "../components/App/ProfilInfoModal";
+import { AboutModal } from "../components/App/AboutModal";
+import { EducationsModal } from "../components/App/EducationsModal";
+import { ExperiencesModal } from "../components/App/ExperiencesModal";
+import { SkillsModal } from "../components/App/SkillsModal";
+import { InterestsModal } from "../components/App/InterestsModal";
+import { UrlProfilModal } from "../components/App/UrlProfilModal";
+import { SuggestionsModal } from "../components/App/SuggestionsModal";
+import { AppSelector } from "../selectors/AppSelector";
+import { useParams } from "react-router-dom";
 
 export const Profil = () => {
+  const { id } = useParams();
+  const { userData } = AppSelector();
   const dataInfo = {
     name: "Said kachoud",
     headLine: "Full stack devloper",
@@ -38,24 +41,60 @@ export const Profil = () => {
     ],
   };
 
+  const showIcon = userData._id === id;
+  console.log("this id user ", userData);
+  console.log("this is result", showIcon);
+
   return (
     <div>
-      <div className="w-full fixed bg-[#F4F2EE] h-screen"></div>
-      <div className="h-[100px] w-full 2xl:w-[80%] relative top-[50px] 2xl:left-[10%]">
-        <ProfilInfoModal dataInfo={dataInfo} />
-        {dataInfo.content && <AboutModal content={dataInfo.content} />}
-        {dataInfo.education && (
-          <EducationsModal educationList={dataInfo.education} />
+      <div className="w-full pt-[55px] lg:pt-[80px] flex flex-col gap-y-2 pb-[55px] lg:pb-4">
+        <ProfilInfoModal showIcon={showIcon} userData={userData} />
+        {
+          // userData.content &&
+          <AboutModal
+            showIcon={showIcon}
+            content={userData.content ? userData.content : dataInfo.content}
+          />
+        }
+        {
+          // userData.education &&
+          <EducationsModal
+            showIcon={showIcon}
+            educationList={
+              userData.education.length
+                ? userData.education
+                : dataInfo.education
+            }
+          />
+        }
+        {
+          // userData.experience &&
+          <ExperiencesModal
+            showIcon={showIcon}
+            experienceList={
+              userData.experience.length
+                ? userData.experience
+                : dataInfo.experience
+            }
+          />
+        }
+        {
+          // userData.skills &&
+          <SkillsModal
+            showIcon={showIcon}
+            skillList={
+              userData.skills.length ? userData.skills : dataInfo.skills
+            }
+          />
+        }
+        {userData.interests && (
+          <InterestsModal
+            showIcon={showIcon}
+            interestList={userData.interests}
+          />
         )}
-        {dataInfo.experience && (
-          <ExperiencesModal experienceList={dataInfo.experience} />
-        )}
-        {dataInfo.skills && <SkillsModal skillList={dataInfo.skills} />}
-        {dataInfo.interests && (
-          <InterestsModal interestList={dataInfo.interests} />
-        )}
+        {<UrlProfilModal showIcon={showIcon} />}
         {<SuggestionsModal suggestionList={dataInfo.suggestions} />}
-        {<UrlProfilModal />}
       </div>
     </div>
   );
