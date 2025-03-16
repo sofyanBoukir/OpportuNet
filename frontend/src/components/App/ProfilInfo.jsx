@@ -2,6 +2,7 @@ import coverProfil from "../../../public/images/coverProfil.png";
 import ProfilImg from "../../../public/images/profilDefault.png";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 // import { IoIosCamera } from "react-icons/io";
+const authService = import.meta.env.VITE_USER_SERVICE;
 
 export const ProfilInfoModal = ({
   setShowModal,
@@ -22,7 +23,7 @@ export const ProfilInfoModal = ({
       ></div>
       <div className="bg-white absolute top-18 md:top-[105px] 2xl:top-[100px] left-[5%] 2xl:left-[3%] h-[100px] 2xl:h-[155px] w-[100px] 2xl:w-[155px] rounded-[50%] p-[3px] cursor-pointer">
         <img
-          src={userData.profile_picture ? ProfilImg : userData.profile_picture}
+          src={`${authService}` + userData.profile_picture}
           alt="photo profil"
           className="rounded-[50%]"
         />
@@ -43,16 +44,14 @@ export const ProfilInfoModal = ({
       <div className="mt-[70px] ml-[30px]">
         <h1 className="font-semibold text-3xl">{userData.name}</h1>
         <h6 className="font-normal text-xl text-gray-800">
-          {userData.headeLine}
+          {userData.headLine}
         </h6>
-        <div className="text-gray-600">
-          {userData.address ? userData.address : "lot riad nacer tiznit"}
-        </div>
+        <div className="text-gray-600">{userData.location}</div>
         <a
-          href={userData.github}
+          href={userData.webSite}
           className="font-semibold text-sm cursor-pointer text-[#0A66C2] hover:underline"
         >
-          {userData.github ? userData.github : "hhhhhhhhhhhhhhhhhh"}
+          {userData.webSite}
         </a>
         <div className="flex gap-2">
           <div className="border-2 border-[#0A66C2] px-2 rounded-full mb-2 mt-3">

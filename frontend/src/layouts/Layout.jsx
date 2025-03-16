@@ -11,6 +11,7 @@ import userDefaultImage from "../../public/images/profilDefault.png";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+const authService = import.meta.env.VITE_USER_SERVICE;
 
 export const Layout = () => {
   const [showProfil, setShowProfil] = useState(false);
@@ -94,7 +95,7 @@ export const Layout = () => {
               onClick={showProfil_FUNCTION}
             >
               <img
-                src="../../public/images/profilDefault.png"
+                src={`${authService}` + userData.profile_picture}
                 className="w-7 h-7 rounded-full mt-0.5"
               />
               <div className="text-xs font-normal hidden lg:block text-gray-600 2xl:block">
@@ -110,7 +111,7 @@ export const Layout = () => {
         >
           <div className="flex items-center gap-2">
             <div>
-              <img src={userDefaultImage} className="rounded-full w-16 h-16" />
+              <img src={`${authService}` + userData.profile_picture} className="rounded-full w-16 h-16" />
             </div>
             <div>
               <p className="text-lg font-semibold">Soufian boukir</p>

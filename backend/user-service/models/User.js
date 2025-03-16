@@ -1,5 +1,4 @@
 const mongoose = require("mongoose")
-require("dotenv").config()
 const userShema = new mongoose.Schema({
     name : {type:String, required:true},
     email : {type:String, required: true, unique:true},
@@ -7,7 +6,7 @@ const userShema = new mongoose.Schema({
     role : {type:String},
     isNewUser : {type:Boolean, default:true},
     isVerified : {type:Boolean, default:false},
-    profile_picture : {type:String, default:`${process.env.SERVER_URL}/users/userDefaultImage.jpg`},
+    profile_picture : {type:String, default:`/users/userDefaultImage.jpg`},
     headLine : {type:String},
     companyName : {type:String},
     about : {type:String},

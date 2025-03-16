@@ -3,14 +3,16 @@ import { AppSelector } from "../../selectors/AppSelector";
 import { Input } from "../UI/Input";
 import { Label } from "../UI/Label";
 import { Button } from "../UI/Button";
+import { updateIntroProfile } from "../../services/profile";
 
 export const UpdateModal = ({ userInfobeforUpdate, toUpdate, setOpen }) => {
   const { userData } = AppSelector();
   const [userInfo, setUserInfo] = useState({ ...userInfobeforUpdate });
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [notification, setNotification] = useState(null);
 
   const handleChange = (e) => {
-    console.log(e);
     const { name, value, type, files } = e.target;
     setUserInfo((prev) => ({
       ...prev,
@@ -22,10 +24,35 @@ export const UpdateModal = ({ userInfobeforUpdate, toUpdate, setOpen }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setErrorMessage(null);
+    setNotification(null);
+    try {
+      let response;
+      switch (toUpdate) {
+        case _toUpdate:
+          response = await updateIntroProfile(
+            localStorage.getItem("token"),
+            userInfo
+          );
+          setLoading(false);
+          setNotification({ type: "success", message: response.data.message });
+          break;
+        default:
+          setNotification({ type: "error", message: "Unauthorized" });
+      }
+    } catch (error) {
+      error.response
+        ? setNotification({
+            type: "error",
+            message: error.response.data.message,
+          })
+        : setNotification({ type: "error", message: "try later again" });
+    }
   };
 
   return (
-    <div className="z-20 abso)lute fixed w-full inset-0 p-2 flex text-gray-700 justify-center lg:backdrop-blur-xs">
+    <div className="z-20 abso)lute fixed w-full inset-0 p-2 flex bg-black/50 text-gray-700 justify-center lg:backdrop-blur-xs">
       <div className="bg-[#ffffff] z-20 border w-full sm:w-[65%] lg:w-[50%] h-[520px] sm:h-[540px] lg:h-[555px] my-auto lg:mt-[30px] px-8 rounded-lg shadow-sm overflow-auto">
         <div className="text-center sticky top-0 pt-6 pb-2 bg-[#ffffff]">
           <h1 className="text-2xl font-semibold text-gray-800">Edit intro</h1>
@@ -55,8 +82,8 @@ export const UpdateModal = ({ userInfobeforUpdate, toUpdate, setOpen }) => {
               />
               <Input
                 type="text"
-                name="headeLine"
-                value={userInfo.headeLine}
+                name="headLine"
+                value={userInfo.headLine}
                 onChange={handleChange}
                 className="p-2 font-normal text-sm outline-2 rounded-xs "
               />
@@ -131,6 +158,7 @@ export const UpdateModal = ({ userInfobeforUpdate, toUpdate, setOpen }) => {
             />
           </div>
         </form>
+        <br></br>
       </div>
     </div>
   );

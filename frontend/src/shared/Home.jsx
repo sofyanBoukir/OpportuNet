@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Post } from "../components/App/Post";
 import userDefaultImage from '../../public/images/profilDefault.png'
 import { Input } from "../components/UI/Input";
@@ -6,7 +6,12 @@ import { Profile } from "../components/App/Profile";
 import { AppSelector } from "../selectors/AppSelector";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { SuggestionsModal } from "../components/App/Suggestions";
+import { ProfileStatus } from "../components/App/ProfileStatus";
+import { AddPost } from "../components/modals/AddPost";
+const authService = import.meta.env.VITE_USER_SERVICE;
+
 export const Home = () => {
+  const [addPost,setAddPost] = useState(false);
 
   const suggestions = [
       { sugName: "Ayoub Mhainid", sugHead: "UI/UX designer" },
@@ -17,28 +22,13 @@ export const Home = () => {
   return (
     <div className="px-[10%] relative top-16">
       <div className="flex justify-center gap-[1%]">
-        <div className="w-[20%] hidden flex-col left-[12%] fixed lg:flex">
-          <div>
-            <Profile />
-          </div>
-          <div className="bg-white rounded-xl mt-2 flex justify-center gap-5 py-2">
-            <div className="text-center hover:bg-gray-50 duration-200 p-1 cursor-pointer">
-              <p className="font-semibold text-xl">100</p>
-              <span>Followers</span>
-            </div>
-            <div className="text-center hover:bg-gray-50 duration-200 p-1 cursor-pointer">
-              <p className="font-semibold text-xl">100</p>
-              <span>Followings</span>
-            </div>
-          </div>
-        </div>
-
-        
+        <ProfileStatus />
         <div className="flex flex-col gap-2 w-[100%] lg:w-[43%] left-[13%] lg:relative">
           <div className="bg-white px-4 py-2 rounded-xl flex gap-2">
-            <img src={userDefaultImage} className="rounded-full w-12 h-12"/>
-            <Input type={'text'} placeholder={'Start a post'} className={'font-semibold w-[100%] border-1 border-gray-400 outline-none cursor-pointer bg-[#F4F2EE] px-3 py-1 rounded-full'} />
-          </div> 
+          <img src={`${authService}` + userData.profile_picture} className="rounded-full w-12 h-12"/>
+            
+            <Input type={'text'} onClick={()=> setAddPost(true)} placeholder={'Start a post'} className={'font-semibold w-[100%] border-1 border-gray-400 outline-none cursor-pointer bg-[#F4F2EE] px-3 py-1 rounded-full'} />
+          </div>
           <Post />
           <Post />
           <Post />
@@ -49,6 +39,9 @@ export const Home = () => {
           <SuggestionsModal suggestionList={suggestions}/>
         </div>
       </div>
+      {
+        addPost && <AddPost setAddPost={setAddPost} />
+      }
     </div>
   );
 };

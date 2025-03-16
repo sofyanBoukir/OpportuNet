@@ -86,7 +86,7 @@ const updateInfo = async (request,response) =>{
         }
         const imageUrl = request.file ? `/users/${request.file.filename}` : user.profile_picture;
 
-        if (user.profile_picture && user.profile_picture !== `${process.env.SERVER_URL}/users/userDefaultImage.jpg`) {
+        if (user.profile_picture && user.profile_picture !== `/users/userDefaultImage.jpg`) {
             const imagePath = path.join(__dirname, "../public", user.profile_picture);
             fs.unlink(imagePath, (err) => {
             });

@@ -1,15 +1,16 @@
 import React from 'react'
 import { AppSelector } from '../../selectors/AppSelector'
 import coverProfile from '../../../public/images/coverProfil.png'
+const authService = import.meta.env.VITE_USER_SERVICE;
+
 export const Profile = () => {
     const {userData } = AppSelector();
-    console.log(userData);
     
   return (
     <div className='w-[100%] bg-white rounded-2xl'>
         <div className='relative'>
             <img src={coverProfile} className='h-[70px] rounded-t-2xl w-[100%]'/>
-            <img src={`${userData.profile_picture}`} className='rounded-full w-16 h-16 border-3 border-white absolute top-5 left-5'/>
+            <img src={`${authService}` + userData.profile_picture} className='rounded-full w-16 h-16 border-3 border-white absolute top-5 left-5'/>
         </div>
 
         <div className='mt-7 px-4 pb-4'>

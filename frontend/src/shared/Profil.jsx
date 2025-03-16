@@ -14,16 +14,14 @@ import { useState } from "react";
 import { Post } from "../components/App/Post";
 
 export const Profil = () => {
+  const { userData } = AppSelector();
+  const { id } = useParams();
+  const [userInfo, setUserInfo] = useState(
+    userData._id === id ? { ...userData } : {}
+  );
   const [showAddModal, setShowAddModal] = useState(false);
   const [toUpdate, setToUpdate] = useState("");
-  const { id } = useParams();
-  const { userData } = AppSelector();
   const dataInfo = {
-    name: "Said kachoud",
-    headLine: "Full stack devloper",
-    address: "Tiznit, Souss-Massa, Morocco",
-    github: "https://github.com/saidKachoud",
-    profile_picture: profilImg,
     followers: 300,
     following: 100,
     education: [
@@ -57,7 +55,7 @@ export const Profil = () => {
       },
     ],
     skills: ["React", "Laravel", "Tailwind", "Express", "Nodejs", "Mongodb"],
-    interests: ["microsoft", "apple", "google", "meta"],
+
     content: `Lorem ipsum dolor si amet consectetur adipisicing elit. Magni nostrum
             consequatur itaque nulla dignissimos non fugiat exercitationem dolor,
             alias mollitia quas vero iure aliquam consectetur excepturi deserunt
@@ -71,18 +69,18 @@ export const Profil = () => {
   const showIcon = userData._id === id;
   const recuiterData = {
     name: userData.name,
-    headeLine: userData.headeLine,
+    headLine: userData.headLine,
     companyName: userData.companyName,
     location: userData.location,
-    webSite: userData.webSit,
+    webSite: userData.webSite,
   };
   const candidateData = {
     name: userData.name,
-    headeLine: userData.headeLine,
+    headLine: userData.headLine,
     location: userData.location,
-    webSite: userData.webSit,
+    webSite: userData.webSite,
   };
-
+  console.log("object", userInfo);
   return (
     <div>
       <div className={`w-full flex flex-col gap-y-2 lg:flex-row justify-start`}>
@@ -92,7 +90,7 @@ export const Profil = () => {
               setShowModal={setShowAddModal}
               valuetoUpdate={setToUpdate}
               showIcon={showIcon}
-              userData={userData}
+              userData={userInfo}
             />
           }
 
