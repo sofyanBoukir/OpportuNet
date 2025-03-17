@@ -1,5 +1,3 @@
-import React from "react";
-
 export const Textarea = ({
   cols,
   rows,
@@ -17,6 +15,7 @@ export const Textarea = ({
       cols={cols}
       placeholder={placeholder}
       onChange={onChange}
+      spellCheck={false}
       className={`resize-none ${className}`}
     />
   );

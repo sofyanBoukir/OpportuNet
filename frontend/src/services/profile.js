@@ -1,9 +1,9 @@
 import axios from "axios";
-const authService = import.meta.env.VITE_USER_SERVICE;
+const serverURL = import.meta.env.VITE_SERVER_URL;
 
 export const completeRegistration = async (token, formData) => {
   const response = await axios.put(
-    `${authService}/profile/completeRegistration`,
+    `${serverURL}/profile/completeRegistration`,
     formData,
     {
       headers: {
@@ -14,9 +14,27 @@ export const completeRegistration = async (token, formData) => {
   return response;
 };
 
+export const searchUsers = async (token,query) =>{
+  const response = await axios.get(`${serverURL}/profile/searchUsers/${query}`,{
+    headers:{
+      Authorization : `Bearer ${token}`
+    }
+  })
+  return response;
+} 
+
+
+export const searchHashTags = async (token,query) =>{
+  const response = await axios.get(`${serverURL}/profile/searchHashTags/${query}`,{
+    headers:{
+      Authorization : `Bearer ${token}`
+    }
+  })
+  return response;
+}
 export const updateIntroProfile = async (token, formData) => {
   const response = await axios.put(
-    `${authService}/profile/updateInfo`,
+    `${serverURL}/profile/updateInfo`,
     formData,
     {
       headers: {
