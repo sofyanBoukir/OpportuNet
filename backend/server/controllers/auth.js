@@ -5,6 +5,7 @@ const VerificationCode = require("../models/VerificationCode");
 const nodemailer = require("nodemailer");
 const { generateEmailHTML_FORVCODE, generateEmailHTML_FORRLINK } = require("../functions/email");
 const Token = require("../models/Token");
+const Post = require("../models/Post");
 require("dotenv").config()
 
 let invalidTokens = new Set();
@@ -22,13 +23,33 @@ const getUserData = async (request,response) =>{
                 'message' : 'User not found'
             })
         }
+
+        const page = parseInt(request.query.page) || 1;
+        const pageSize = 6;
+
+        const skip = (page - 1) * pageSize; 
+
+        const posts = await Post.find({ user : userId })
+            .skip(skip)
+            .limit(pageSize)
+            .populate('user', 'name profile_picture headLine')
+            .sort({ createdAt: -1 });
+
+        const totalPosts = await Post.countDocuments({ user: userId });
+
+        const totalPages = Math.ceil(totalPosts / pageSize);
+
         const userObject = user.toObject()
         delete userObject.password;
-        if(userObject){
-            return response.json({
-                'userData' : userObject,
-            })
-        }
+
+        return response.json({
+            posts,
+            totalPosts,
+            totalPages,
+            'userData':userObject
+        });
+
+        
     }catch(error){
         return response.status(500).json({
             'messahe' : error.message

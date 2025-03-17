@@ -7,6 +7,7 @@ require("dotenv").config();
 const fs = require('fs');
 const path = require('path');
 const Interest = require("../models/Interest");
+const Post = require("../models/Post");
 require("dotenv").config()
 >>>>>>> 807f11aff56e165709fc0870e4921b1003a1202b:backend/server/controllers/profile.js
 
@@ -37,19 +38,33 @@ const getUserDataById = async (request,response) =>{
                 'message' : 'User not found'
             })
         }
+
+        const page = parseInt(request.query.page) || 1;
+        const pageSize = 6;
+
+        const skip = (page - 1) * pageSize; 
+
+        const posts = await Post.find({ user : userId })
+            .skip(skip)
+            .limit(pageSize)
+            .populate('user', 'name profile_picture headLine')
+            .sort({ createdAt: -1 });
+            
+        const totalPosts = await Post.countDocuments({ user: userId });
+
+        const totalPages = Math.ceil(totalPosts / pageSize);
+
         const userObject = user.toObject()
         delete userObject.password;
         delete userObject.email;
 
-        if(userObject){
-            return response.json({
-                'userData' : userObject,
-            })
-        }
-
         return response.json({
-            'message' : 'user not found'
+            posts,
+            totalPosts,
+            totalPages,
+            'userData' : userObject,
         })
+
     }catch(error){
         return response.status(500).json({
             'messahe' : error.message
