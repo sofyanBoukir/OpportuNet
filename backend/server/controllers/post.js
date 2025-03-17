@@ -2,32 +2,6 @@ const Notification = require("../models/Notification");
 const Post = require("../models/Post");
 const User = require("../models/User");
 
-
-
-const getUserPosts = async (request,response) =>{
-    try{
-        const userId = request.user.id;
-        const user = await User.findById(userId)
-        
-        if(!user){
-            return response.status(404).json({
-                'message' : 'user not found'
-            })
-        }
-
-        
-        return response.status(404).json({
-            'message' : 'User has No posts'
-        })
-    }catch(err){
-        return response.status(500).json({
-            'message' : err.message
-        })
-    }
-}
-
-
-
 const addPost = async (request,response) =>{
     try{
         const { content, tags, mentionsIds } = request.body;
@@ -76,4 +50,4 @@ const addPost = async (request,response) =>{
     }
 }
 
-module.exports = {addPost, getUserPosts}
+module.exports = {addPost}
