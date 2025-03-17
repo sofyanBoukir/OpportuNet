@@ -31,21 +31,6 @@
     /* color: rgb(206, 90, 90); */
     /* color: rgb(72, 145, 72); */
 }
-:root {
-    --bg-color: white;
-    --text-color: black;
-  }
-  
-.dark {
-    --bg-color: black;
-    --text-color: white;
+.tagged-user{
+    color: blue;
 }
-
-.bg-theme {
-    background-color: var(--bg-color);
-}
-
-.text-theme {
-    color: var(--text-color);
-}
-  

@@ -1,7 +1,7 @@
 import axios from "axios"
-const authService = import.meta.env.VITE_USER_SERVICE;
+const serverURL = import.meta.env.VITE_SERVER_URL;
 
 export const getInterests = async () =>{
-    const response = await axios.get(`${authService}/interest/interests`);
+    const response = await axios.get(`${serverURL}/interest/interests`);
     return response;
 }

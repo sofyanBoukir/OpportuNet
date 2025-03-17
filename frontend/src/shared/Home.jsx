@@ -8,7 +8,7 @@ import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { SuggestionsModal } from "../components/App/Suggestions";
 import { ProfileStatus } from "../components/App/ProfileStatus";
 import { AddPost } from "../components/modals/AddPost";
-const authService = import.meta.env.VITE_USER_SERVICE;
+const authService = import.meta.env.VITE_SERVER_URL;
 
 export const Home = () => {
   const [addPost,setAddPost] = useState(false);

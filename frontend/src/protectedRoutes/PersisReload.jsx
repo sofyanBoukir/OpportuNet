@@ -17,7 +17,7 @@ export const PersisReload = () => {
               setValidToken(true);
             }
         }catch(err){
-            navigate(-1)
+            navigate('/user/sign_in')
         }
     }
 
@@ -25,5 +25,5 @@ export const PersisReload = () => {
     _getUserData()
   },[]);
 
-  return validToken ? <Outlet /> : navigate(-1);
+  return validToken ? <Outlet /> : navigate('/user/sign_in');
 };

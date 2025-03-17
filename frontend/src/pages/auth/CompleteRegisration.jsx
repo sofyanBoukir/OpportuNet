@@ -59,9 +59,11 @@ export const CompleteRegisration = () => {
             if(response.status === 200){
                 setExtraLoading(true);
                 setTimeout(() => {
-                    navigate('/feed')
                     setExtraLoading(false);
                 }, 3000);
+                setTimeout(() => {
+                    navigate('/feed')
+                }, 2050);
             }
         }catch(err){
             setLoading(false);
