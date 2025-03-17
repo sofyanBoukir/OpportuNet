@@ -114,8 +114,8 @@ export const Layout = () => {
               <img src={`${serverURL}` + userData.profile_picture} className="rounded-full w-16 h-16" />
             </div>
             <div>
-              <p className="text-lg font-semibold">Soufian boukir</p>
-              <span className="text-gray-700">Javascript developer</span>
+              <p className="text-lg font-semibold">{userData.name}</p>
+              <span className="text-gray-700">{userData.headLine}</span>
             </div>
           </div>
           <div className="mt-2">
