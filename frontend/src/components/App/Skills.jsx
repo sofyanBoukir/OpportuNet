@@ -1,9 +1,42 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useState } from "react";
+import { AppSelector } from "../../selectors/AppSelector";
+import { useDispatch } from "react-redux";
+import { Notification } from "../UI/Notification";
+import { deleteSkill } from "../../services/profile";
+import { ERROR_MESSAGES } from "../../constants/Errors";
 
 export const SkillsModal = ({ showIcon, skillList }) => {
+  const { userData } = AppSelector();
+  const dispatch = useDispatch();
   const [hieghtDiv, setHieghtDiv] = useState(2);
+
+  // const [errorMessage, setErrorMessage] = useState(null);
+  const [notification, setNotification] = useState(null);
+
+  const token = localStorage.getItem("token");
+
+  const handleClickDelete = async (skillId) => {
+    // setErrorMessage(null);
+    setNotification(null);
+    try {
+      const response = await deleteSkill(token, skillId);
+      const _skills = skillList.filter((item) => item._id !== skillId);
+      dispatch({
+        type: "UPDATE_USERDATA",
+        papayloady: { ...userData, skills: _skills },
+      });
+      setNotification({ type: "success", message: response.data.message });
+    } catch (error) {
+      error.response
+        ? setNotification({
+            type: "error",
+            message: error.response.data.message,
+          })
+        : setNotification({ type: "error", message: ERROR_MESSAGES.TRY_AGAIN });
+    }
+  };
 
   const handleClickAll = () => {
     hieghtDiv === skillList.length
@@ -29,7 +62,10 @@ export const SkillsModal = ({ showIcon, skillList }) => {
               <div className=" w-full flex justify-between pr-2">
                 <h5 className="text-md font-semibold text-black ">{item}</h5>
                 {showIcon && (
-                  <div className="text-gray-600 cursor-pointer hover:text-black rounded-[50%]">
+                  <div
+                    onClick={() => handleClickDelete(item._id)}
+                    className="text-gray-600 cursor-pointer hover:text-black rounded-[50%]"
+                  >
                     <span>
                       <DeleteOutlinedIcon />
                     </span>
@@ -50,6 +86,9 @@ export const SkillsModal = ({ showIcon, skillList }) => {
           ? `Close all ${skillList.length} skills`
           : `Show all ${skillList.length} skills`}
       </div>
+      {notification && (
+        <Notification type={notification.type} message={notification.message} />
+      )}
     </div>
   );
 };

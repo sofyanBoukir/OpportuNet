@@ -16,11 +16,14 @@ import { Post } from "../components/App/Post";
 export const Profil = () => {
   const { userData } = AppSelector();
   const { id } = useParams();
-  const [userInfo, setUserInfo] = useState(
-    userData._id === id ? { ...userData } : {}
-  );
+
+  const [userInfo, setUserInfo] = useState({});
   const [showAddModal, setShowAddModal] = useState(false);
   const [toUpdate, setToUpdate] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+
+  const showIcon = userData._id === id;
+
   const dataInfo = {
     followers: 300,
     following: 100,
@@ -66,21 +69,20 @@ export const Profil = () => {
     ],
   };
 
-  const showIcon = userData._id === id;
-  const recuiterData = {
-    name: userData.name,
-    headLine: userData.headLine,
-    companyName: userData.companyName,
-    location: userData.location,
-    webSite: userData.webSite,
-  };
-  const candidateData = {
-    name: userData.name,
-    headLine: userData.headLine,
-    location: userData.location,
-    webSite: userData.webSite,
-  };
-  console.log("object", userInfo);
+  // const recuiterData = {
+  //   name: userData.name,
+  //   headLine: userData.headLine,
+  //   companyName: userData.companyName,
+  //   location: userData.location,
+  //   webSite: userData.webSite,
+  // };
+  // const candidateData = {
+  //   name: userData.name,
+  //   headLine: userData.headLine,
+  //   location: userData.location,
+  //   webSite: userData.webSite,
+  // };
+  console.log("object", userData);
   return (
     <div>
       <div className={`w-full flex flex-col gap-y-2 lg:flex-row justify-start`}>
@@ -90,19 +92,27 @@ export const Profil = () => {
               setShowModal={setShowAddModal}
               valuetoUpdate={setToUpdate}
               showIcon={showIcon}
-              userData={userInfo}
+              userData={userData._id === id ? userData : userInfo}
             />
           }
 
-          {<AboutModal showIcon={showIcon} content={dataInfo.content} />}
+          {
+            <AboutModal
+              valuetoUpdate={setToUpdate}
+              setShowModal={setShowAddModal}
+              showIcon={showIcon}
+              content={userData._id === id ? userData.about : userInfo.about}
+            />
+          }
           {
             // userData.education &&
             <EducationsModal
+              idEduSelected={setSelectedId}
+              valuetoUpdate={setToUpdate}
+              setShowModal={setShowAddModal}
               showIcon={showIcon}
               educationList={
-                userData.education.length
-                  ? userData.education
-                  : dataInfo.education
+                userData._id === id ? userData.education : userInfo.about
               }
             />
           }
@@ -145,9 +155,7 @@ export const Profil = () => {
         {showAddModal && (
           <UpdateModal
             toUpdate={toUpdate}
-            userInfobeforUpdate={
-              userData.role === "candidate" ? candidateData : recuiterData
-            }
+            idSelaected={selectedId}
             setOpen={setShowAddModal}
           />
         )}

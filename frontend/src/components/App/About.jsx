@@ -1,10 +1,21 @@
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 
-export const AboutModal = ({ showIcon, content }) => {
+export const AboutModal = ({
+  valuetoUpdate,
+  setShowModal,
+  showIcon,
+  content,
+}) => {
   return (
     <div className="bg-white w-full lg:w-[89%] p-[30px] lg:ml-[15%] relative lg:rounded-md z-15">
       {showIcon && (
-        <div className="absolute right-0 top-[5px] mt-4 mr-5 p-1.5 duration-200 text-center text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[50%] ">
+        <div
+          onClick={() => {
+            setShowModal(true);
+            valuetoUpdate("about");
+          }}
+          className="absolute right-0 top-[5px] mt-4 mr-5 p-1.5 duration-200 text-center text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[50%] "
+        >
           <ModeEditOutlinedIcon />
         </div>
       )}
