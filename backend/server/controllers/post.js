@@ -15,27 +15,7 @@ const getUserPosts = async (request,response) =>{
             })
         }
 
-        const page = parseInt(request.query.page) || 1;
-        const pageSize = 6;
-
-        const skip = (page - 1) * pageSize; 
-
-        const posts = await Post.find({ user : userId })
-            .skip(skip)
-            .limit(pageSize)
-            .populate('user', 'name profile_picture headLine')
-            .sort({ createdAt: -1 });
-        const totalPosts = await Post.countDocuments({ user: userId });
-
-        const totalPages = Math.ceil(totalPosts / pageSize);
-
-        if(posts){
-            return response.json({
-                posts,
-                totalPosts,
-                totalPages
-            });
-        }
+        
         return response.status(404).json({
             'message' : 'User has No posts'
         })
