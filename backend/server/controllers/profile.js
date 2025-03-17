@@ -1,15 +1,9 @@
 const User = require("../models/User");
-<<<<<<< HEAD:backend/user-service/controllers/profile.js
 const fs = require("fs");
 const path = require("path");
-require("dotenv").config();
-=======
-const fs = require('fs');
-const path = require('path');
 const Interest = require("../models/Interest");
 const Post = require("../models/Post");
-require("dotenv").config()
->>>>>>> 807f11aff56e165709fc0870e4921b1003a1202b:backend/server/controllers/profile.js
+require("dotenv").config();
 
 const getUserDataById = async (request, response) => {
   try {
@@ -19,73 +13,44 @@ const getUserDataById = async (request, response) => {
       path: "interests",
     });
 
-<<<<<<< HEAD:backend/user-service/controllers/profile.js
     if (!user) {
       return response.status(404).json({
         message: "User not found",
       });
-=======
-const getUserDataById = async (request,response) =>{
-    try{
-        const {userId} = request.params;
-        const user = await User.findById(userId).populate({
-            select : 'interest',
-            path : 'interests'
-        });
-
-        if(!user){
-            return response.status(404).json({
-                'message' : 'User not found'
-            })
-        }
-
-        const page = parseInt(request.query.page) || 1;
-        const pageSize = 6;
-
-        const skip = (page - 1) * pageSize; 
-
-        const posts = await Post.find({ user : userId })
-            .skip(skip)
-            .limit(pageSize)
-            .populate('user', 'name profile_picture headLine')
-            .sort({ createdAt: -1 });
-            
-        const totalPosts = await Post.countDocuments({ user: userId });
-
-        const totalPages = Math.ceil(totalPosts / pageSize);
-
-        const userObject = user.toObject()
-        delete userObject.password;
-        delete userObject.email;
-
-        return response.json({
-            posts,
-            totalPosts,
-            totalPages,
-            'userData' : userObject,
-        })
-
-    }catch(error){
-        return response.status(500).json({
-            'messahe' : error.message
-        })
->>>>>>> 807f11aff56e165709fc0870e4921b1003a1202b:backend/server/controllers/profile.js
     }
+
+    const page = parseInt(request.query.page) || 1;
+    const pageSize = 6;
+
+    const skip = (page - 1) * pageSize;
+
+    const posts = await Post.find({ user: userId })
+      .skip(skip)
+      .limit(pageSize)
+      .populate("user", "name profile_picture headLine")
+      .sort({ createdAt: -1 });
+
+    const totalPosts = await Post.countDocuments({ user: userId });
+
+    const totalPages = Math.ceil(totalPosts / pageSize);
+
     const userObject = user.toObject();
     delete userObject.password;
     delete userObject.email;
 
-    if (userObject) {
-      return response.json({
-        userData: userObject,
-      });
-    }
+    return response.json({
+      posts,
+      totalPosts,
+      totalPages,
+      userData: userObject,
+    });
   } catch (error) {
     return response.status(500).json({
       messahe: error.message,
     });
   }
 };
+
 const completeRegistration = async (request, response) => {
   try {
     const userId = request.user.id;
@@ -106,103 +71,11 @@ const completeRegistration = async (request, response) => {
       });
     }
 
-<<<<<<< HEAD:backend/user-service/controllers/profile.js
     user.role = role;
     user.headLine = headLine;
     user.role === "recuiter" ? (user.companyName = companyName) : null;
     user.interests = interests;
     user.isNewUser = false;
-=======
-
-const searchUsers = async (request,response) =>{
-    try{
-        const userId = request.user.id;
-        const { query } = request.params;
-
-        const user = await User.findById(userId);
-        if(!user){
-            return response.status(404).json({
-                'message' : 'User Invalid'
-            })
-        }
-
-        const users = await User.find({
-            $and: [
-              { _id: { $ne: userId } },
-              { name: { $regex: query, $options: "i" } }
-            ]
-        });
-
-        if(users){
-            return response.json({
-                'users' : users
-            })
-        }
-        return response.json({
-            'message' : 'Users not found'
-        })
-    }catch(err){
-        return response.status(500).json({
-            'message' : err.message
-        })
-    }
-}
-
-
-const searchHashTags = async (request,response) =>{
-    try{
-        const userId = request.user.id;
-        const { query } = request.params;
-
-        const user = await User.findById(userId);
-        if(!user){
-            return response.status(404).json({
-                'message' : 'User Invalid'
-            })
-        }
-
-        const formattedQuery = query.startsWith('#') ? query : `#${query}`;
-
-        const matchedInterests = await Interest.find({
-            hashtags: { $elemMatch: { $regex: formattedQuery, $options: "i" } }
-        });
-
-        if (matchedInterests.length > 0) {
-            // Extract all matching hashtags from all documents
-            const matchingHashtags = matchedInterests.flatMap(interest =>
-                interest.hashtags.filter(hashtag =>
-                    hashtag.toLowerCase().includes(formattedQuery.toLowerCase())
-                )
-            );
-
-            // Return the matching hashtags as a response
-            return response.json({
-                hashTags: matchingHashtags
-            });
-        } else {
-            // If no documents match, return an empty array
-            return response.json({
-                hashTags: []
-            });
-        }
-
-        return response.json({
-            'message' : 'hashTags not found'
-        })
-    }catch(err){
-        return response.status(500).json({
-            'message' : err.message
-        })
-    }
-}
-
-
-const addEducation = async (request,response) =>{
-    try{
-        const userId = request.user.id;
-        const { degree,year,institution } = request.body;
->>>>>>> 807f11aff56e165709fc0870e4921b1003a1202b:backend/server/controllers/profile.js
-
     await user.save();
 
     return response.json({
@@ -214,6 +87,104 @@ const addEducation = async (request,response) =>{
     });
   }
 };
+
+const searchUsers = async (request, response) => {
+  try {
+    const userId = request.user.id;
+    const { query } = request.params;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return response.status(404).json({
+        message: "User Invalid",
+      });
+    }
+
+    const users = await User.find({
+      $and: [
+        { _id: { $ne: userId } },
+        { name: { $regex: query, $options: "i" } },
+      ],
+    });
+
+    if (users) {
+      return response.json({
+        users: users,
+      });
+    }
+    return response.json({
+      message: "Users not found",
+    });
+  } catch (err) {
+    return response.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+const searchHashTags = async (request, response) => {
+  try {
+    const userId = request.user.id;
+    const { query } = request.params;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return response.status(404).json({
+        message: "User Invalid",
+      });
+    }
+
+    const formattedQuery = query.startsWith("#") ? query : `#${query}`;
+
+    const matchedInterests = await Interest.find({
+      hashtags: { $elemMatch: { $regex: formattedQuery, $options: "i" } },
+    });
+
+    if (matchedInterests.length > 0) {
+      // Extract all matching hashtags from all documents
+      const matchingHashtags = matchedInterests.flatMap((interest) =>
+        interest.hashtags.filter((hashtag) =>
+          hashtag.toLowerCase().includes(formattedQuery.toLowerCase())
+        )
+      );
+
+      // Return the matching hashtags as a response
+      return response.json({
+        hashTags: matchingHashtags,
+      });
+    } else {
+      // If no documents match, return an empty array
+      return response.json({
+        hashTags: [],
+      });
+    }
+
+    return response.json({
+      message: "hashTags not found",
+    });
+  } catch (err) {
+    return response.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+// const addEducation = async (request,response) =>{
+//     try{
+//         const userId = request.user.id;
+//         const { degree,year,institution } = request.body;
+
+//     await user.save();
+
+//     return response.json({
+//       message: "Completed successfully",
+//     });
+//   } catch (err) {
+//     return response.status(500).json({
+//       message: err.message,
+//     });
+//   }
+// };
 
 const updateInfo = async (request, response) => {
   try {
@@ -432,7 +403,6 @@ const updateExperience = async (request, response) => {
       });
     }
 
-<<<<<<< HEAD:backend/user-service/controllers/profile.js
     const experienceIndex = user.experience.findIndex(
       (experience) => experience._id.toString() === experienceId
     );
@@ -595,9 +565,6 @@ module.exports = {
   addSkill,
   deleteSkill,
   updateInterests,
+  searchHashTags,
+  searchUsers,
 };
-=======
-module.exports = { getUserDataById,completeRegistration , updateInfo ,updateAbout , searchUsers, searchHashTags
-    ,addEducation , updateEducation, deleteEducation, addExperience, updateExperience, deleteExperience
-    ,addSkill, deleteSkill, updateInterests}
->>>>>>> 807f11aff56e165709fc0870e4921b1003a1202b:backend/server/controllers/profile.js
