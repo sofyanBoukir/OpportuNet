@@ -31,7 +31,7 @@ export const Login = () => {
 
     const handleSubmit = async (e) =>{
         e.preventDefault();
-        // try{
+        try{
             setLoading(true);
             const response = await login(formData);
             console.log(response);
@@ -68,17 +68,17 @@ export const Login = () => {
                         navigate('/feed')
                         break;
                     }
-        //     }
-        // }catch(err){
-        //     setLoading(false)
-        //     switch(err.response.status){
-        //         case 401:
-        //             setError(err.response.data.message)
-        //             break
-        //         case 500:
-        //             setError(ERROR_MESSAGES.SOMETHING_WENT_WRONG)
-        //             break
-        //     }
+            }
+        }catch(err){
+            setLoading(false)
+            switch(err.response.status){
+                case 401:
+                    setError(err.response.data.message)
+                    break
+                case 500:
+                    setError(ERROR_MESSAGES.SOMETHING_WENT_WRONG)
+                    break
+            }
         }
     }
   return (
