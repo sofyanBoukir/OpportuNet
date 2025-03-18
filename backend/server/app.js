@@ -22,6 +22,7 @@ app.use("/home",require("./routes/home"));
 app.use("/interest", require("./routes/interest"));
 app.use("/profile", require("./routes/profile"));
 app.use("/post",require("./routes/post"));
+app.use("/comment",require("./routes/comment"));
 
 app.listen(process.env.PORT, () => {
   console.log(`User service is running on port ${process.env.PORT}`);
