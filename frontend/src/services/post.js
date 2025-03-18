@@ -28,3 +28,12 @@ export const toggleLike = async (token,postId) =>{
     })
     return response;
 }
+
+export const getPost = async (token,postId) =>{
+    const response = await axios.get(`${serverURL}/post/getPost/${postId}`,{
+        headers:{
+            Authorization : `Bearer ${token}`
+        }
+    })
+    return response;
+}

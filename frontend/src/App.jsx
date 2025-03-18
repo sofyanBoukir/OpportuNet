@@ -16,6 +16,7 @@ import { PersisReload } from "./protectedRoutes/PersisReload";
 import { NotFound } from "./pages/error/NotFound";
 import React from "react";
 import { Notification } from "./shared/Notification";
+import { PostId } from "./shared/PostId";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Route path="/feed" element={<Home />} />
             <Route path="/notifications" element={<Notification />} />
             <Route path="/user/profil/:id" element={<Profil />} />
+            <Route path="/user/post/:postId" element={<PostId />} />
           </Route>
         </Route>
       </Routes>

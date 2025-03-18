@@ -4,7 +4,7 @@ const Post = require("../models/Post");
 const User = require("../models/User");
 
 
-const getPost = async () =>{
+const getPost = async (request,response) =>{
     try{
         const {postId} = request.params;
 
