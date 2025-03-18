@@ -104,43 +104,43 @@ const deletePost = async (request,response) =>{
     }
 }
 
-const alreadyLiked = async (request,response) =>{
-    try{
+// const alreadyLiked = async (request,response) =>{
+//     try{
 
-        const userId = request.user.id;
-        const { postId } = request.params;
-        const user = await User.findById(userId)
+//         const userId = request.user.id;
+//         const { postId } = request.params;
+//         const user = await User.findById(userId)
         
-        if(!user){
-            return response.status(404).json({
-                'message' : 'user not found'
-            })
-        }
+//         if(!user){
+//             return response.status(404).json({
+//                 'message' : 'user not found'
+//             })
+//         }
 
-        const post = await Post.findById(postId);
-        if(!post){
-            return response.status(404).json({
-                'message' : 'Post not found'
-            })
-        }
+//         const post = await Post.findById(postId);
+//         if(!post){
+//             return response.status(404).json({
+//                 'message' : 'Post not found'
+//             })
+//         }
 
-        const alreadyLiked = await Post.findOne({likes:{$in:userId}});
-        if(alreadyLiked){
-            return response.json({
-                'liked' : true
-            })
-        }else{
-            return response.json({
-                'liked' : false
-            })
-        }
+//         const alreadyLiked = await Post.findOne({likes:{$in:userId}});
+//         if(alreadyLiked){
+//             return response.json({
+//                 'liked' : true
+//             })
+//         }else{
+//             return response.json({
+//                 'liked' : false
+//             })
+//         }
 
-    }catch(err){
-        return response.status(500).json({
-            'message' : err.message
-        })
-    }
-}
+//     }catch(err){
+//         return response.status(500).json({
+//             'message' : err.message
+//         })
+//     }
+// }
 
 const toggleLike = async (request,response) =>{
     try{
@@ -166,9 +166,11 @@ const toggleLike = async (request,response) =>{
 
         if(post){
             const newLikes = post.likes.filter((_id) => _id.toString() !== userId);
+            const newLikesUser = user.likedPosts.filter((_id) => _id.toString() !== userId);
             post.likes = newLikes;
+            user.likedPosts = newLikesUser;
             await post.save();
-
+            await user.save();
             return response.json({
                 'liked' : false
             })
@@ -185,7 +187,11 @@ const toggleLike = async (request,response) =>{
                 })
     
                 await newNotification.save()
+
+                user.likedPosts.push(postId);
                 postExists.likes.push(userId);
+
+                await user.save();
                 await postExists.save();
 
                 return response.json({
@@ -203,7 +209,10 @@ const toggleLike = async (request,response) =>{
             await newNotification.save()
 
             postExists.likes.push(userId);
+            user.likedPosts.push(postId);
+
             await postExists.save();
+            await user.save();
 
             return response.json({
                 'liked' : true
@@ -218,6 +227,48 @@ const toggleLike = async (request,response) =>{
 }
 
 
+const toggleSave = async (request,response) =>{
+    try{
+
+        const userId = request.user.id;
+        const { postId } = request.params;
+        const user = await User.findById(userId)
+        
+        if(!user){
+            return response.status(404).json({
+                'message' : 'user not found'
+            })
+        }
+
+        const postExists = await Post.findById(postId);
+        if(!postExists){
+            return response.status(404).json({
+                'message' : 'Post not found'
+            })
+        }
+
+        const alreadySaved = await User.findOne({savedPosts:{$in:postId}});
+        if(alreadySaved){
+            const newSaves = user.savedPosts.filter((id) => id.toString() !== postId);
+            user.savedPosts = newSaves;
+            await user.save()
+            return response.json({
+                'saved' : false
+            })
+        }else{
+            user.savedPosts.push(postId);
+            await user.save();
+            return response.json({
+                'saved' : true
+            })
+        }
+
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+}
 
 
-module.exports = {getPost,addPost,deletePost,alreadyLiked,toggleLike}
+module.exports = {getPost,addPost,deletePost,toggleLike,toggleSave}

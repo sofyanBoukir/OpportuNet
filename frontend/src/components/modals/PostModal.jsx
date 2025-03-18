@@ -4,7 +4,7 @@ import { Input } from "../UI/Input";
 import { Label } from "../UI/Label";
 import { Button } from "../UI/Button";
 import { ERROR_MESSAGES } from "../../constants/Errors";
-import { commentOnPost, getPostComments } from "../../services/comment";
+import { commentOnPost, deleteComment, getPostComments } from "../../services/comment";
 import { Comment } from "../App/Comment";
 import { LinearProgress } from "@mui/material";
 import { AppSelector } from "../../selectors/AppSelector";
@@ -24,7 +24,6 @@ export const PostModal = ({setOpenModalPost,post}) => {
   const loadingRef = useRef(false)
   const [commentMessage,setCommentMessage] = useState('')
 
-  console.log(comments);
   
   const _getPostComments = async () =>{
     if(loadingRef.current) return;
@@ -36,14 +35,12 @@ export const PostModal = ({setOpenModalPost,post}) => {
     }
     setLoading(false)
     loadingRef.current = false
-    console.log(response);  
   }
 
   const _commentOnPost = async () =>{
     try{
       setCommentLoading(true)
       const response = await commentOnPost(localStorage.getItem('token'),post._id,comment);
-      console.log(response);
       
       setCommentLoading(false);
       if(response.status === 200){
@@ -51,11 +48,12 @@ export const PostModal = ({setOpenModalPost,post}) => {
         setComments((prevComments) => [{user:{
           name:userData.name,
           profile_picture:userData.profile_picture,
+          _id:userData._id
         },
           comment:comment,
           createdAt:new Date()},...prevComments])
           console.log(comments);
-          
+          setCommentMessage('')
         setComment('')
       }
     }catch(err){
@@ -67,6 +65,18 @@ export const PostModal = ({setOpenModalPost,post}) => {
           case 500:
               setErrorMessage(ERROR_MESSAGES.SOMETHING_WENT_WRONG)
               break
+      }
+    }
+  }
+
+
+  const _deleteComment = async (postId,commentId) =>{
+    const response = await deleteComment(localStorage.getItem('token'),postId,commentId);
+    if(response.status === 200){
+      if(response.data.deleted){
+        const newComments = comments.filter((comment) => comment._id !== commentId);
+        setComments(newComments);
+        post.comments.length -= 1
       }
     }
   }
@@ -128,7 +138,7 @@ export const PostModal = ({setOpenModalPost,post}) => {
             {
               !loading && comments && comments.length ?
                 comments.map((comment) =>{
-                  return <Comment comment={comment}/>
+                  return <Comment comment={comment} deleteComment={_deleteComment}/>
                 })
               :null
             }

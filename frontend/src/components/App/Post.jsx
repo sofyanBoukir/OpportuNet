@@ -9,9 +9,12 @@ import moment from 'moment/moment';
 import { HeartIcon as SolidHeart } from "@heroicons/react/16/solid";
 import { HeartIcon as OutlineHeart } from "@heroicons/react/24/outline";
 
+import { BookmarkIcon as SolidBookMark } from "@heroicons/react/16/solid";
+import { BookmarkIcon as OutlineBookMark } from "@heroicons/react/24/outline";
 
 import { Skeleton } from '@mui/material';
-import { isAlreadyLiked, toggleLike } from '../../services/post';
+import { isAlreadyLiked, toggleLike, toggleSave } from '../../services/post';
+import { AppSelector } from '../../selectors/AppSelector';
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const Post = ({post}) => {
@@ -28,24 +31,25 @@ export const Post = ({post}) => {
         setIsExpanded(!isExpanded);
     };
 
-
-
+    const {userData} = AppSelector()
+    console.log(userData);
+    
     const [openModalPost , setOpenModalPost] =useState(false)
-    const [alreadyLiked,setAlreadyLiked] = useState(false);
-
-
-    const _alreadyLiked = async () =>{
-        const response = await isAlreadyLiked(localStorage.getItem('token'),post._id);
-        console.log(response);
+    const [alreadyLiked,setAlreadyLiked] = useState(userData.likedPosts.includes(post._id));    
+    const [alreadySaved,setAlreadySaved] = useState(userData.savedPosts.includes(post._id));
+    
+    // const _alreadyLiked = async () =>{
+    //     const response = await isAlreadyLiked(localStorage.getItem('token'),post._id);
+    //     console.log(response);
         
-        if(response.status === 200){
-            if(response.data.liked){
-                setAlreadyLiked(true)
-            }else{
-                setAlreadyLiked(false)
-            }
-        }
-    }
+    //     if(response.status === 200){
+    //         if(response.data.liked){
+    //             setAlreadyLiked(true)
+    //         }else{
+    //             setAlreadyLiked(false)
+    //         }
+    //     }
+    // }
 
     const _toggleLike = async () =>{
         const response = await toggleLike(localStorage.getItem('token'),post._id);
@@ -53,19 +57,36 @@ export const Post = ({post}) => {
         
         if(response.status === 200){
             if(response.data.liked === true){
+                userData.likedPosts.push(post._id)
                 setAlreadyLiked(true)
                 post.likes.length += 1
             }
             if(response.data.liked === false){
                 setAlreadyLiked(false)
                 post.likes.length -= 1
+                const newLikes = userData.likedPosts.filter((id) => id !== post._id);
+                userData.likedPosts = newLikes
             }
         }
     }
 
-    useEffect(() =>{
-        _alreadyLiked()
-    },[])
+
+    const _toggleSave = async () =>{
+        const response = await toggleSave(localStorage.getItem('token'),post._id);
+        console.log(response);
+        
+        if(response.status === 200){
+            if(response.data.saved === true){
+                userData.savedPosts.push(post._id)
+                setAlreadySaved(true)
+            }
+            if(response.data.saved === false){
+                const newSaves = userData.savedPosts.filter((id) => id !== post._id);
+                userData.savedPosts = newSaves
+                setAlreadySaved(false)
+            }
+        }
+    }
   return (
     <div className='w-[100%] md:w-[100%] bg-white rounded-xl'>
         <div className='w-[100%] px-4 py-4 justify-between flex flex-row items-center'>
@@ -143,8 +164,11 @@ export const Post = ({post}) => {
                 <button className='flex flex-row items-center w-[30%] hover:bg-gray-100 justify-center py-2 rounded-lg cursor-pointer duration-200' onClick={()=>setOpenModalPost(true)}><div className='flex flex-row items-center gap-2'>
                     <ChatBubbleBottomCenterIcon className='text-black w-6 h-6'/><h1>Comment</h1></div>
                 </button>
-                <button className='flex flex-row items-center w-[30%] hover:bg-gray-100 justify-center py-2 rounded-lg cursor-pointer duration-200'><div className='flex flex-row items-center gap-2'>
-                    <BookmarkIcon className='text-black w-6 h-6'/><h1>Save</h1></div>
+                <button onClick={_toggleSave} className='flex flex-row items-center w-[30%] hover:bg-gray-100 justify-center py-2 rounded-lg cursor-pointer duration-200'><div className='flex flex-row items-center gap-2'>
+                    {
+                        alreadySaved ? <SolidBookMark className='text-black w-6 h-6'/> : <OutlineBookMark className='text-black w-6 h-6'/>
+                    }
+                    <h1>Save</h1></div>
                 </button>
             </div>
         </div>
