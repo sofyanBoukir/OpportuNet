@@ -5,7 +5,7 @@ import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 const authService = import.meta.env.VITE_USER_SERVICE;
 
 export const ProfilInfoModal = ({
-  setShowModal,
+  setShowModalUpdate,
   valuetoUpdate,
   showIcon,
   userData,
@@ -32,7 +32,7 @@ export const ProfilInfoModal = ({
       {showIcon && (
         <div
           onClick={() => {
-            setShowModal(true);
+            setShowModalUpdate(true);
             valuetoUpdate("intro");
           }}
           className="float-end mt-4 mr-5 p-1.5 duration-200 text-center pt-1 text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[50%] "

@@ -14,24 +14,29 @@ export const completeRegistration = async (token, formData) => {
   return response;
 };
 
-export const searchUsers = async (token,query) =>{
-  const response = await axios.get(`${serverURL}/profile/searchUsers/${query}`,{
-    headers:{
-      Authorization : `Bearer ${token}`
+export const searchUsers = async (token, query) => {
+  const response = await axios.get(
+    `${serverURL}/profile/searchUsers/${query}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }
-  })
+  );
   return response;
-} 
+};
 
-
-export const searchHashTags = async (token,query) =>{
-  const response = await axios.get(`${serverURL}/profile/searchHashTags/${query}`,{
-    headers:{
-      Authorization : `Bearer ${token}`
+export const searchHashTags = async (token, query) => {
+  const response = await axios.get(
+    `${serverURL}/profile/searchHashTags/${query}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }
-  })
+  );
   return response;
-}
+};
 export const updateIntroProfile = async (token, formData) => {
   const response = await axios.put(
     `${serverURL}/profile/updateInfo`,
@@ -48,8 +53,21 @@ export const updateIntroProfile = async (token, formData) => {
 
 export const updateAboutProfile = async (token, contentAbout) => {
   const response = await axios.put(
-    `${authService}/profile/updateAbout`,
+    `${serverURL}/profile/updateAbout`,
     contentAbout,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response;
+};
+
+export const addEducationProfile = async (token, formData) => {
+  const response = await axios.post(
+    `${serverURL}/profile/addEducation`,
+    formData,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -61,7 +79,7 @@ export const updateAboutProfile = async (token, contentAbout) => {
 
 export const updateEducationProfile = async (token, educationId, formData) => {
   const response = await axios.put(
-    `${authService}/profile/updateEducation/${educationId}`,
+    `${serverURL}/profile/updateEducation/${educationId}`,
     formData,
     {
       headers: {
@@ -74,7 +92,37 @@ export const updateEducationProfile = async (token, educationId, formData) => {
 
 export const deleteEducation = async (token, educationId) => {
   const response = await axios.delete(
-    `${authService}/profile/deleteEducation/${educationId}`,
+    `${serverURL}/profile/deleteEducation/${educationId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response;
+};
+
+export const addExperienceProfile = async (token, formData) => {
+  const response = await axios.post(
+    `${serverURL}/profile/addExperience`,
+    formData,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response;
+};
+
+export const updateExperienceProfile = async (
+  token,
+  experienceId,
+  formData
+) => {
+  const response = await axios.put(
+    `${serverURL}/profile/updateExperience/${experienceId}`,
+    formData,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -86,7 +134,7 @@ export const deleteEducation = async (token, educationId) => {
 
 export const deleteExperience = async (token, experienceId) => {
   const response = await axios.delete(
-    `${authService}/profile/deleteExperience/${experienceId}`,
+    `${serverURL}/profile/deleteExperience/${experienceId}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -96,9 +144,30 @@ export const deleteExperience = async (token, experienceId) => {
   return response;
 };
 
+export const addSkillProfile = async (token, formData) => {
+  const response = await axios.post(`${serverURL}/profile/addSkill`, formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
+
 export const deleteSkill = async (token, skillId) => {
   const response = await axios.delete(
-    `${authService}/profile/deleteSkill/${skillId}`,
+    `${serverURL}/profile/deleteSkill/${skillId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response;
+};
+
+export const getUserById = async (token) => {
+  const response = await axios.get(
+    `${serverURL}/profile/getUserDataById/67d91e63967866664dd4322c`,
     {
       headers: {
         Authorization: `Bearer ${token}`,

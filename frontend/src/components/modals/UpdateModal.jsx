@@ -8,38 +8,49 @@ import { Button } from "../UI/Button";
 import {
   updateAboutProfile,
   updateEducationProfile,
+  updateExperienceProfile,
   updateIntroProfile,
 } from "../../services/profile";
 import { useDispatch } from "react-redux";
+import { ERROR_MESSAGES } from "../../constants/Errors";
 
-export const UpdateModal = ({ idSelaected, toUpdate, setOpen }) => {
+export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
   const { userData } = AppSelector();
   const [userInfo, setUserInfo] = useState({ ...userData });
   const [educationInfo, setEducationInfo] = useState({
-    ...userData.education.filter((item) => item._id === idSelaected)[0],
+    ...userData.education.filter((item) => item._id === idSelected)[0],
+  });
+  const [experienceInfo, setExperienceInfo] = useState({
+    ...userData.experience.filter((item) => item._id === idSelected)[0],
   });
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [notification, setNotification] = useState(null);
   const dispatch = useDispatch();
 
-  const handleChange = (e) => {
-    const { name, value, type, files } = e.target;
-    toUpdate !== _education
-      ? setUserInfo((prev) => ({
-          ...prev,
-          [name]: type === "file" ? files[0] : value,
-        }))
-      : setEducationInfo((prev) => ({
-          ...prev,
-          [name]: value,
-        }));
-  };
-
   const token = localStorage.getItem("token");
   const _intro = "intro";
   const _about = "about";
   const _education = "education";
+  const _experience = "experience";
+
+  const handleChange = (e) => {
+    const { name, value, type, files, checked } = e.target;
+    toUpdate === _intro || toUpdate === _about
+      ? setUserInfo((prev) => ({
+          ...prev,
+          [name]: type === "file" ? files[0] : value,
+        }))
+      : toUpdate === _education
+      ? setEducationInfo((prev) => ({
+          ...prev,
+          [name]: value,
+        }))
+      : setExperienceInfo((prev) => ({
+          ...prev,
+          [name]: type === "checkbox" ? checked : value,
+        }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,7 +84,7 @@ export const UpdateModal = ({ idSelaected, toUpdate, setOpen }) => {
         case _education:
           response = await updateEducationProfile(
             token,
-            idSelaected,
+            idSelected,
             educationInfo
           );
           setLoading(false);
@@ -82,8 +93,31 @@ export const UpdateModal = ({ idSelaected, toUpdate, setOpen }) => {
             payload: {
               ...userData,
               education: [
-                userData.education.map((item) =>
-                  item.id === idSelaected ? educationInfo : item
+                ...userData.education.map((item) =>
+                  item._id === idSelected ? educationInfo : item
+                ),
+              ],
+            },
+          });
+          setNotification({ type: "success", message: response.data.message });
+          setTimeout(() => {
+            setOpen(false);
+          }, 2000);
+          break;
+        case _experience:
+          response = await updateExperienceProfile(
+            token,
+            idSelected,
+            experienceInfo
+          );
+          setLoading(false);
+          dispatch({
+            type: "UPDATE_USERDATA",
+            payload: {
+              ...userData,
+              experience: [
+                ...userData.experience.map((item) =>
+                  item._id === idSelected ? experienceInfo : item
                 ),
               ],
             },
@@ -95,9 +129,14 @@ export const UpdateModal = ({ idSelaected, toUpdate, setOpen }) => {
           break;
 
         default:
-          setNotification({ type: "error", message: "Unauthorized" });
+          setNotification({
+            type: "error",
+            message: ERROR_MESSAGES.UNAUTHORIZED,
+          });
       }
     } catch (error) {
+      setLoading(false);
+      console.log(error.response);
       error.response
         ? setNotification({
             type: "error",
@@ -107,12 +146,13 @@ export const UpdateModal = ({ idSelaected, toUpdate, setOpen }) => {
     }
   };
   console.log("object", userInfo);
+  console.log("object", idSelected);
   return (
     <div className="z-20 abso)lute fixed w-full inset-0 p-2 flex bg-black/50 text-gray-700 justify-center lg:backdrop-blur-xs">
       <div
         className={`bg-[#ffffff] z-20 border w-full sm:w-[65%] lg:w-[50%] ${
-          toUpdate === _intro
-            ? "h-[520px] sm:h-[540px] lg:h-[555px]"
+          toUpdate === _intro || toUpdate === _experience
+            ? "h-[520px] sm:h-[540px] lg:h-[555px] pb-4"
             : "h-[400px] sm:h-[420px] lg:h-[435px]"
         } my-auto lg:mt-[30px] px-8 rounded-lg shadow-sm overflow-auto`}
       >
@@ -130,7 +170,9 @@ export const UpdateModal = ({ idSelaected, toUpdate, setOpen }) => {
                   text={
                     toUpdate === _intro
                       ? "FullName*"
-                      : toUpdate == _education && "School*"
+                      : toUpdate === _education
+                      ? "School*"
+                      : toUpdate === _experience && "Position*"
                   }
                   className="text-sm font-normal text-gray-600 mb-1"
                 />
@@ -139,20 +181,45 @@ export const UpdateModal = ({ idSelaected, toUpdate, setOpen }) => {
                   name={
                     toUpdate === _intro
                       ? "name"
-                      : toUpdate === _education && "institution"
+                      : toUpdate === _education
+                      ? "institution"
+                      : toUpdate === _experience && "position"
                   }
                   value={
                     toUpdate === _intro
                       ? userInfo.name
-                      : toUpdate == _education && educationInfo.institution
+                      : toUpdate === _education
+                      ? educationInfo.institution
+                      : toUpdate === _experience && experienceInfo.position
                   }
                   onChange={handleChange}
                   className="p-2 font-normal text-sm outline-2 rounded-xs "
                 />
               </div>
+              {toUpdate === _experience && (
+                <div className="flex flex-col mt-5">
+                  <Label
+                    text="Company*"
+                    className="text-sm font-normal text-gray-600 mb-1"
+                  />
+                  <Input
+                    type="text"
+                    name="company"
+                    value={experienceInfo.company}
+                    onChange={handleChange}
+                    className="p-2 font-normal text-sm outline-2 rounded-xs "
+                  />
+                </div>
+              )}
               <div className="flex flex-col mt-5">
                 <Label
-                  text={toUpdate === _intro ? "Headline*" : "Degree*"}
+                  text={
+                    toUpdate === _intro
+                      ? "Headline*"
+                      : toUpdate === _education
+                      ? "Degree*"
+                      : toUpdate === _experience && "Location"
+                  }
                   className="text-sm font-normal text-gray-600 mb-1"
                 />
                 <Input
@@ -160,12 +227,16 @@ export const UpdateModal = ({ idSelaected, toUpdate, setOpen }) => {
                   name={
                     toUpdate === _intro
                       ? "headLine"
-                      : toUpdate === _education && "degree"
+                      : toUpdate === _education
+                      ? "degree"
+                      : toUpdate === _experience && "location"
                   }
                   value={
                     toUpdate === _intro
                       ? userInfo.headLine
-                      : toUpdate === _education && educationInfo.degree
+                      : toUpdate === _education
+                      ? educationInfo.degree
+                      : toUpdate === _experience && experienceInfo.location
                   }
                   onChange={handleChange}
                   className="p-2 font-normal text-sm outline-2 rounded-xs "
@@ -216,10 +287,16 @@ export const UpdateModal = ({ idSelaected, toUpdate, setOpen }) => {
                   name={
                     toUpdate === _intro
                       ? "location"
-                      : toUpdate === _education && "year"
+                      : toUpdate === _education
+                      ? "year"
+                      : toUpdate === _experience && "year"
                   }
                   value={
-                    toUpdate === _intro ? userInfo.location : educationInfo.year
+                    toUpdate === _intro
+                      ? userInfo.location
+                      : toUpdate === _education
+                      ? educationInfo.year
+                      : toUpdate === _experience && experienceInfo.year
                   }
                   onChange={handleChange}
                   className="p-2 font-normal text-sm outline-2 rounded-xs "
@@ -240,6 +317,39 @@ export const UpdateModal = ({ idSelaected, toUpdate, setOpen }) => {
                     required={false}
                   />
                 </div>
+              )}
+              {toUpdate === _experience && (
+                <>
+                  <div className="flex items-center mt-5">
+                    <Label
+                      text="Current"
+                      className="text-sm font-normal text-gray-600 mb-1 mr-2"
+                    />
+                    <input
+                      type="checkbox"
+                      name="current"
+                      checked={experienceInfo.current}
+                      onChange={handleChange}
+                      className="p-2 font-normal text-sm rounded-xs "
+                      // required={false}
+                    />
+                  </div>
+                  <div className="flex flex-col mt-5">
+                    <Label
+                      text="Description"
+                      className="text-sm font-normal text-gray-600 mb-1"
+                    />
+
+                    <Textarea
+                      name="description"
+                      rows="8"
+                      placeholder="description"
+                      value={experienceInfo.description}
+                      onChange={handleChange}
+                      className="p-3 font-normal text-sm outline-2 rounded-xs "
+                    />
+                  </div>
+                </>
               )}
             </div>
           ) : (

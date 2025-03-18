@@ -10,8 +10,10 @@ import { Notification } from "../UI/Notification";
 import { ERROR_MESSAGES } from "../../constants/Errors";
 
 export const EducationsModal = ({
+  valuetoAdd,
+  setShowModalAdd,
   idEduSelected,
-  setShowModal,
+  setShowModalUpdate,
   valuetoUpdate,
   showIcon,
   educationList,
@@ -31,7 +33,7 @@ export const EducationsModal = ({
       );
       dispatch({
         type: "UPDATE_USERDATA",
-        papayloady: { ...userData, education: _education },
+        payload: { ...userData, education: _education },
       });
       setNotification({ type: "success", message: response.data.message });
     } catch (error) {
@@ -47,7 +49,13 @@ export const EducationsModal = ({
   return (
     <div className="bg-white w-full lg:w-[89%] flex flex-col gap-3 p-[30px] lg:ml-[15%] relative lg:rounded-md z-15">
       {showIcon && (
-        <div className="absolute right-0 top-[5px] mt-4 mr-5 p-1.5 w-10 duration-200 h-10 text-center text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[50%] ">
+        <div
+          onClick={() => {
+            setShowModalAdd(true);
+            valuetoAdd("education");
+          }}
+          className="absolute right-0 top-[5px] mt-4 mr-5 p-1.5 w-10 duration-200 h-10 text-center text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[50%] "
+        >
           <PlusIcon strokeWidth="1.3" />
         </div>
       )}
@@ -75,15 +83,15 @@ export const EducationsModal = ({
               </span>
             </div>
             {showIcon && (
-              <div
-                onClick={() => {
-                  idEduSelected(item._id);
-                  valuetoUpdate("education");
-                  setShowModal(true);
-                }}
-                className="flex gap-2"
-              >
-                <span className="text-center p-1.5 text-gray-600 cursor-pointer duration-200 hover:bg-gray-100 hover:text-black rounded-[50%]">
+              <div className="flex gap-2">
+                <span
+                  onClick={() => {
+                    idEduSelected(item._id);
+                    valuetoUpdate("education");
+                    setShowModalUpdate(true);
+                  }}
+                  className="text-center p-1.5 text-gray-600 cursor-pointer duration-200 hover:bg-gray-100 hover:text-black rounded-[50%]"
+                >
                   <ModeEditOutlinedIcon />
                 </span>
                 <span

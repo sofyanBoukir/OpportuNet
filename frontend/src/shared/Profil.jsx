@@ -10,19 +10,61 @@ import { SuggestionsModal } from "../components/App/Suggestions";
 import { UpdateModal } from "../components/modals/UpdateModal";
 import { AppSelector } from "../selectors/AppSelector";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Post } from "../components/App/Post";
+import { AddModal } from "../components/modals/AddModal";
+import { IsEmptyModal } from "../components/App/IsEmptyModal";
+import { getUserById } from "../services/profile";
+import { ERROR_MESSAGES } from "../constants/Errors";
 
 export const Profil = () => {
   const { userData } = AppSelector();
   const { id } = useParams();
 
   const [userInfo, setUserInfo] = useState({});
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [toUpdate, setToUpdate] = useState("");
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [toAdd, setToAdd] = useState("");
+  const [notification, setNotification] = useState(null);
+
   const [selectedId, setSelectedId] = useState(null);
 
   const showIcon = userData._id === id;
+
+  useEffect(() => {
+    const getUser = async () => {
+      setNotification(null);
+      try {
+        const response = await getUserById(localStorage.getItem("token"));
+        setUserInfo(response.data);
+        console.log("fff", response);
+      } catch (error) {
+        switch (error.response.status) {
+          case 401:
+            setNotification({
+              type: "error",
+              message: error.response.data.message,
+            });
+            break;
+          case 500:
+            error.response
+              ? setNotification({
+                  type: "error",
+                  message: error.response.data.message,
+                })
+              : setNotification({
+                  type: "error",
+                  message: ERROR_MESSAGES.TRY_AGAIN,
+                });
+            break;
+        }
+      }
+    };
+
+    // userData._id !== id &&
+    getUser();
+  }, []);
 
   const dataInfo = {
     followers: 300,
@@ -69,19 +111,6 @@ export const Profil = () => {
     ],
   };
 
-  // const recuiterData = {
-  //   name: userData.name,
-  //   headLine: userData.headLine,
-  //   companyName: userData.companyName,
-  //   location: userData.location,
-  //   webSite: userData.webSite,
-  // };
-  // const candidateData = {
-  //   name: userData.name,
-  //   headLine: userData.headLine,
-  //   location: userData.location,
-  //   webSite: userData.webSite,
-  // };
   console.log("object", userData);
   return (
     <div>
@@ -89,57 +118,90 @@ export const Profil = () => {
         <div className="w-full lg:w-[65%] pt-[55px] lg:pt-[80px] flex flex-col gap-y-2 lg:pb-4">
           {
             <ProfilInfoModal
-              setShowModal={setShowAddModal}
+              setShowModalUpdate={setShowUpdateModal}
               valuetoUpdate={setToUpdate}
               showIcon={showIcon}
-              userData={userData._id === id ? userData : userInfo}
+              userData={userData._id === id ? userData : userInfo.userData}
             />
           }
 
+          {userData._id === id ? (
+            userData.about ? (
+              <AboutModal
+                valuetoUpdate={setToUpdate}
+                setShowModalUpdate={setShowUpdateModal}
+                showIcon={showIcon}
+                content={
+                  userData._id === id ? userData.about : userInfo.userData.about
+                }
+              />
+            ) : (
+              <IsEmptyModal
+                setShowModalAdd={setShowAddModal}
+                valuetoAdd={setToAdd}
+                type="about"
+              />
+            )
+          ) : (
+            userInfo.about && (
+              <AboutModal
+                valuetoUpdate={setToUpdate}
+                setShowModalUpdate={setShowUpdateModal}
+                showIcon={showIcon}
+                content={
+                  userData._id === id ? userData.about : userInfo.userData.about
+                }
+              />
+            )
+          )}
           {
-            <AboutModal
-              valuetoUpdate={setToUpdate}
-              setShowModal={setShowAddModal}
-              showIcon={showIcon}
-              content={userData._id === id ? userData.about : userInfo.about}
-            />
-          }
-          {
-            // userData.education &&
             <EducationsModal
               idEduSelected={setSelectedId}
+              setShowModalUpdate={setShowUpdateModal}
               valuetoUpdate={setToUpdate}
-              setShowModal={setShowAddModal}
+              setShowModalAdd={setShowAddModal}
+              valuetoAdd={setToAdd}
               showIcon={showIcon}
               educationList={
-                userData._id === id ? userData.education : userInfo.about
+                userData._id === id
+                  ? userData.education
+                  : userInfo.userData.education
               }
             />
           }
           {
-            // userData.experience &&
             <ExperiencesModal
+              idEduSelected={setSelectedId}
+              setShowModalUpdate={setShowUpdateModal}
+              valuetoUpdate={setToUpdate}
+              setShowModalAdd={setShowAddModal}
+              valuetoAdd={setToAdd}
               showIcon={showIcon}
               experienceList={
-                userData.experience.length
+                userData._id === id
                   ? userData.experience
-                  : dataInfo.experience
+                  : userInfo.userData.experience
               }
             />
           }
           {
-            // userData.skills &&
             <SkillsModal
+              setShowModalAdd={setShowAddModal}
+              valuetoAdd={setToAdd}
               showIcon={showIcon}
               skillList={
-                userData.skills.length ? userData.skills : dataInfo.skills
+                userData._id === id ? userData.skills : userInfo.userData.skills
               }
             />
           }
           {userData.interests && (
             <InterestsModal
               showIcon={showIcon}
-              interestList={userData.interests}
+              interestList={
+                userData._id === id
+                  ? userData.interests
+                  : userInfo.userData.interests
+              }
             />
           )}
           <div className="w-full lg:w-[89%] flex flex-col gap-2 lg:ml-[15%]">
@@ -152,14 +214,18 @@ export const Profil = () => {
           {<UrlProfilModal />}
           {<SuggestionsModal suggestionList={dataInfo.suggestions} />}
         </div>
-        {showAddModal && (
+        {showUpdateModal && (
           <UpdateModal
             toUpdate={toUpdate}
-            idSelaected={selectedId}
-            setOpen={setShowAddModal}
+            idSelected={selectedId}
+            setOpen={setShowUpdateModal}
           />
         )}
+        {showAddModal && <AddModal toAdd={toAdd} setOpen={setShowAddModal} />}
       </div>
+      {notification && (
+        <Notification type={notification.type} message={notification.message} />
+      )}
     </div>
   );
 };

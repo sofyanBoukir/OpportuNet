@@ -44,14 +44,16 @@ export const InterestsModal = ({ showIcon, interestList }) => {
           return;
         }
       })}
-      <div
-        onClick={handleClickAll}
-        className="text-center font-semibold text-sm text-gray-700 hover:text-black hover:cursor-pointer hover:bg-[#F3F3F3] duration-200 py-2"
-      >
-        {hieghtDiv === interestList.length
-          ? `Close all ${interestList.length} skills`
-          : `Show all ${interestList.length} skills`}
-      </div>
+      {interestList.length > 2 && (
+        <div
+          onClick={handleClickAll}
+          className="text-center font-semibold text-sm text-gray-700 hover:text-black hover:cursor-pointer hover:bg-[#F3F3F3] duration-200 py-2"
+        >
+          {hieghtDiv === interestList.length
+            ? `Close all ${interestList.length} skills`
+            : `Show all ${interestList.length} skills`}
+        </div>
+      )}
     </div>
   );
 };

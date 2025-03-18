@@ -2,7 +2,7 @@ import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 
 export const AboutModal = ({
   valuetoUpdate,
-  setShowModal,
+  setShowModalUpdate,
   showIcon,
   content,
 }) => {
@@ -11,7 +11,7 @@ export const AboutModal = ({
       {showIcon && (
         <div
           onClick={() => {
-            setShowModal(true);
+            setShowModalUpdate(true);
             valuetoUpdate("about");
           }}
           className="absolute right-0 top-[5px] mt-4 mr-5 p-1.5 duration-200 text-center text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[50%] "

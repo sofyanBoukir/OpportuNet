@@ -9,16 +9,23 @@ import { deleteExperience } from "../../services/profile";
 import { Notification } from "../UI/Notification";
 import { ERROR_MESSAGES } from "../../constants/Errors";
 
-export const ExperiencesModal = ({ showIcon, experienceList }) => {
+export const ExperiencesModal = ({
+  valuetoUpdate,
+  idEduSelected,
+  setShowModalUpdate,
+  valuetoAdd,
+  setShowModalAdd,
+  showIcon,
+  experienceList,
+}) => {
   const { userData } = AppSelector();
   const dispatch = useDispatch();
-  // const [errorMessage, setErrorMessage] = useState(null);
+
   const [notification, setNotification] = useState(null);
 
   const token = localStorage.getItem("token");
 
   const handleClickDelete = async (experienceId) => {
-    // setErrorMessage(null);
     setNotification(null);
     try {
       const response = await deleteExperience(token, experienceId);
@@ -27,7 +34,7 @@ export const ExperiencesModal = ({ showIcon, experienceList }) => {
       );
       dispatch({
         type: "UPDATE_USERDATA",
-        papayloady: { ...userData, experience: _experience },
+        payload: { ...userData, experience: _experience },
       });
       setNotification({ type: "success", message: response.data.message });
     } catch (error) {
@@ -43,7 +50,13 @@ export const ExperiencesModal = ({ showIcon, experienceList }) => {
   return (
     <div className="bg-white w-full lg:w-[89%] p-[30px] lg:ml-[15%] relative lg:rounded-md z-15 flex gap-3 flex-col">
       {showIcon && (
-        <div className="absolute right-0 top-[5px] mt-4 mr-5 p-1.5 w-10 duration-200 h-10  text-center text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[50%] ">
+        <div
+          onClick={() => {
+            setShowModalAdd(true);
+            valuetoAdd("experience");
+          }}
+          className="absolute right-0 top-[5px] mt-4 mr-5 p-1.5 w-10 duration-200 h-10  text-center text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[50%] "
+        >
           <PlusIcon strokeWidth="1.3" />
         </div>
       )}
@@ -89,19 +102,26 @@ export const ExperiencesModal = ({ showIcon, experienceList }) => {
           <div className=" w-full flex items-center justify-between pr-2">
             <div>
               <h5 className="text-xl font-semibold text-black ">
-                {item.namePost} - {item.companyName}
+                {item.position} - {item.company}
               </h5>
               <p className="text-lg font-light text-gray-900">
                 {item.location}
               </p>
-              <p className="text-lg font-light text-gray-900">{item.date}</p>
+              <p className="text-lg font-light text-gray-900">{item.year}</p>
               <span className="text-sm font-light text-gray-900">
                 {item.description}
               </span>
             </div>
             {showIcon && (
               <div className="flex gap-2">
-                <span className="text-center p-1.5 text-gray-600 cursor-pointer duration-200 hover:bg-gray-100 hover:text-black rounded-[50%]">
+                <span
+                  onClick={() => {
+                    setShowModalUpdate(true);
+                    valuetoUpdate("experience");
+                    idEduSelected(item._id);
+                  }}
+                  className="text-center p-1.5 text-gray-600 cursor-pointer duration-200 hover:bg-gray-100 hover:text-black rounded-[50%]"
+                >
                   <ModeEditOutlinedIcon />
                 </span>
                 <span
