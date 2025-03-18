@@ -54,15 +54,16 @@ export const CompleteRegisration = () => {
         try{
             setLoading(true);
             const response = await completeRegistration(localStorage.getItem('token'),formData);
-            console.log(response);
-            
+                        
             setLoading(false);
             if(response.status === 200){
                 setExtraLoading(true);
                 setTimeout(() => {
                     setExtraLoading(false);
-                    navigate('/feed')
                 }, 3000);
+                setTimeout(() => {
+                    navigate('/feed')
+                }, 2050);
             }
         }catch(err){
             setLoading(false);
@@ -150,19 +151,19 @@ export const CompleteRegisration = () => {
                                 <div>
                                     <h1 className='text-3xl font-semibold text-center'>Why do you want to use our app?</h1>
                                     <br></br>
-                                    <span className='text-gray-600'>This question helps us tailor the platform to your needs. Are you here to find a job, or hire top talent?</span>
+                                    <span className='text-gray-800 text-lg'>This question helps us tailor the platform to your needs. Are you here to find a job, or hire top talent?</span>
 
-                                    <div className='flex mt-2 gap-2 justify-center'>
-                                        <div onClick={() => setFormData({...formData,role:'candidate'})} 
+                                    <div className='flex mt-4 gap-2 justify-center'>
+                                        <div onClick={() => setFormData({...formData,role:'candidate'})}
                                         className={`border-2 px-3 shadow-lg py-1 w-[50%] md:w-[30%] text-start cursor-pointer hover:bg-gray-100 duration-200 border-black rounded-sm
-                                        ${formData.role === 'candidate' ? 'bg-gray-100 border-blue-600 text-blue-800' :null}`}>
+                                        ${formData.role === 'candidate' ? 'bg-blue-50 border-blue-700 text-blue-800' :null}`}>
                                             <UserIcon className='w-12 h-12' strokeWidth={0.7}/>
                                             <p className='text-ld font-semibold'>Candidate</p>
                                             <span>Looking for job,internship ... and showcasing your skills.</span>
                                         </div>
                                         <div onClick={() => setFormData({...formData,role:'recuiter'})} 
                                         className={`border-2 px-3 shadow-lg py-1 w-[50%] md:w-[30%] text-start cursor-pointer hover:bg-gray-100 duration-200 border-black rounded-sm
-                                        ${formData.role === 'recuiter' ? 'bg-gray-100 border-blue-600 text-blue-800' :null}`}>
+                                        ${formData.role === 'recuiter' ? 'bg-blue-50 border-blue-700 text-blue-800' :null}`}>
                                             <BriefcaseIcon className='w-12 h-12' strokeWidth={0.7}/>
                                             <p className='text-ld font-semibold'>Recruiter</p>
                                             <span> Searching for top talent, posting job openings.</span>
@@ -177,9 +178,9 @@ export const CompleteRegisration = () => {
                                 <div>
                                     <h1 className='text-3xl font-semibold text-center'>Select your interests! </h1>
                                     <br></br>
-                                    <span className='text-gray-600'>Choose topics that matter to you the most. Your feed will be customized based on your selections. At least 5 interests</span>
+                                    <span className='text-gray-800 text-lg'>Choose topics that matter to you the most. Your feed will be customized based on your selections. <br></br><span className='underline'>At least 5 interests</span></span>
 
-                                    <div className='flex mt-2 flex-wrap justify-center gap-2'>
+                                    <div className='flex mt-4 flex-wrap justify-center gap-2'>
                                         {
                                             interests && interests.length?
                                                 interests.map((interest) =>{
@@ -195,7 +196,7 @@ export const CompleteRegisration = () => {
                                                             })
                                                       }
                                                     className={`px-4 py-2 shadow rounded-sm border cursor-pointer hover:bg-gray-100 duration-200
-                                                    ${formData.interests.includes(interest._id) ? 'bg-gray-100 border-blue-700 text-blue-800' : null}
+                                                    ${formData.interests.includes(interest._id) ? 'bg-blue-50 border-blue-700 text-blue-800' : null}
                                                     `}>
                                                         {interest.interest}
                                                     </div>
@@ -212,11 +213,11 @@ export const CompleteRegisration = () => {
                                 <div>
                                     <h1 className='text-3xl font-semibold text-center'>What describes you!</h1>
                                     <br></br>
-                                    <span className='text-gray-600'>Tell us about your background so we can personalize your experience.</span>
+                                    <span className='text-gray-800 text-lg'>Tell us about your background so we can personalize your experience.</span>
 
                                     <div className='flex mt-2 flex-col gap-4'>
                                         <div className='flex flex-col'>
-                                            <Label text={'HeadLine'} className={'text-start text-gray-600'}/>
+                                            <Label text={'HeadLine'} className={'text-start text-lg text-gray-600'}/>
                                             <Input type={'text'} placeholder={'Ex: Software developer'} value={formData.headLine} onChange={(e) => setFormData({...formData,headLine:e.target.value})}
                                             className={'py-2 px-3 border-2 border-gray-400 rounded-sm'}/>
                                         </div>
@@ -239,7 +240,7 @@ export const CompleteRegisration = () => {
                                 <div>
                                     <h1 className='text-3xl font-semibold text-center'>Congrutulations {appStore.userData.name}!</h1>
                                     <br></br>
-                                    <span className='text-gray-600'>Let's move forward and explore the best opportunities—whether you're looking to hire top talent or discover your next career move!</span>
+                                    <span className='text-start text-lg text-gray-600'>Let's move forward and explore the best opportunities—whether you're looking to hire top talent or discover your next career move!</span>
 
                                     
                                 </div>

@@ -6,6 +6,7 @@ import App from "./App.jsx";
 import { legacy_createStore } from "redux";
 import { Provider } from "react-redux";
 import { AppReducer } from "./features/AppReducer.js";
+import React from "react"
 
 const store = legacy_createStore(AppReducer);
 

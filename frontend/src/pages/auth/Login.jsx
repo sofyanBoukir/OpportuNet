@@ -34,6 +34,8 @@ export const Login = () => {
         try{
             setLoading(true);
             const response = await login(formData);
+            console.log(response);
+            
             
             switch(response.status){
                 case 200:
@@ -49,12 +51,16 @@ export const Login = () => {
                     }
                     setLoading(false);
                     localStorage.setItem('token',response.data.token)
+                    console.log(response);
+                    
                     if(response.data.userData.isNewUser){
                         setExtraLoading(true)
                         setTimeout(() => {
                             setExtraLoading(false);
+                        }, 3000);
+                        setTimeout(() => {
                             navigate('/user/completeRegistration')
-                        }, 2000);
+                        }, 2050);
                         break;
                     }
                     else{

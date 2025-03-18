@@ -1,131 +1,163 @@
-import SearchIcon from "@mui/icons-material/Search";
-import ContrastIcon from "@mui/icons-material/Contrast";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { SingleLink } from "../components/UI/SingleLink";
 import { Input } from "../components/UI/Input";
+import {
+  ArrowRightOnRectangleIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
+import { SingleLink } from "../components/UI/SingleLink";
 import { dataHeader } from "../constants/Links";
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
 import { AppSelector } from "../selectors/AppSelector";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import userDefaultImage from "../../public/images/profilDefault.png";
+import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
+import React from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+const serverURL = import.meta.env.VITE_SERVER_URL;
 
 export const Layout = () => {
   const [showProfil, setShowProfil] = useState(false);
-  const dispatch = useDispatch();
-
   const { isMessaged, isNotified, userData } = AppSelector();
+  const navigate = useNavigate();
+
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
 
   const showProfil_FUNCTION = (e) => {
     e.stopPropagation();
     showProfil === false ? setShowProfil(true) : setShowProfil(false);
   };
 
-  const handleClickDark = () => {
-    console.log("object");
-    dispatch({ type: "UPDATE_THEME", payload: "dark" });
-  };
-
   return (
-    <div className={`relative top-0`} onClick={() => setShowProfil(false)}>
-      <header className="bg-white fixed top-0 w-[100vw] z-20 h-[50px] flex sm:justify-center justify-around ">
-        <div className={`w-[10%] mx-1 my-auto sm:flex sm:w-[25%] sm:h-full`}>
-          <img
-            src="../../public/images/scren.png"
-            alt="logo"
-            className="sm:w-[50px] sm:h-[70%] sm:my-auto sm:mr-1"
-          />
-          <Input
-            placeholder="Search"
-            className={`hidden sm:block pl-[35px] w-[80%] h-[70%] my-auto bg-gray-100`}
-          />
-        </div>
-        <div className="w-[90%] flex justify-around items-center sm:justify-evenly sm:w-[33%] bg-am)ber-200 ">
-          <div
-            className={`w-[60px] flex justify-center mt-[3px] sm:absolute sm:left-[365px]`}
-          >
-            <SearchIcon strokeWidth="1" className="w-10 h-10" />
-          </div>
-          {dataHeader
-            .filter((item) => item.ROLE === userData.role)
-            .map((element) => (
-              <SingleLink
-                key={element.LINK}
-                link={element.LINK}
-                svg={element.SVG}
-                text={element.TEXT}
+    <div>
+      <div>
+        <div
+          className="bg-white py-1 lg:px-[10%] flex w-[100%] justify-between fixed z-20"
+          onClick={() => setShowProfil(false)}
+        >
+          <div className="w-full lg:w-[40%] relative">
+            <div
+              className={`w-[60px] flex justify-center mt-[3px] absolute left-[48px] top-[12px]`}
+            >
+              <MagnifyingGlassIcon
+                strokeWidth="2"
+                className="w-5 h-5 text-gray-700"
               />
-            ))}
-          <div
-            className={`w-[60px] flex flex-col items-center justify-center mt-[3px] cursor-pointer hover:text-blue-500`}
-            onClick={showProfil_FUNCTION}
-          >
-            <img
-              src="../../public/images/profilDefault.png"
-              className="w-6 h-6 rounded-xl mt-0.5"
-            />
-            <div className="font-light hidden sm:block">Me</div>
+            </div>
+            <div className={`w-full h-full flex items-center gap-2 p-1`}>
+              <img
+                src="../../public/images/scren.png"
+                alt="logo"
+                className="w-[50px] h-[40px]"
+              />
+              <Input
+                placeholder="Search"
+                className={`sm:block) pl-[32px] py-2 w-[90%] sm:w-[640px]) my-auto outline-none rounded-md bg-[#F2F2F2]`}
+              />
+            </div>
+          </div>
+          <div className="bg-white w-full lg:w-[50%] h-[70px] lg:h-auto fixed lg:static bottom-0 flex sm:justify-center gap-8">
+            {dataHeader
+              .filter((item) => item.ROLE === userData.role)
+              .map((element) => (
+                <SingleLink
+                  key={element.LINK}
+                  link={element.LINK}
+                  svg={element.SVG}
+                  text={element.TEXT}
+                />
+              ))}
+
+            <div
+              className={`w-[60px] flex flex-col items-center justify-center mt-[3px] cursor-pointer`}
+              onClick={() => setDarkMode(!darkMode)}
+            >
+              {darkMode ? (
+                <MoonIcon className="w-7 h-7 text-[#666666]" />
+              ) : (
+                <SunIcon className="w-7 h-7 text-[#666666]" />
+              )}
+              <div className="text-xs font-normal hidden lg:block text-gray-600">
+                {darkMode ? "Dark" : "Light"}
+              </div>
+            </div>
+            <div
+              className={`w-[60px] flex flex-col items-center justify-center mt-[3px] cursor-pointer`}
+              onClick={showProfil_FUNCTION}
+            >
+              <img
+                src={`${serverURL}` + userData.profile_picture}
+                className="w-7 h-7 rounded-full mt-0.5"
+              />
+              <div className="text-xs font-normal hidden lg:block text-gray-600 2xl:block">
+                Profile
+              </div>
+            </div>
           </div>
         </div>
         <div
           className={`${
             showProfil ? "block" : "hidden"
-          } border border-gray-200 w-[270px] h-[60px]) sm:) h-[200px] shadow-xl absolute bg-white top-[55px] right-6 rounded-b-lg rounded-tl-lg sm:right-[355px]`}
+          } w-[400px] py-2 px-3 rounded-xl shadow-lg flex flex-col bg-white absolute) fixed md:left-[65%] rounded-tr-none md:top-[75px] z-40`}
         >
-          <div className="w-full flex">
-            <div className="w-[30%] h-[45%] pt-1">
-              <img
-                src="../../public/images/profilDefault.png"
-                className="w-[70%] h-[70%] rounded-[50%] m-auto"
-              />
+          <div className="flex items-center gap-2">
+            <div>
+              <img src={`${serverURL}` + userData.profile_picture} className="rounded-full w-16 h-16" />
             </div>
-            <div className="w-[70%] h-[45%] pt-1">
-              <h1 className="font-semibold text-xl">Said kachoud</h1>
-              <h6>devloper</h6>
+            <div>
+              <p className="text-lg font-semibold">{userData.name}</p>
+              <span className="text-gray-700">{userData.headLine}</span>
             </div>
-            <button className="font-semibold absolute border-2 border-blue-600 text-blue-600 w-[250px] rounded-2xl top-[36%] left-[3.5%] text-center cursor-pointer hover:bg-blue-200 hover:text-blue-500 hover:border-blue-600 hover:border-3 hover:font-medium">
-              view profil
+          </div>
+          <div className="mt-2">
+            <button
+              onClick={() => {
+                setShowProfil(false);
+                navigate(`/user/profil/${userData._id}`);
+              }}
+              className="rounded-2xl font-semibold w-[100%] cursor-pointer border-2 border-blue-600 text-[#0A66C2] bg-gray-100 hover:bg-blue-50 duration-200"
+            >
+              View profile
             </button>
           </div>
-          <hr className="absolute text-gray-300 w-[95%] left-[2.5%] top-[53%]" />
-          <div className="absolute top-[55%] w-full h-[85px]">
-            <div
-              className="w-full h-[50%] pl-2 pt-2 cursor-pointer hover:bg-gray-100"
-              onClick={handleClickDark}
-            >
-              <ContrastIcon
-                strokeWidth="1"
-                className="w-6 h-6 mr-1 text-gray-700"
+          <div className="mt-2">
+            <hr className="text-gray-300"></hr>
+          </div>
+          <div className="mt-2 flex gap-2 flex-col">
+            <div className="flex gap-2 items-center py-1 rounded-md cursor-pointer px-2 hover:bg-gray-100 duration-200">
+              <ArrowRightOnRectangleIcon
+                className="w-6 h-6 text-gray-700"
+                strokeWidth={1.1}
               />
-              <span>Dark mode</span>
-            </div>
-            <div className="w-full h-[50%] pl-3 pt-1 cursor-pointer hover:bg-gray-100">
-              <LogoutIcon
-                strokeWidth="1"
-                className="w-6 h-6 mr-1 text-gray-700"
-              />
-              <span>Logout</span>
+              <span className="text-gray-700 text-lg">Sign out</span>
             </div>
           </div>
         </div>
-
-        <span
-          className={
-            isNotified
-              ? "bg-red-500 rounded w-2 h-2 absolute right-[129px] top-4 sm:right-[522px] sm:top-[6px]"
-              : "hidden"
-          }
-        ></span>
-        <span
-          className={
-            isMessaged
-              ? "bg-red-500 rounded w-2 h-2 fixed right-[180px] top-4 sm:right-[585px] sm:top-1"
-              : "hidden"
-          }
-        ></span>
-      </header>
-      <div className="absolute top-[50px] w-[100vw]">
-        <Outlet />
+        {/* <span
+            className={
+              isNotified
+                ? "bg-red-500 rounded w-2 h-2 fixed bottom-7 right-[125px] sm:right-[239px] 2xl:absolute 2xl:top-[6px] 2xl:right-[183px]"
+                : "hidden"
+            }
+          ></span>
+          <span
+            className={
+              isMessaged
+                ? "bg-red-500 rounded w-2 h-2 fixed bottom-7 right-[201px] sm:right-[373px] 2xl:top-[6px] 2xl:right-[650px]"
+                : "hidden"
+            }
+          ></span> */}
       </div>
+      <Outlet />
     </div>
   );
 };

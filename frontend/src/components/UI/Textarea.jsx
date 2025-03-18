@@ -6,6 +6,7 @@ export const Textarea = ({ name, value, placeholder, onChange, className}) => {
         value={value}
         placeholder={placeholder}
         onChange={onChange}
+        spellCheck={false}
         className={`resize-none ${className}`} />
 )
 }

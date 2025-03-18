@@ -1,7 +1,5 @@
-import { LinkSlashIcon } from "@heroicons/react/24/outline";
-import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import React from "react"
 
 export const SingleLink = ({ link, svg, text }) => {
   const navigate = useNavigate();
@@ -22,18 +20,18 @@ export const SingleLink = ({ link, svg, text }) => {
       }}
       className={`${
         link === currentPath ? "text-black sm:border-b-2" : null
-      } w-[60px] flex flex-col items-center justify-center cursor-pointer hover:text-gray-200) duration-200`}
+      } w-[60px] flex flex-col items-center justify-center cursor-pointer hover:text-gray-200 duration-200`}
     >
       <div
-        className={`mt-[3px] ${
-          link === currentPath ? "text-black" : " text-gray-600"
+        className={`mt-[3px] duration-200 ${
+          link === currentPath ? "text-black" : " text-[#666666] "
         }`}
       >
         {svg}
       </div>
       <div>
         <span
-          className={`text-sm font-semiboldbold hidden lg:block ${
+          className={`text-xs duration-200 font-normal hidden lg:block ${
             link === currentPath ? "text-black" : "text-gray-600"
           }`}
         >
@@ -44,7 +42,7 @@ export const SingleLink = ({ link, svg, text }) => {
   );
 };
 
-export const Selector = () => {
-  const user = useSelector((state) => state.userData);
-  return user;
-};
+// export const Selector = () => {
+//   const user = useSelector((state) => state.userData);
+//   return user;
+// };

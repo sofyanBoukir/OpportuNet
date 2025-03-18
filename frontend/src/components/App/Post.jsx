@@ -4,7 +4,11 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { BookmarkIcon, ChatBubbleBottomCenterIcon, EllipsisHorizontalIcon, FlagIcon, HeartIcon, LinkIcon } from '@heroicons/react/24/outline';
 import { PostModal } from '../modals/PostModal';
-export const Post = () => {
+import moment from 'moment/moment';
+import { Skeleton } from '@mui/material';
+const serverUrl = import.meta.env.VITE_SERVER_URL;
+
+export const Post = ({post}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const [openModalPost , setOpenModalPost] =useState(false)
@@ -20,17 +24,17 @@ export const Post = () => {
         setIsExpanded(!isExpanded);
     };
   return (
-    <div className='w-[90%] md:w-[35%] bg-white mx-auto rounded-xl mt-5'>
+    <div className='w-[100%] md:w-[100%] bg-white rounded-xl'>
         <div className='w-[100%] px-4 py-4 justify-between flex flex-row items-center'>
             <div className=' flex flex-row items-center'>
-                <div className='w-[15%] lg:w-[12%]'> <img src="/profil.jpg" className=' rounded-full' alt="" /></div>
+                <div className='w-[15%] lg:w-[12%]'> <img src={serverUrl + post.user?.profile_picture} className=' rounded-full' alt="" /></div>
                 <div className='px-3'>
-                    <div className='flex flex-row items-end'>
-                        <h1 className='text-xl font-semibold'>Ayoub Mhainid</h1>
-                        <h3 className='text-gray-400 font-semibold px-2'>. 2D</h3>
+                    <div className='flex flex-row items-center'>
+                        <h1 className='text-xl font-semibold'>{post.user?.name}</h1>
+                        <h3 className='text-gray-400 text-sm font-semibold px-2'>{moment(post.createdAt).fromNow()}</h3>
                     </div>
                     <div>
-                        <h1 className='text-gray-400 text-lg font-semibold'>Develloper full stack</h1>
+                        <h1 className='text-gray-400 text-lg font-semibold'>{post.user?.headLine}</h1>
                     </div>
                 </div>
             </div>
@@ -65,9 +69,9 @@ export const Post = () => {
         </div>
         <div>
             <div className="text-gray-800 px-4 py-2 text-xl lexend-deca ">
-                {text.length > 20 ? (
+                {post.content.length > 100 ? (
                     <>
-                    <span>{isExpanded ? text : text.slice(0, 20) + "..."}</span>
+                    <span>{isExpanded ? post.content : post.content.slice(0, 20) + "..."}</span>
                     <button
                         onClick={toggleText}
                         className="text-gray-500 underline text-sm ml-2 cursor-pointer"
@@ -76,15 +80,15 @@ export const Post = () => {
                     </button>
                     </>
                 ) : (
-                    <span>{text}</span>
+                    <span>{post.content}</span>
                 )}
             </div>
             <div className='w-[100%] mt-1'>
-                <img src="/OnePiece.jpg" className='w-[100%]' alt="" />
+                <img src={serverUrl + post.image} className='w-[100%]' alt="" />
             </div>
             <div className='px-4 py-3 flex flex-row justify-between'>
-                <h1>100 Likes</h1>
-                <h1>100 comments</h1>
+                <h1>{post.likes.length} Likes</h1>
+                <h1>{post.comments.length} comments</h1>
             </div>
             <hr  className='w-[95%] py-1 text-gray-200 mx-auto'/>
             <div className='flex flex-row items-center py-2 px-5  justify-center'>

@@ -2,69 +2,72 @@ import HomeIcon from "@mui/icons-material/Home";
 import WorkIcon from "@mui/icons-material/Work";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ForumIcon from "@mui/icons-material/Forum";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
-import { AppSelector } from "../selectors/AppSelector";
-import { Outlet } from "react-router-dom";
-
+import { AiFillHome } from "react-icons/ai";
+import { FaBriefcase } from "react-icons/fa6";
+import { TbMessageFilled } from "react-icons/tb";
+import { IoNotifications } from "react-icons/io5";
+import { BookmarkIcon } from "@heroicons/react/24/solid";
+// import { BookmarkIcon } from "@heroicons/react/24/outline";
+import React from "react"
 export const dataHeader = [
   {
-    ROLE: "condidate",
-    SVG: <HomeIcon strokeWidth="1" className="w-10 h-10" />,
+    ROLE: "candidate",
+    SVG: <AiFillHome strokeWidth="1" className="w-7 h-7" />,
     TEXT: "Home",
-    LINK: `/condidate/home`,
+    LINK: `/feed`,
   },
   {
-    ROLE: "condidate",
-    SVG: <WorkIcon strokeWidth="1" className="w-10 h-10" />,
+    ROLE: "candidate",
+    SVG: <FaBriefcase strokeWidth="1" className="w-7 h-7" />,
     TEXT: "Jobs",
-    LINK: `/condidate/jobs`,
+    LINK: `/candidate/jobs`,
   },
   {
-    ROLE: "condidate",
-    SVG: <ForumIcon strokeWidth="1" className="w-10 h-10" />,
+    ROLE: "candidate",
+    SVG: <TbMessageFilled strokeWidth="1" className="w-7 h-7" />,
     TEXT: "Messaging",
-    LINK: `/condidate/messaging`,
+    LINK: `/messaging`,
   },
   {
-    ROLE: "condidate",
-    SVG: <NotificationsIcon strokeWidth="1" className="w-10 h-10" />,
+    ROLE: "candidate",
+    SVG: <BookmarkIcon strokeWidth="1" className="w-7 h-7" />,
+    TEXT: "Saves",
+    LINK: `/saves`,
+  },
+  {
+    ROLE: "candidate",
+    SVG: <IoNotifications strokeWidth="1" className="w-7 h-7" />,
     TEXT: "Notifications",
-    LINK: `/condidate/notifications`,
-  },
-  {
-    ROLE: "condidate",
-    SVG: <BookmarkIcon strokeWidth="1" className="w-10 h-10" />,
-    TEXT: "Saved",
-    LINK: `/condidate/saved/{id}`,
+    LINK: `/notifications`,
   },
   {
     ROLE: "recuiter",
-    SVG: <HomeIcon strokeWidth="1" className="w-10 h-10" />,
+    SVG: <HomeIcon strokeWidth="1" className="w-7 h-7"/>,
     TEXT: "Home",
-    LINK: `/recuiter/home`,
+    LINK: `/feed`,
   },
   {
     ROLE: "recuiter",
-    SVG: <WorkIcon strokeWidth="1" className="w-10 h-10" />,
-    TEXT: "Jobs",
+    SVG: <WorkIcon strokeWidth="1" className="w-7 h-7"/>,
+    TEXT: "Post",
     LINK: `/recuiter/post`,
   },
   {
     ROLE: "recuiter",
-    SVG: <ForumIcon strokeWidth="1" className="w-10 h-10" />,
+    SVG: <ForumIcon strokeWidth="1" className="w-7 h-7"/>,
     TEXT: "Messaging",
-    LINK: `/recuiter/messaging`,
+    LINK: `/messaging`,
   },
   {
     ROLE: "recuiter",
-    SVG: <NotificationsIcon strokeWidth="1" className="w-10 h-10" />,
-    TEXT: "Notifications",
-    LINK: `/recuiter/notifications`,
-  },
-  {
-    ROLE: "recuiter",
-    SVG: <BookmarkIcon strokeWidth="1" className="w-10 h-10" />,
+    SVG: <BookmarkIcon strokeWidth="1" className="w-7 h-7"/>,
     TEXT: "Saved",
-    LINK: `/recuiter/saved/{id}`,
+    LINK: `/saved`,
+  },
+  {
+    ROLE: "recuiter",
+    SVG: <NotificationsIcon strokeWidth="1" className="w-7 h-7"/>,
+    TEXT: "Notifications",
+    LINK: `/notifications`,
   },
 ];

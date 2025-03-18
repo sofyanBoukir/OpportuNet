@@ -11,7 +11,7 @@ export const PostModal = ({setOpenModalPost}) => {
   const toggleText = () => setIsExpanded(!isExpanded);
 
   return (
-    <div className="fixed inset-0 z-20 flex items-center bg-black/70 justify-center h-screen text-gray-700 backdrop-blur-xs">
+    <div className="fixed inset-0 z-20 flex items-center bg-black/50 justify-center h-screen text-gray-700 backdrop-blur-xs">
       <div className="bg-white md:w-[50%] px-1 py-6 rounded-lg shadow-xl flex flex-col max-h-[90vh] w-full">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold">This is the modal header</h1>
