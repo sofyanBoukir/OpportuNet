@@ -1,17 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { BookmarkIcon, ChatBubbleBottomCenterIcon, EllipsisHorizontalIcon, FlagIcon, HeartIcon, LinkIcon } from '@heroicons/react/24/outline';
+import { BookmarkIcon, ChatBubbleBottomCenterIcon, EllipsisHorizontalIcon, FlagIcon, LinkIcon } from '@heroicons/react/24/outline';
 import { PostModal } from '../modals/PostModal';
 import moment from 'moment/moment';
+// import HeartIcon from '@heroicons/react/24/outline';
+import { HeartIcon as SolidHeart } from "@heroicons/react/16/solid";
+import { HeartIcon as OutlineHeart } from "@heroicons/react/24/outline";
+
+
 import { Skeleton } from '@mui/material';
+import { isAlreadyLiked, toggleLike } from '../../services/post';
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const Post = ({post}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-    const [openModalPost , setOpenModalPost] =useState(false)
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
@@ -19,10 +24,48 @@ export const Post = ({post}) => {
       setAnchorEl(null);
     };
     const [isExpanded, setIsExpanded] = useState(false);
-    const text = 'Theres a small issue in your class name usage. In JSX (React), class names should not start with a dot (.) inside the className attribute. '
     const toggleText = () => {
         setIsExpanded(!isExpanded);
     };
+
+
+
+    const [openModalPost , setOpenModalPost] =useState(false)
+    const [alreadyLiked,setAlreadyLiked] = useState(false);
+
+
+    const _alreadyLiked = async () =>{
+        const response = await isAlreadyLiked(localStorage.getItem('token'),post._id);
+        console.log(response);
+        
+        if(response.status === 200){
+            if(response.data.liked){
+                setAlreadyLiked(true)
+            }else{
+                setAlreadyLiked(false)
+            }
+        }
+    }
+
+    const _toggleLike = async () =>{
+        const response = await toggleLike(localStorage.getItem('token'),post._id);
+        console.log(response);
+        
+        if(response.status === 200){
+            if(response.data.liked === true){
+                setAlreadyLiked(true)
+                post.likes.length += 1
+            }
+            if(response.data.liked === false){
+                setAlreadyLiked(false)
+                post.likes.length -= 1
+            }
+        }
+    }
+
+    useEffect(() =>{
+        _alreadyLiked()
+    },[])
   return (
     <div className='w-[100%] md:w-[100%] bg-white rounded-xl'>
         <div className='w-[100%] px-4 py-4 justify-between flex flex-row items-center'>
@@ -68,13 +111,13 @@ export const Post = ({post}) => {
             </div>
         </div>
         <div>
-            <div className="text-gray-800 px-4 py-2 text-xl lexend-deca ">
+            <div className="text-gray-800 px-4 py-2 text-xl lexend-deca">
                 {post.content.length > 100 ? (
                     <>
-                    <span>{isExpanded ? post.content : post.content.slice(0, 20) + "..."}</span>
+                    <span>{isExpanded ? post.content : post.content.slice(0, 100) + "..."}</span>
                     <button
                         onClick={toggleText}
-                        className="text-gray-500 underline text-sm ml-2 cursor-pointer"
+                        className="text-gray-700 underline text-sm ml-2 cursor-pointer"
                     >
                         {isExpanded ? "See Less" : "See More"}
                     </button>
@@ -92,18 +135,20 @@ export const Post = ({post}) => {
             </div>
             <hr  className='w-[95%] py-1 text-gray-200 mx-auto'/>
             <div className='flex flex-row items-center py-2 px-5  justify-center'>
-                <button className='flex flex-row items-center w-[30%] hover:bg-gray-100 justify-center py-2 rounded-lg cursor-pointer'><div className='flex flex-row items-center gap-2'>
-                    <HeartIcon className='text-black w-6'/> <h1>Like</h1></div>
+                <button onClick={_toggleLike} className='flex flex-row items-center w-[30%] hover:bg-gray-100 justify-center py-2 rounded-lg cursor-pointer duration-200'><div className='flex flex-row items-center gap-2'>
+                    {
+                        alreadyLiked ? <SolidHeart className='w-6 h-6 text-red-600'/> : <OutlineHeart className='w-6 h-6 text-black'/>
+                    } <h1>Like</h1></div>
                 </button>
-                <button className='flex flex-row items-center w-[30%] hover:bg-gray-100 justify-center py-2 rounded-lg cursor-pointer' onClick={()=>setOpenModalPost(true)}><div className='flex flex-row items-center gap-2'>
+                <button className='flex flex-row items-center w-[30%] hover:bg-gray-100 justify-center py-2 rounded-lg cursor-pointer duration-200' onClick={()=>setOpenModalPost(true)}><div className='flex flex-row items-center gap-2'>
                     <ChatBubbleBottomCenterIcon className='text-black w-6 h-6'/><h1>Comment</h1></div>
                 </button>
-                <button className='flex flex-row items-center w-[30%] hover:bg-gray-100 justify-center py-2 rounded-lg cursor-pointer'><div className='flex flex-row items-center gap-2'>
+                <button className='flex flex-row items-center w-[30%] hover:bg-gray-100 justify-center py-2 rounded-lg cursor-pointer duration-200'><div className='flex flex-row items-center gap-2'>
                     <BookmarkIcon className='text-black w-6 h-6'/><h1>Save</h1></div>
                 </button>
             </div>
         </div>
-        {openModalPost && <PostModal setOpenModalPost={setOpenModalPost}/>}
+        {openModalPost && <PostModal setOpenModalPost={setOpenModalPost} post={post}/>}
     </div>
     
   )
