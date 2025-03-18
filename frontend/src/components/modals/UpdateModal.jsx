@@ -59,7 +59,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
           [name]: type === "checkbox" ? checked : value,
         }));
   };
-
+  console.log("hh", idSelected);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

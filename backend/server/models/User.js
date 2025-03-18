@@ -14,6 +14,9 @@ const userShema = new mongoose.Schema({
     webSite : {type:String},
     skills : [ {type:String} ],
     interests : [{type: mongoose.Schema.Types.ObjectId, ref: "Interest"}],
+    seenPosts : [{type: mongoose.Schema.Types.ObjectId, ref: "Post"}],
+    followers : [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
+    following : [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
     education: [
         {
             degree: { type: String, required: true },

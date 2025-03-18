@@ -1,6 +1,7 @@
 import coverProfil from "../../../public/images/coverProfil.png";
 import ProfilImg from "../../../public/images/profilDefault.png";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
+import { Follow } from "../UI/Follow";
 
 const serverURL = import.meta.env.VITE_SERVER_URL;
 
@@ -64,6 +65,10 @@ export const ProfilInfoModal = ({
               {userData.followers ? userData.followers : "22"} followings
             </span>
           </div>
+          <Follow
+            text="follow"
+            className="bg-[#0A66C2] text-white hover:bg-blue-900 px-7 rounded-full mb-2 mt-3"
+          />
         </div>
       </div>
     </div>

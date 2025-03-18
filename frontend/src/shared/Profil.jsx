@@ -36,7 +36,8 @@ export const Profil = () => {
     const getUser = async () => {
       setNotification(null);
       try {
-        const response = await getUserById(localStorage.getItem("token"), id);
+        // const response = await getUserById(localStorage.getItem("token"), id);
+        const response = await getUserById(localStorage.getItem("token"));
         setUserInfo(response.data);
         console.log("fff", response);
       } catch (error) {
@@ -62,7 +63,8 @@ export const Profil = () => {
       }
     };
 
-    userData._id !== id && getUser();
+    // userData._id !== id &&
+    getUser();
   }, []);
 
   const dataInfo = {
@@ -110,7 +112,8 @@ export const Profil = () => {
     ],
   };
 
-  console.log("object", userData);
+  console.log("userIndo", userInfo);
+  console.log("userData", userData);
   return (
     <div>
       <div className={`w-full flex flex-col gap-y-2 lg:flex-row justify-start`}>
@@ -206,9 +209,9 @@ export const Profil = () => {
             />
           )}
           <div className="w-full lg:w-[89%] flex flex-col gap-2 lg:ml-[15%]">
-            <Post />
-            <Post />
-            <Post />
+            <Post post={userData.seenPosts} />
+            {/* <Post />
+            <Post /> */}
           </div>
         </div>
         <div className="lg:w-[20%] flex flex-col gap-2 lg:pt-[80px] lg:ml-[4%]">
