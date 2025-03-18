@@ -14,15 +14,19 @@ export const NotificationApp = () => {
     setAnchorEl(null);
   };
   return (
-    <div className="w-[100%] flex  flex-col  ">
-        <div className="flex flex-row text-center items-center justify-between px-3 py-6">
-        <img
-        src="../../public/images/profilDefault.png"
-        className="rounded-full w-[15%]"
-      />
-      <h2 className="text-lg">John Doe has sent you a connection request.</h2>
+    <div className="w-[100%] flex flex-col">
+        <div className="flex flex-row items-center px-3 py-3 bg-blue-100">
+        <div className="flex gap-2 items-center">
+            <img
+              src="../../public/images/profilDefault.png"
+              className="rounded-full w-[15%]"
+            />
+          <div>
+            <h2 className="text-lg"><span className="font-semibold cursor-pointer">Jhon doe</span> started following you. <span className="text-sm font-semibold underline">view more</span></h2>
+            <h2 className="text-sm">12 hours ago</h2>
+          </div>
+        </div>
       <div>
-        <h2 className="text-gray-500">12h</h2>
         <div>
           <Button
             id="basic-button"
@@ -31,7 +35,7 @@ export const NotificationApp = () => {
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
           >
-            <EllipsisHorizontalIcon className="text-black w-10" />
+            <EllipsisHorizontalIcon className="text-black w-10" strokeWidth={'1'}/>
           </Button>
           <Menu
             id="basic-menu"

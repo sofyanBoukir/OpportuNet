@@ -18,7 +18,7 @@ export const Notification = () => {
     <div className="md:px-[10%] px-3 relative top-16">
       <div className="flex justify-center gap-[1%]">
         <ProfileStatus />
-        <div className="flex flex-col gap-2 w-[100%] lg:w-[43%] h-max left-[13%] lg:relative bg-white rounded-2xl ">
+        <div className="flex flex-col w-[100%] lg:w-[43%] h-max left-[13%] lg:relative bg-white rounded-2xl ">
           <NotificationApp />
           <NotificationApp />
           <NotificationApp />
