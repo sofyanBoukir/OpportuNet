@@ -22,7 +22,7 @@ export const NotificationApp = () => {
               className="rounded-full w-[15%]"
             />
           <div>
-            <h2 className="text-lg"><span className="font-semibold cursor-pointer">Jhon doe</span> started following you. <span className="text-sm font-semibold underline">view more</span></h2>
+            <h2 className="text-lg"><span className="font-semibold cursor-pointer">Jhon doe</span> started following you. <span className="text-sm font-semibold underline cursor-pointer">view more</span></h2>
             <h2 className="text-sm">12 hours ago</h2>
           </div>
         </div>

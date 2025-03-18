@@ -103,4 +103,26 @@ const deletePost = async (request,response) =>{
     }
 }
 
+const alreadyLiked = async (request,response) =>{
+    try{
+
+        const userId = request.user.id;
+        const {postId} = request.params;
+        const user = await User.findById(userId)
+        
+        if(!user){
+            return response.status(404).json({
+                'message' : 'user not found'
+            })
+        }
+
+        const post = await Post.findOne({$and:[{user:userId},{_id:postId}]});
+
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+}
+
 module.exports = {getPost,addPost,deletePost}

@@ -4,6 +4,7 @@ const notificationShema = new mongoose.Schema({
     from_user : {type: mongoose.Schema.Types.ObjectId, ref: "User"},
     post : {type: mongoose.Schema.Types.ObjectId, ref: "Post"},
     message : {type:String, required:true},
+    status : {type:String},
     // comment : {type: mongoose.Schema.Types.ObjectId, ref: "Comment"}
 },{timestamps:true});
 
