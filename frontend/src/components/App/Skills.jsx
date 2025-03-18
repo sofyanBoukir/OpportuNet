@@ -16,7 +16,6 @@ export const SkillsModal = ({
   const { userData } = AppSelector();
   const dispatch = useDispatch();
   const [hieghtDiv, setHieghtDiv] = useState(2);
-  // const [numberSkill, setNumberSkill] = useState(2);
 
   const [notification, setNotification] = useState(null);
 

@@ -30,7 +30,7 @@ export const AddModal = ({ toAdd, setOpen }) => {
   };
 
   const token = localStorage.getItem("token");
-  //   const _intro = "intro";
+
   const _about = "about";
   const _education = "education";
   const _experience = "experience";
@@ -96,7 +96,7 @@ export const AddModal = ({ toAdd, setOpen }) => {
       }
     } catch (error) {
       setLoading(false);
-      console.log(error.response);
+
       error.response
         ? setNotification({
             type: "error",
@@ -231,7 +231,6 @@ export const AddModal = ({ toAdd, setOpen }) => {
                       checked={userInfo.current}
                       onChange={handleChange}
                       className="p-2 font-normal text-sm rounded-xs "
-                      // required={false}
                     />
                   </div>
                 )}

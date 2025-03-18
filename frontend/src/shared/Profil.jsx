@@ -36,7 +36,7 @@ export const Profil = () => {
     const getUser = async () => {
       setNotification(null);
       try {
-        const response = await getUserById(localStorage.getItem("token"));
+        const response = await getUserById(localStorage.getItem("token"), id);
         setUserInfo(response.data);
         console.log("fff", response);
       } catch (error) {
@@ -62,8 +62,7 @@ export const Profil = () => {
       }
     };
 
-    // userData._id !== id &&
-    getUser();
+    userData._id !== id && getUser();
   }, []);
 
   const dataInfo = {
@@ -196,6 +195,8 @@ export const Profil = () => {
           }
           {userData.interests && (
             <InterestsModal
+              setShowModalUpdate={setShowUpdateModal}
+              valuetoUpdate={setToUpdate}
               showIcon={showIcon}
               interestList={
                 userData._id === id

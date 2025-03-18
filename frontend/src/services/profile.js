@@ -165,9 +165,22 @@ export const deleteSkill = async (token, skillId) => {
   return response;
 };
 
-export const getUserById = async (token) => {
+export const getUserById = async (token, userId) => {
   const response = await axios.get(
-    `${serverURL}/profile/getUserDataById/67d91e63967866664dd4322c`,
+    `${serverURL}/profile/getUserDataById/${userId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response;
+};
+
+export const updateInterestProfil = async (token, formData) => {
+  const response = await axios.post(
+    `${serverURL}/profile/updateInterests`,
+    formData,
     {
       headers: {
         Authorization: `Bearer ${token}`,

@@ -62,35 +62,6 @@ export const ExperiencesModal = ({
       )}
       <h2 className="text-2xl font-semibold mb-4">Experience</h2>
       {experienceList.map((item) => (
-        // <div className="flex justify-baseline gap-2">
-        //   <div className="w-[45px] h-[45px] mb-4 ">
-        //     <img
-        //       src={experienceImg}
-        //       alt="logo education"
-        //       className="w-full h-full"
-        //     />
-        //   </div>
-        //   <div className=" w-full flex justify-between pr-2">
-        //     <div>
-        //       <h5 className="text-md font-semibold text-black ">
-        //         {item.namePost}
-        //       </h5>
-        //       <span className="text-md font-light text-gray-700">
-        //         {item.date}
-        //       </span>
-        //     </div>
-        //     {showIcon && (
-        //       <div className="flex gap-1">
-        //         <span className="w-[35px] h-[35px] text-center p-[1.5px] text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[50%]">
-        //           <ModeEditOutlinedIcon />
-        //         </span>
-        //         <span className="w-[35px] h-[35px] text-center p-[1.5px] text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[50%]">
-        //           <DeleteOutlinedIcon />
-        //         </span>
-        //       </div>
-        //     )}
-        //   </div>
-        // </div>
         <div className="flex items-start gap-3">
           <div className="mb-4 ">
             <img

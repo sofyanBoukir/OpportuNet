@@ -72,10 +72,7 @@ export const EducationsModal = ({
           <div className=" w-full flex items-center justify-between pr-2">
             <div>
               <h5 className="text-xl font-semibold text-black ">
-                {
-                  item.institution
-                  // item.nameSchool
-                }
+                {item.institution}
               </h5>
               <p className="text-lg font-light text-gray-900">{item.degree}</p>
               <span className="text-md font-light text-gray-700">
