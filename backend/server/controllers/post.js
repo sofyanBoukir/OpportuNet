@@ -1,9 +1,10 @@
+const Comment = require("../models/Comment");
 const Notification = require("../models/Notification");
 const Post = require("../models/Post");
 const User = require("../models/User");
 
 
-const getPost = async () =>{
+const getPost = async (request,response) =>{
     try{
         const {postId} = request.params;
 
@@ -107,7 +108,7 @@ const alreadyLiked = async (request,response) =>{
     try{
 
         const userId = request.user.id;
-        const {postId} = request.params;
+        const { postId } = request.params;
         const user = await User.findById(userId)
         
         if(!user){
@@ -116,7 +117,23 @@ const alreadyLiked = async (request,response) =>{
             })
         }
 
-        const post = await Post.findOne({$and:[{user:userId},{_id:postId}]});
+        const post = await Post.findById(postId);
+        if(!post){
+            return response.status(404).json({
+                'message' : 'Post not found'
+            })
+        }
+
+        const alreadyLiked = await Post.findOne({likes:{$in:userId}});
+        if(alreadyLiked){
+            return response.json({
+                'liked' : true
+            })
+        }else{
+            return response.json({
+                'liked' : false
+            })
+        }
 
     }catch(err){
         return response.status(500).json({
@@ -125,4 +142,82 @@ const alreadyLiked = async (request,response) =>{
     }
 }
 
-module.exports = {getPost,addPost,deletePost}
+const toggleLike = async (request,response) =>{
+    try{
+
+        const userId = request.user.id;
+        const { postId } = request.params;
+        const user = await User.findById(userId)
+        
+        if(!user){
+            return response.status(404).json({
+                'message' : 'user not found'
+            })
+        }
+
+        const postExists = await Post.findById(postId);
+        if(!postExists){
+            return response.status(404).json({
+                'message' : 'Post not found'
+            })
+        }
+
+        const post = await Post.findOne({likes:{$in:userId}});
+
+        if(post){
+            const newLikes = post.likes.filter((_id) => _id.toString() !== userId);
+            post.likes = newLikes;
+            await post.save();
+
+            return response.json({
+                'liked' : false
+            })
+        }else{
+
+            const notExists = await Notification.findOneAndDelete({$and:[{user:postExists.user},{from_user:userId},{post:postExists._id},{message:"Liked your post"}]});
+
+            if(notExists){
+                const newNotification = new Notification({
+                    user:postExists.user,
+                    from_user:userId,
+                    post:postExists._id,
+                    message:"Liked your post"
+                })
+    
+                await newNotification.save()
+                postExists.likes.push(userId);
+                await postExists.save();
+
+                return response.json({
+                    'liked' : true
+                })
+            }
+
+            const newNotification = new Notification({
+                user:postExists.user,
+                from_user:userId,
+                post:postExists._id,
+                message:"Liked your post"
+            })
+
+            await newNotification.save()
+
+            postExists.likes.push(userId);
+            await postExists.save();
+
+            return response.json({
+                'liked' : true
+            })
+        }
+
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+}
+
+
+
+
+module.exports = {getPost,addPost,deletePost,alreadyLiked,toggleLike}

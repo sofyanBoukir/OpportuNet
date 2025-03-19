@@ -165,9 +165,9 @@ export const deleteSkill = async (token, skillId) => {
   return response;
 };
 
-export const getUserById = async (token) => {
+export const getUserById = async (token, userId, page) => {
   const response = await axios.get(
-    `${serverURL}/profile/getUserDataById/67d8addbc39f6b0df3f073c0`,
+    `${serverURL}/profile/getUserDataById/${userId}?page=${page}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
