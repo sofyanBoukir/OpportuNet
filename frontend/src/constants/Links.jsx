@@ -42,19 +42,19 @@ export const dataHeader = [
   },
   {
     ROLE: "recuiter",
-    SVG: <HomeIcon strokeWidth="1" className="w-7 h-7"/>,
+    SVG: <AiFillHome strokeWidth="1" className="w-7 h-7"/>,
     TEXT: "Home",
     LINK: `/feed`,
   },
   {
     ROLE: "recuiter",
-    SVG: <WorkIcon strokeWidth="1" className="w-7 h-7"/>,
+    SVG: <FaBriefcase strokeWidth="1" className="w-7 h-7"/>,
     TEXT: "Post",
     LINK: `/recuiter/post`,
   },
   {
     ROLE: "recuiter",
-    SVG: <ForumIcon strokeWidth="1" className="w-7 h-7"/>,
+    SVG: <TbMessageFilled strokeWidth="1" className="w-7 h-7"/>,
     TEXT: "Messaging",
     LINK: `/messaging`,
   },
@@ -66,7 +66,7 @@ export const dataHeader = [
   },
   {
     ROLE: "recuiter",
-    SVG: <NotificationsIcon strokeWidth="1" className="w-7 h-7"/>,
+    SVG: <IoNotifications strokeWidth="1" className="w-7 h-7"/>,
     TEXT: "Notifications",
     LINK: `/notifications`,
   },

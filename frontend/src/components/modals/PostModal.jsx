@@ -4,7 +4,7 @@ import { Input } from "../UI/Input";
 import { Label } from "../UI/Label";
 import { Button } from "../UI/Button";
 import { ERROR_MESSAGES } from "../../constants/Errors";
-import { commentOnPost, getPostComments } from "../../services/comment";
+import { commentOnPost, deleteComment, getPostComments } from "../../services/comment";
 import { Comment } from "../App/Comment";
 import { LinearProgress } from "@mui/material";
 import { AppSelector } from "../../selectors/AppSelector";
@@ -24,7 +24,6 @@ export const PostModal = ({setOpenModalPost,post}) => {
   const loadingRef = useRef(false)
   const [commentMessage,setCommentMessage] = useState('')
 
-  console.log(comments);
   
   const _getPostComments = async () =>{
     if(loadingRef.current) return;
@@ -36,7 +35,6 @@ export const PostModal = ({setOpenModalPost,post}) => {
     }
     setLoading(false)
     loadingRef.current = false
-    console.log(response);  
   }
 
   const _commentOnPost = async () =>{
@@ -51,11 +49,12 @@ export const PostModal = ({setOpenModalPost,post}) => {
         setComments((prevComments) => [{user:{
           name:userData.name,
           profile_picture:userData.profile_picture,
+          _id:userData._id
         },
           comment:comment,
           createdAt:new Date()},...prevComments])
           console.log(comments);
-          
+          setCommentMessage('')
         setComment('')
       }
     }catch(err){
@@ -67,6 +66,18 @@ export const PostModal = ({setOpenModalPost,post}) => {
           case 500:
               setErrorMessage(ERROR_MESSAGES.SOMETHING_WENT_WRONG)
               break
+      }
+    }
+  }
+
+
+  const _deleteComment = async (postId,commentId) =>{
+    const response = await deleteComment(localStorage.getItem('token'),postId,commentId);
+    if(response.status === 200){
+      if(response.data.deleted){
+        const newComments = comments.filter((comment) => comment._id !== commentId);
+        setComments(newComments);
+        post.comments.length -= 1
       }
     }
   }
@@ -128,7 +139,7 @@ export const PostModal = ({setOpenModalPost,post}) => {
             {
               !loading && comments && comments.length ?
                 comments.map((comment) =>{
-                  return <Comment comment={comment}/>
+                  return <Comment comment={comment} deleteComment={_deleteComment}/>
                 })
               :null
             }
@@ -143,9 +154,8 @@ export const PostModal = ({setOpenModalPost,post}) => {
 
         <div className="sticky bottom-0 left-0 flex items-center w-full py-2 gap-2 bg-white">
           <img
-            src="/profil.jpg"
+            src={serverUrl+userData.profile_picture}
             className="w-10 h-10 rounded-full border-2"
-            alt=""
           />
           <Input
             type="text"

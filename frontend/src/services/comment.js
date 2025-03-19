@@ -20,3 +20,13 @@ export const commentOnPost = async (token,postId,comment) =>{
     });
     return response;
 } 
+
+
+export const deleteComment = async (token,postId,commentId) =>{
+    const response = await axios.delete(`${serverURL}/comment/deleteComment/${postId}/${commentId}`,{
+        headers : {
+            Authorization : `Bearer ${token}`
+        }
+    })
+    return response;
+}

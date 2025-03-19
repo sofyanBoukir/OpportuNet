@@ -56,3 +56,15 @@ export const deletePost = async (token, postId) => {
   );
   return response;
 };
+export const toggleSave = async (token, postId) => {
+  const response = await axios.put(
+    `${serverURL}/post/toggleSave/${postId}`,
+    null,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response;
+};

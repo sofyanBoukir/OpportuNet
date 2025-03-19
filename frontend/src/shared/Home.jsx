@@ -33,11 +33,9 @@ export const Home = () => {
       setTimeout(() => {
         setLoading(false);
       }, 3000);
-      console.log(response);
 
       if (response.status === 200) {
         if (response.data.posts) {
-          console.log(response.data.posts);
           setFeedPosts((prevPosts) => [...prevPosts, ...response.data.posts]);
         }
       }
@@ -100,8 +98,8 @@ export const Home = () => {
           </div>
           {loading && <PostSkeleton />}
           {feedPosts && !loading && feedPosts.length
-            ? feedPosts.map((post) => {
-                return <Post post={post} />;
+            ? feedPosts.map((post,index) => {
+                return <Post key={index} post={post} />;
               })
             : null}
           {!loading && feedPosts.length === 0 && (
