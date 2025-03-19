@@ -12,6 +12,7 @@ import {
   addExperienceProfile,
   addSkillProfile,
 } from "../../services/profile";
+import { getUserData } from "../../services/auth";
 
 export const AddModal = ({ toAdd, setOpen }) => {
   const { userData } = AppSelector();
@@ -42,15 +43,17 @@ export const AddModal = ({ toAdd, setOpen }) => {
     setNotification(null);
     try {
       let response;
+      let eudRes;
       switch (toAdd) {
         case _education:
           response = await addEducationProfile(token, dataInfo);
+          eudRes = await getUserData(token);
           setLoading(false);
           dispatch({
             type: "UPDATE_USERDATA",
             payload: {
               ...userData,
-              education: [...userData.education, dataInfo],
+              education: eudRes.data.userData.education,
             },
           });
           setNotification({ type: "success", message: response.data.message });
@@ -60,12 +63,13 @@ export const AddModal = ({ toAdd, setOpen }) => {
           break;
         case _experience:
           response = await addExperienceProfile(token, dataInfo);
+          expRes = await getUserData(token);
           setLoading(false);
           dispatch({
             type: "UPDATE_USERDATA",
             payload: {
               ...userData,
-              experience: [...userData.experience, dataInfo],
+              experience: expRes.data.userData.experience,
             },
           });
           setNotification({ type: "success", message: response.data.message });

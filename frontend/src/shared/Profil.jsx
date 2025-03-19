@@ -15,12 +15,14 @@ import { AddModal } from "../components/modals/AddModal";
 import { IsEmptyModal } from "../components/App/IsEmptyModal";
 import { getUserById } from "../services/profile";
 import { ERROR_MESSAGES } from "../constants/Errors";
+import { PostSkeleton } from "../components/skeletons/PostSkeleton";
 
 export const Profil = () => {
   const { userData } = AppSelector();
   const { id } = useParams();
 
   const [userInfo, setUserInfo] = useState({});
+  const [postsList, setPostsList] = useState([]);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [toUpdate, setToUpdate] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
@@ -28,47 +30,53 @@ export const Profil = () => {
   const [notification, setNotification] = useState(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalPosts, setTotalPosts] = useState(0);
+  const [error, setError] = useState("");
 
   const [selectedId, setSelectedId] = useState(null);
   const loadingRef = useRef(false);
 
   const showIcon = userData._id === id;
+  useEffect(() => {
+    const _getUserById = async () => {
+      try {
+        if (loadingRef.current) return;
+        loadingRef.current = true;
+        const response = await getUserById(
+          localStorage.getItem("token"),
+          id,
+          page
+        );
+        loadingRef.current = false;
 
-  const _getUserById = async () => {
-    try {
-      if (loadingRef.current) return;
-      loadingRef.current = true;
-      const response = await getUserById(
-        localStorage.getItem("token"),
-        id,
-        page
-      );
-      loadingRef.current = false;
+        setTimeout(() => {
+          setLoading(false);
+        }, 3000);
+        console.log("respose", response);
+        console.log("post", response.data.posts);
 
-      setTimeout(() => {
+        if (response.status === 200) {
+          setUserInfo(response.data.userData);
+          if (response.data.posts) {
+            setPostsList((prevPosts) => [...prevPosts, ...response.data.posts]);
+            setTotalPages(response.data.totalPages);
+            setTotalPosts(response.data.totalPosts);
+          }
+        }
+      } catch (err) {
         setLoading(false);
-      }, 3000);
-      console.log("respose", response);
-      console.log("post", response.data.posts);
-
-      if (response.status === 200) {
-        if (response.data.posts) {
-          setUserInfo(response.data);
+        switch (err.response.status) {
+          case 401:
+            setError(err.response.data.message);
+            break;
+          case 500:
+            setError(ERROR_MESSAGES.SOMETHING_WENT_WRONG);
+            break;
         }
       }
-    } catch (err) {
-      setLoading(false);
-      switch (err.response.status) {
-        case 401:
-          setError(err.response.data.message);
-          break;
-        case 500:
-          setError(ERROR_MESSAGES.SOMETHING_WENT_WRONG);
-          break;
-      }
-    }
-  };
-  useEffect(() => {
+    };
+
     _getUserById();
   }, [page]);
 
@@ -78,7 +86,9 @@ export const Profil = () => {
         window.innerHeight + window.scrollY >=
         document.documentElement.scrollHeight - 10
       ) {
-        setPage((prevPage) => prevPage + 1);
+        if (page <= totalPages) {
+          setPage((prevPage) => prevPage + 1);
+        }
       }
     };
 
@@ -168,7 +178,7 @@ export const Profil = () => {
       { sugName: "Soufiane Boukir", sugHead: "Devloper Back-End" },
     ],
   };
-  console.log("userInfopost", userInfo.posts);
+  console.log("state post", postsList);
   console.log("userInfopost", userInfo);
   console.log("userData", userData);
   return (
@@ -266,20 +276,17 @@ export const Profil = () => {
             />
           )}
           <div className="w-full lg:w-[89%] flex flex-col gap-2 lg:ml-[15%]">
-            {/* loading && <PostSkeleton />}
-                      {feedPosts && !loading && feedPosts.length
-                        ? feedPosts.map((post) => {
-                            return <Post post={post} />;
-                          })
-                        : null}
-                      {!loading && feedPosts.length === 0 && (
-                        <span className="text-xl font-semibold">
-                          Try to post new posts on diff accounts
-                        </span>
-                      )} */}
-            {userInfo.posts.map((item) => (
-              <Post post={item} />
-            ))}
+            {loading && <PostSkeleton />}
+            {postsList && !loading && postsList.length
+              ? postsList.map((post) => {
+                  return <Post post={post} />;
+                })
+              : null}
+            {!loading && postsList.length === 0 && (
+              <span className="text-xl font-semibold">
+                Try to post new posts on diff accounts
+              </span>
+            )}
           </div>
         </div>
         <div className="lg:w-[20%] flex flex-col gap-2 lg:pt-[80px] lg:ml-[4%]">
