@@ -65,24 +65,25 @@ const commentOnPost = async (request,response) =>{
             })
         }
 
-
         const newComment = new Comment({
             post : postId,
             user : userId,
             comment : comment,
         })
 
-        const newNotification = new Notification({
-            user:postExists.user,
-            from_user:userId,
-            post:postExists._id,
-            message:"Commented on your post"
-        })
+        if(postExists.user.toString() !== userId){
+            const newNotification = new Notification({
+                user:postExists.user,
+                from_user:userId,
+                post:postExists._id,
+                message:"Commented on your post"
+            })
+            await newNotification.save();
+        }
 
         postExists.comments.push(newComment._id);
         await postExists.save()
         await newComment.save();
-        await newNotification.save();
 
         return response.json({
             'message' : 'Commented successfully'
@@ -95,4 +96,44 @@ const commentOnPost = async (request,response) =>{
     }
 }
 
-module.exports = { getComments,commentOnPost };
+
+const deleteComment = async (request,response) =>{
+    try{
+        const userId = request.user.id;
+        const { postId,commentId } = request.params;
+        const user = await User.findById(userId)
+
+        if(!user){
+            return response.status(404).json({
+                'message' : 'user not found'
+            })
+        }
+
+        const postExists = await Post.findById(postId);
+        if(!postExists){
+            return response.status(404).json({
+                'message' : 'Post not found'
+            })
+        }
+
+        const comment = await Comment.findOneAndDelete({$and:[{_id:commentId},{user:userId}]})
+        if(comment){
+            const newComments = postExists.comments.filter((_id) => _id.toString() !== commentId);
+            postExists.comments = newComments;
+            await postExists.save();
+            return response.json({
+                'deleted' : true
+            })
+        }else{
+            return response.status(404).json({
+                'message' : 'Unauthorized to delete this post'
+            })
+        }
+
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+}
+module.exports = { getComments,commentOnPost ,deleteComment};

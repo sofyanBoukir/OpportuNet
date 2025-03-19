@@ -11,20 +11,26 @@ export const PostId = () => {
   const { postId } = useParams();
   const navigate = useNavigate();
   const getPostById = async (postId) => {
-    const response = await getPost(localStorage.getItem("token"), postId);
-    console.log(response);
-    if (response.data.post) {
-      setLoading(false);
-      setPostData(response.data.post);
-    } else {
-      navigate("/errer");
+    try{
+      const response = await getPost(localStorage.getItem("token"), postId);
+      console.log(response);
+      if (response.data.post) {
+        setTimeout(() => {
+          setLoading(false);
+        }, 3000);
+        setPostData(response.data.post);
+      } else {
+        navigate("/notFound");
+      }
+    }catch(err){
+      navigate('/notFound')
     }
   };
   useEffect(() => {
     if (postId) {
       getPostById(postId);
     } else {
-      navigate("/errer");
+      navigate("/notFound");
     }
   }, [postId]);
   return (
