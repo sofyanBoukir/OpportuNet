@@ -16,6 +16,8 @@ import { IsEmptyModal } from "../components/App/IsEmptyModal";
 import { getUserById } from "../services/profile";
 import { ERROR_MESSAGES } from "../constants/Errors";
 import { PostSkeleton } from "../components/skeletons/PostSkeleton";
+import { deletePost } from "../services/post";
+import { Notification } from "../components/UI/Notification";
 
 export const Profil = () => {
   const { userData } = AppSelector();
@@ -33,68 +35,113 @@ export const Profil = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [totalPosts, setTotalPosts] = useState(0);
   const [error, setError] = useState("");
+  const [postId, setPostId] = useState(null);
 
   const [selectedId, setSelectedId] = useState(null);
   const loadingRef = useRef(false);
-
+  const hasMore = useRef(true);
   const showIcon = userData._id === id;
-  useEffect(() => {
-    const _getUserById = async () => {
-      try {
-        if (loadingRef.current) return;
-        loadingRef.current = true;
-        const response = await getUserById(
-          localStorage.getItem("token"),
-          id,
-          page
-        );
-        loadingRef.current = false;
 
-        setTimeout(() => {
-          setLoading(false);
-        }, 3000);
-        console.log("respose", response);
-        console.log("post", response.data.posts);
+  const _getUserById = async () => {
+    try {
+      if (loadingRef.current) return;
+      loadingRef.current = true;
+      const response = await getUserById(
+        localStorage.getItem("token"),
+        id,
+        page
+      );
+      loadingRef.current = false;
 
-        if (response.status === 200) {
-          setUserInfo(response.data.userData);
-          if (response.data.posts) {
-            setPostsList((prevPosts) => [...prevPosts, ...response.data.posts]);
-            setTotalPages(response.data.totalPages);
-            setTotalPosts(response.data.totalPosts);
-          }
-        }
-      } catch (err) {
+      setTimeout(() => {
         setLoading(false);
-        switch (err.response.status) {
-          case 401:
-            setError(err.response.data.message);
-            break;
-          case 500:
-            setError(ERROR_MESSAGES.SOMETHING_WENT_WRONG);
-            break;
+      }, 3000);
+      if (response.status === 200) {
+        setUserInfo(response.data.userData);
+        if (response.data.posts) {
+          setPostsList((prevPosts) => [...prevPosts, ...response.data.posts]);
+          setTotalPages(response.data.totalPages);
+          setTotalPosts(response.data.totalPosts);
         }
       }
-    };
-
-    _getUserById();
+    } catch (err) {
+      setLoading(false);
+      switch (err.response.status) {
+        case 401:
+          setError(err.response.data.message);
+          break;
+        case 500:
+          setError(ERROR_MESSAGES.SOMETHING_WENT_WRONG);
+          break;
+      }
+    }
+  };
+  useEffect(() => {
+    _getUserById(1);
   }, [page]);
+
+  // useEffect(() => {
+  //   const handleScroll = async () => {
+  //     const isAtBottom =
+  //       window.innerHeight + window.scrollY >= document.body.offsetHeight - 1;
+
+  //     if (isAtBottom && !loading && loadingRef.current && hasMore.current) {
+  //       const nextPage = page + 1;
+  //       setPage((prevState) => prevState + 1);
+  //       _getUserById(nextPage);
+  //     }
+  //   };
+
+  //   window.addEventListener("scroll", handleScroll);
+
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, [page, loadingRef]);
 
   useEffect(() => {
     const handleScroll = () => {
+      console.log("ffffscrol");
       if (
         window.innerHeight + window.scrollY >=
         document.documentElement.scrollHeight - 10
       ) {
         if (page <= totalPages) {
+          const nextPage = page + 1;
           setPage((prevPage) => prevPage + 1);
+          _getUserById(nextPage);
         }
       }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [page]);
+
+  useEffect(() => {
+    const _deletePost = async () => {
+      setNotification(null);
+      try {
+        const response = await deletePost(
+          localStorage.getItem("token"),
+          postId
+        );
+        const newPosts = postsList.filter((item) => item._id !== postId);
+        setPostsList(newPosts);
+        setNotification({ type: "success", message: response.data.message });
+      } catch (error) {
+        error.response
+          ? setNotification({
+              type: "error",
+              message: error.response.data.message,
+            })
+          : setNotification({
+              type: "error",
+              message: ERROR_MESSAGES.TRY_AGAIN,
+            });
+      }
+    };
+
+    postId && _deletePost();
+  }, [postId]);
 
   const dataInfo = {
     posts: [
@@ -225,6 +272,7 @@ export const Profil = () => {
           )}
           {
             <EducationsModal
+              notification={setNotification}
               idEduSelected={setSelectedId}
               setShowModalUpdate={setShowUpdateModal}
               valuetoUpdate={setToUpdate}
@@ -240,6 +288,7 @@ export const Profil = () => {
           }
           {
             <ExperiencesModal
+              notification={setNotification}
               idEduSelected={setSelectedId}
               setShowModalUpdate={setShowUpdateModal}
               valuetoUpdate={setToUpdate}
@@ -255,6 +304,7 @@ export const Profil = () => {
           }
           {
             <SkillsModal
+              notification={setNotification}
               setShowModalAdd={setShowAddModal}
               valuetoAdd={setToAdd}
               showIcon={showIcon}
@@ -279,7 +329,13 @@ export const Profil = () => {
             {loading && <PostSkeleton />}
             {postsList && !loading && postsList.length
               ? postsList.map((post) => {
-                  return <Post post={post} />;
+                  return (
+                    <Post
+                      post={post}
+                      showIcon={showIcon}
+                      postSelected={setPostId}
+                    />
+                  );
                 })
               : null}
             {!loading && postsList.length === 0 && (
@@ -301,10 +357,13 @@ export const Profil = () => {
           />
         )}
         {showAddModal && <AddModal toAdd={toAdd} setOpen={setShowAddModal} />}
+        {notification && (
+          <Notification
+            type={notification.type}
+            message={notification.message}
+          />
+        )}
       </div>
-      {notification && (
-        <Notification type={notification.type} message={notification.message} />
-      )}
     </div>
   );
 };

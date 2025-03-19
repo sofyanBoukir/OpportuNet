@@ -3,13 +3,12 @@ import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import educationImage from "../../../public/images/educationImage.png";
 import { deleteEducation } from "../../services/profile";
-import { useState } from "react";
 import { AppSelector } from "../../selectors/AppSelector";
 import { useDispatch } from "react-redux";
-import { Notification } from "../UI/Notification";
 import { ERROR_MESSAGES } from "../../constants/Errors";
 
 export const EducationsModal = ({
+  notification,
   valuetoAdd,
   setShowModalAdd,
   idEduSelected,
@@ -20,12 +19,11 @@ export const EducationsModal = ({
 }) => {
   const { userData } = AppSelector();
   const dispatch = useDispatch();
-  const [notification, setNotification] = useState(null);
 
   const token = localStorage.getItem("token");
 
   const handleClickDelete = async (educationId) => {
-    setNotification(null);
+    notification(null);
     try {
       const response = await deleteEducation(token, educationId);
       const _education = educationList.filter(
@@ -35,14 +33,14 @@ export const EducationsModal = ({
         type: "UPDATE_USERDATA",
         payload: { ...userData, education: _education },
       });
-      setNotification({ type: "success", message: response.data.message });
+      notification({ type: "success", message: response.data.message });
     } catch (error) {
       error.response
-        ? setNotification({
+        ? notification({
             type: "error",
             message: error.response.data.message,
           })
-        : setNotification({ type: "error", message: ERROR_MESSAGES.TRY_AGAIN });
+        : notification({ type: "error", message: ERROR_MESSAGES.TRY_AGAIN });
     }
   };
 
@@ -102,9 +100,6 @@ export const EducationsModal = ({
           </div>
         </div>
       ))}
-      {notification && (
-        <Notification type={notification.type} message={notification.message} />
-      )}
     </div>
   );
 };

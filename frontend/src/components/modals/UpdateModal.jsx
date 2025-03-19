@@ -76,7 +76,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
           setNotification({ type: "success", message: response.data.message });
           setTimeout(() => {
             setOpen(false);
-          }, 2000);
+          }, 1000);
           break;
         case _about:
           response = await updateAboutProfile(token, userInfo);
@@ -88,7 +88,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
           setNotification({ type: "success", message: response.data.message });
           setTimeout(() => {
             setOpen(false);
-          }, 2000);
+          }, 1000);
           break;
         case _education:
           response = await updateEducationProfile(
@@ -96,16 +96,13 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
             idSelected,
             educationInfo
           );
+          const edu = await getUserData(token);
           setLoading(false);
           dispatch({
             type: "UPDATE_USERDATA",
             payload: {
               ...userData,
-              education: [
-                ...userData.education.map((item) =>
-                  item._id === idSelected ? educationInfo : item
-                ),
-              ],
+              education: edu.data.userData.education,
             },
           });
           setNotification({ type: "success", message: response.data.message });
@@ -119,16 +116,13 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
             idSelected,
             experienceInfo
           );
+          const exper = await getUserData(token);
           setLoading(false);
           dispatch({
             type: "UPDATE_USERDATA",
             payload: {
               ...userData,
-              experience: [
-                ...userData.experience.map((item) =>
-                  item._id === idSelected ? experienceInfo : item
-                ),
-              ],
+              experience: exper.data.userData.experience,
             },
           });
           setNotification({ type: "success", message: response.data.message });

@@ -3,11 +3,11 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useState } from "react";
 import { AppSelector } from "../../selectors/AppSelector";
 import { useDispatch } from "react-redux";
-import { Notification } from "../UI/Notification";
 import { deleteSkill } from "../../services/profile";
 import { ERROR_MESSAGES } from "../../constants/Errors";
 
 export const SkillsModal = ({
+  notification,
   valuetoAdd,
   setShowModalAdd,
   showIcon,
@@ -17,12 +17,10 @@ export const SkillsModal = ({
   const dispatch = useDispatch();
   const [hieghtDiv, setHieghtDiv] = useState(2);
 
-  const [notification, setNotification] = useState(null);
-
   const token = localStorage.getItem("token");
 
   const handleClickDelete = async (indexSkill) => {
-    setNotification(null);
+    notification(null);
     try {
       const response = await deleteSkill(token, indexSkill);
       const _skills = skillList.filter((item, index) => index !== indexSkill);
@@ -30,14 +28,14 @@ export const SkillsModal = ({
         type: "UPDATE_USERDATA",
         payload: { ...userData, skills: _skills },
       });
-      setNotification({ type: "success", message: response.data.message });
+      notification({ type: "success", message: response.data.message });
     } catch (error) {
       error.response
-        ? setNotification({
+        ? notification({
             type: "error",
             message: error.response.data.message,
           })
-        : setNotification({ type: "error", message: ERROR_MESSAGES.TRY_AGAIN });
+        : notification({ type: "error", message: ERROR_MESSAGES.TRY_AGAIN });
     }
   };
 
@@ -96,9 +94,6 @@ export const SkillsModal = ({
             ? `Close all ${skillList.length} skills`
             : `Show all ${skillList.length} skills`}
         </div>
-      )}
-      {notification && (
-        <Notification type={notification.type} message={notification.message} />
       )}
     </div>
   );
