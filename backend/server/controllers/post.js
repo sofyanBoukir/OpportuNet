@@ -4,11 +4,11 @@ const Post = require("../models/Post");
 const User = require("../models/User");
 
 
-const getPost = async () =>{
+const getPost = async (request,response) =>{
     try{
         const {postId} = request.params;
 
-        const post = await Post.findById(postId);
+        const post = await Post.findById(postId).populate('user', 'name profile_picture headLine');
         if(post){
             return response.json({
                 post
@@ -162,51 +162,19 @@ const toggleLike = async (request,response) =>{
             })
         }
 
-        const post = await Post.findOne({likes:{$in:userId}});
+        const alreadyLiked = user.likedPosts.includes(postId);
 
-        if(post){
-            const newLikes = post.likes.filter((_id) => _id.toString() !== userId);
-            const newLikesUser = user.likedPosts.filter((_id) => _id.toString() !== userId);
-            post.likes = newLikes;
+        if(alreadyLiked){
+            const newLikes = postExists.likes.filter((_id) => _id.toString() !== userId);
+            const newLikesUser = user.likedPosts.filter((_id) => _id.toString() !== postId);
+            postExists.likes = newLikes;
             user.likedPosts = newLikesUser;
-            await post.save();
+            await postExists.save();
             await user.save();
             return response.json({
                 'liked' : false
             })
         }else{
-
-            const notExists = await Notification.findOneAndDelete({$and:[{user:postExists.user},{from_user:userId},{post:postExists._id},{message:"Liked your post"}]});
-
-            if(notExists){
-                const newNotification = new Notification({
-                    user:postExists.user,
-                    from_user:userId,
-                    post:postExists._id,
-                    message:"Liked your post"
-                })
-    
-                await newNotification.save()
-
-                user.likedPosts.push(postId);
-                postExists.likes.push(userId);
-
-                await user.save();
-                await postExists.save();
-
-                return response.json({
-                    'liked' : true
-                })
-            }
-
-            const newNotification = new Notification({
-                user:postExists.user,
-                from_user:userId,
-                post:postExists._id,
-                message:"Liked your post"
-            })
-
-            await newNotification.save()
 
             postExists.likes.push(userId);
             user.likedPosts.push(postId);
@@ -214,9 +182,19 @@ const toggleLike = async (request,response) =>{
             await postExists.save();
             await user.save();
 
-            return response.json({
-                'liked' : true
-            })
+            if(postExists.user.toString() !== userId){
+                const newNotification = new Notification({
+                    user: postExists.user,
+                    from_user: userId,
+                    post: postExists._id,
+                    message: 'Liked your post',
+                });
+                await newNotification.save();
+            }
+
+            return response.status(200).json({
+                liked: true,
+            });
         }
 
     }catch(err){
@@ -247,7 +225,8 @@ const toggleSave = async (request,response) =>{
             })
         }
 
-        const alreadySaved = await User.findOne({savedPosts:{$in:postId}});
+        const alreadySaved = user.savedPosts.includes(postId);
+        
         if(alreadySaved){
             const newSaves = user.savedPosts.filter((id) => id.toString() !== postId);
             user.savedPosts = newSaves;

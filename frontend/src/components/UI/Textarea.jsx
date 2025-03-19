@@ -1,12 +1,22 @@
-import React from 'react'
-
-export const Textarea = ({ name, value, placeholder, onChange, className}) => {
+export const Textarea = ({
+  cols,
+  rows,
+  name,
+  value,
+  placeholder,
+  onChange,
+  className,
+}) => {
   return (
-    <textarea name={name}
-        value={value}
-        placeholder={placeholder}
-        onChange={onChange}
-        spellCheck={false}
-        className={`resize-none ${className}`} />
-)
-}
+    <textarea
+      name={name}
+      value={value}
+      rows={rows}
+      cols={cols}
+      placeholder={placeholder}
+      onChange={onChange}
+      spellCheck={false}
+      className={`resize-none ${className}`}
+    />
+  );
+};

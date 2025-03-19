@@ -1,4 +1,3 @@
-import profilImg from "../../public/images/said-kachoud.jpg";
 import { ProfilInfoModal } from "../components/App/ProfilInfo";
 import { AboutModal } from "../components/App/About";
 import { EducationsModal } from "../components/App/Educations";
@@ -10,18 +9,122 @@ import { SuggestionsModal } from "../components/App/Suggestions";
 import { UpdateModal } from "../components/modals/UpdateModal";
 import { AppSelector } from "../selectors/AppSelector";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Post } from "../components/App/Post";
+import { AddModal } from "../components/modals/AddModal";
+import { IsEmptyModal } from "../components/App/IsEmptyModal";
+import { getUserById } from "../services/profile";
+import { ERROR_MESSAGES } from "../constants/Errors";
 
 export const Profil = () => {
   const { userData } = AppSelector();
   const { id } = useParams();
-  const [userInfo, setUserInfo] = useState(
-    userData._id === id ? { ...userData } : {}
-  );
-  const [showAddModal, setShowAddModal] = useState(false);
+
+  const [userInfo, setUserInfo] = useState({});
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [toUpdate, setToUpdate] = useState("");
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [toAdd, setToAdd] = useState("");
+  const [notification, setNotification] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+
+  const [selectedId, setSelectedId] = useState(null);
+  const loadingRef = useRef(false);
+
+  const showIcon = userData._id === id;
+
+  const _getUserById = async () => {
+    try {
+      if (loadingRef.current) return;
+      loadingRef.current = true;
+      const response = await getUserById(
+        localStorage.getItem("token"),
+        id,
+        page
+      );
+      loadingRef.current = false;
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 3000);
+      console.log("respose", response);
+      console.log("post", response.data.posts);
+
+      if (response.status === 200) {
+        if (response.data.posts) {
+          setUserInfo(response.data);
+        }
+      }
+    } catch (err) {
+      setLoading(false);
+      switch (err.response.status) {
+        case 401:
+          setError(err.response.data.message);
+          break;
+        case 500:
+          setError(ERROR_MESSAGES.SOMETHING_WENT_WRONG);
+          break;
+      }
+    }
+  };
+  useEffect(() => {
+    _getUserById();
+  }, [page]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 10
+      ) {
+        setPage((prevPage) => prevPage + 1);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const dataInfo = {
+    posts: [
+      {
+        _id: "67d9a83925cbdd122b11296b",
+        user: {
+          _id: "67d9a393df3aebc8f05f988d",
+          name: "Soufian boukir",
+          profile_picture: "/users/1742320140690-ronaldo.jpg",
+          headLine: "Software devlooper",
+        },
+        content: "this content of post soufine",
+        image: null,
+        tags: [],
+        likes: [],
+        comments: [],
+        mentions: [],
+        createdAt: "2025-03-18T17:07:05.740Z",
+        updatedAt: "2025-03-18T17:07:05.740Z",
+        __v: 0,
+      },
+      {
+        _id: "67d9a8392erbdd122b11296b",
+        user: {
+          _id: "67d9a393df3aebc8f05f988d",
+          name: "Soufian boukir",
+          profile_picture: "/users/1742320140690-ronaldo.jpg",
+          headLine: "Software devlooper",
+        },
+        content: "this dis of post soufine",
+        image: null,
+        tags: [],
+        likes: [],
+        comments: [],
+        mentions: [],
+        createdAt: "2025-03-18T17:07:05.740Z",
+        updatedAt: "2025-03-18T17:07:05.740Z",
+        __v: 0,
+      },
+    ],
     followers: 300,
     following: 100,
     education: [
@@ -65,93 +168,136 @@ export const Profil = () => {
       { sugName: "Soufiane Boukir", sugHead: "Devloper Back-End" },
     ],
   };
-
-  const showIcon = userData._id === id;
-  const recuiterData = {
-    name: userData.name,
-    headLine: userData.headLine,
-    companyName: userData.companyName,
-    location: userData.location,
-    webSite: userData.webSite,
-  };
-  const candidateData = {
-    name: userData.name,
-    headLine: userData.headLine,
-    location: userData.location,
-    webSite: userData.webSite,
-  };
-  console.log("object", userInfo);
+  console.log("userInfopost", userInfo.posts);
+  console.log("userInfopost", userInfo);
+  console.log("userData", userData);
   return (
     <div>
       <div className={`w-full flex flex-col gap-y-2 lg:flex-row justify-start`}>
         <div className="w-full lg:w-[65%] pt-[55px] lg:pt-[80px] flex flex-col gap-y-2 lg:pb-4">
           {
             <ProfilInfoModal
-              setShowModal={setShowAddModal}
+              setShowModalUpdate={setShowUpdateModal}
               valuetoUpdate={setToUpdate}
               showIcon={showIcon}
-              userData={userInfo}
+              userData={userData._id === id ? userData : userInfo.userData}
             />
           }
 
-          {<AboutModal showIcon={showIcon} content={dataInfo.content} />}
+          {userData._id === id ? (
+            userData.about ? (
+              <AboutModal
+                valuetoUpdate={setToUpdate}
+                setShowModalUpdate={setShowUpdateModal}
+                showIcon={showIcon}
+                content={
+                  userData._id === id ? userData.about : userInfo.userData.about
+                }
+              />
+            ) : (
+              <IsEmptyModal
+                setShowModalAdd={setShowAddModal}
+                valuetoAdd={setToAdd}
+                type="about"
+              />
+            )
+          ) : (
+            userInfo.about && (
+              <AboutModal
+                valuetoUpdate={setToUpdate}
+                setShowModalUpdate={setShowUpdateModal}
+                showIcon={showIcon}
+                content={
+                  userData._id === id ? userData.about : userInfo.userData.about
+                }
+              />
+            )
+          )}
           {
-            // userData.education &&
             <EducationsModal
+              idEduSelected={setSelectedId}
+              setShowModalUpdate={setShowUpdateModal}
+              valuetoUpdate={setToUpdate}
+              setShowModalAdd={setShowAddModal}
+              valuetoAdd={setToAdd}
               showIcon={showIcon}
               educationList={
-                userData.education.length
+                userData._id === id
                   ? userData.education
-                  : dataInfo.education
+                  : userInfo.userData.education
               }
             />
           }
           {
-            // userData.experience &&
             <ExperiencesModal
+              idEduSelected={setSelectedId}
+              setShowModalUpdate={setShowUpdateModal}
+              valuetoUpdate={setToUpdate}
+              setShowModalAdd={setShowAddModal}
+              valuetoAdd={setToAdd}
               showIcon={showIcon}
               experienceList={
-                userData.experience.length
+                userData._id === id
                   ? userData.experience
-                  : dataInfo.experience
+                  : userInfo.userData.experience
               }
             />
           }
           {
-            // userData.skills &&
             <SkillsModal
+              setShowModalAdd={setShowAddModal}
+              valuetoAdd={setToAdd}
               showIcon={showIcon}
               skillList={
-                userData.skills.length ? userData.skills : dataInfo.skills
+                userData._id === id ? userData.skills : userInfo.userData.skills
               }
             />
           }
           {userData.interests && (
             <InterestsModal
+              setShowModalUpdate={setShowUpdateModal}
+              valuetoUpdate={setToUpdate}
               showIcon={showIcon}
-              interestList={userData.interests}
+              interestList={
+                userData._id === id
+                  ? userData.interests
+                  : userInfo.userData.interests
+              }
             />
           )}
           <div className="w-full lg:w-[89%] flex flex-col gap-2 lg:ml-[15%]">
-            <Post />
-            <Post />
-            <Post />
+            {/* loading && <PostSkeleton />}
+                      {feedPosts && !loading && feedPosts.length
+                        ? feedPosts.map((post) => {
+                            return <Post post={post} />;
+                          })
+                        : null}
+                      {!loading && feedPosts.length === 0 && (
+                        <span className="text-xl font-semibold">
+                          Try to post new posts on diff accounts
+                        </span>
+                      )} */}
+            {userInfo.posts.map((item) => (
+              <Post post={item} />
+            ))}
           </div>
         </div>
         <div className="lg:w-[20%] flex flex-col gap-2 lg:pt-[80px] lg:ml-[4%]">
           {<UrlProfilModal />}
           {<SuggestionsModal suggestionList={dataInfo.suggestions} />}
         </div>
-        {showAddModal && (
+        {showUpdateModal && (
           <UpdateModal
             toUpdate={toUpdate}
-            userInfobeforUpdate={
-              userData.role === "candidate" ? candidateData : recuiterData
-            }
-            setOpen={setShowAddModal}
+            idSelected={selectedId}
+            setOpen={setShowUpdateModal}
           />
         )}
+        {showAddModal && <AddModal toAdd={toAdd} setOpen={setShowAddModal} />}
       </div>
+      {notification && (
+        <Notification type={notification.type} message={notification.message} />
+      )}
     </div>
   );
 };

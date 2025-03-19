@@ -1,11 +1,12 @@
 import coverProfil from "../../../public/images/coverProfil.png";
 import ProfilImg from "../../../public/images/profilDefault.png";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
-// import { IoIosCamera } from "react-icons/io";
-const authService = import.meta.env.VITE_USER_SERVICE;
+import { Follow } from "../UI/Follow";
+
+const serverURL = import.meta.env.VITE_SERVER_URL;
 
 export const ProfilInfoModal = ({
-  setShowModal,
+  setShowModalUpdate,
   valuetoUpdate,
   showIcon,
   userData,
@@ -23,16 +24,16 @@ export const ProfilInfoModal = ({
       ></div>
       <div className="bg-white absolute top-18 md:top-[105px] 2xl:top-[100px] left-[5%] 2xl:left-[3%] h-[100px] 2xl:h-[155px] w-[100px] 2xl:w-[155px] rounded-[50%] p-[3px] cursor-pointer">
         <img
-          src={`${authService}` + userData.profile_picture}
+          src={`${serverURL}` + userData.profile_picture}
           alt="photo profil"
-          className="rounded-[50%]"
+          className="w-[95px] h-[95px] 2xl:w-[150px] 2xl:h-[150px] rounded-[50%]"
         />
       </div>
 
       {showIcon && (
         <div
           onClick={() => {
-            setShowModal(true);
+            setShowModalUpdate(true);
             valuetoUpdate("intro");
           }}
           className="float-end mt-4 mr-5 p-1.5 duration-200 text-center pt-1 text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[50%] "
@@ -64,6 +65,10 @@ export const ProfilInfoModal = ({
               {userData.followers ? userData.followers : "22"} followings
             </span>
           </div>
+          <Follow
+            text="follow"
+            className="bg-[#0A66C2] text-white hover:bg-blue-900 px-7 rounded-full mb-2 mt-3"
+          />
         </div>
       </div>
     </div>

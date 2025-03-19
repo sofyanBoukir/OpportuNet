@@ -41,6 +41,7 @@ export const PostModal = ({setOpenModalPost,post}) => {
     try{
       setCommentLoading(true)
       const response = await commentOnPost(localStorage.getItem('token'),post._id,comment);
+      console.log(response);
       
       setCommentLoading(false);
       if(response.status === 200){
@@ -153,9 +154,8 @@ export const PostModal = ({setOpenModalPost,post}) => {
 
         <div className="sticky bottom-0 left-0 flex items-center w-full py-2 gap-2 bg-white">
           <img
-            src="/profil.jpg"
+            src={serverUrl+userData.profile_picture}
             className="w-10 h-10 rounded-full border-2"
-            alt=""
           />
           <Input
             type="text"

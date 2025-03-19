@@ -65,24 +65,25 @@ const commentOnPost = async (request,response) =>{
             })
         }
 
-
         const newComment = new Comment({
             post : postId,
             user : userId,
             comment : comment,
         })
 
-        const newNotification = new Notification({
-            user:postExists.user,
-            from_user:userId,
-            post:postExists._id,
-            message:"Commented on your post"
-        })
+        if(postExists.user.toString() !== userId){
+            const newNotification = new Notification({
+                user:postExists.user,
+                from_user:userId,
+                post:postExists._id,
+                message:"Commented on your post"
+            })
+            await newNotification.save();
+        }
 
         postExists.comments.push(newComment._id);
         await postExists.save()
         await newComment.save();
-        await newNotification.save();
 
         return response.json({
             'message' : 'Commented successfully'

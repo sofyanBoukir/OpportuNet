@@ -32,25 +32,13 @@ export const Post = ({post}) => {
     };
 
     const {userData} = AppSelector()
-    console.log(userData);
     
     const [openModalPost , setOpenModalPost] =useState(false)
     const [alreadyLiked,setAlreadyLiked] = useState(userData.likedPosts.includes(post._id));    
     const [alreadySaved,setAlreadySaved] = useState(userData.savedPosts.includes(post._id));
-    
-    // const _alreadyLiked = async () =>{
-    //     const response = await isAlreadyLiked(localStorage.getItem('token'),post._id);
-    //     console.log(response);
-        
-    //     if(response.status === 200){
-    //         if(response.data.liked){
-    //             setAlreadyLiked(true)
-    //         }else{
-    //             setAlreadyLiked(false)
-    //         }
-    //     }
-    // }
 
+    console.log(userData.likedPosts);
+    
     const _toggleLike = async () =>{
         const response = await toggleLike(localStorage.getItem('token'),post._id);
         console.log(response);
@@ -72,18 +60,22 @@ export const Post = ({post}) => {
 
 
     const _toggleSave = async () =>{
+
+        console.log('toggle save for post ' + post._id);
         const response = await toggleSave(localStorage.getItem('token'),post._id);
         console.log(response);
         
         if(response.status === 200){
             if(response.data.saved === true){
-                userData.savedPosts.push(post._id)
-                setAlreadySaved(true)
+                
+                const updatedSavedPosts = [...userData.savedPosts, post._id];
+                userData.savedPosts = updatedSavedPosts;
+                setAlreadySaved(true);
             }
             if(response.data.saved === false){
-                const newSaves = userData.savedPosts.filter((id) => id !== post._id);
-                userData.savedPosts = newSaves
-                setAlreadySaved(false)
+                const updatedSavedPosts = userData.savedPosts.filter((id) => id !== post._id);
+                userData.savedPosts = updatedSavedPosts;
+                setAlreadySaved(false);
             }
         }
     }
@@ -91,7 +83,7 @@ export const Post = ({post}) => {
     <div className='w-[100%] md:w-[100%] bg-white rounded-xl'>
         <div className='w-[100%] px-4 py-4 justify-between flex flex-row items-center'>
             <div className=' flex flex-row items-center'>
-                <div className='w-[15%] lg:w-[12%]'> <img src={serverUrl + post.user?.profile_picture} className=' rounded-full' alt="" /></div>
+                <div> <img src={serverUrl + post.user?.profile_picture} className='w-12 h-12 rounded-full' alt="" /></div>
                 <div className='px-3'>
                     <div className='flex flex-row items-center'>
                         <h1 className='text-xl font-semibold'>{post.user?.name}</h1>

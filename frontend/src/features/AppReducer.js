@@ -10,6 +10,7 @@ const appState = {
 export const AppReducer = (state = appState, action) => {
   switch (action.type) {
     case "UPDATE_USERDATA":
+      console.log("apppp");
       return { ...state, userData: action.payload };
     case "UPDATE_THEME":
       if (state.istheme === "light") {
