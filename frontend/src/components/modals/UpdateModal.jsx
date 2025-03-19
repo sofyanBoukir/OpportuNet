@@ -15,6 +15,7 @@ import {
 import { useDispatch } from "react-redux";
 import { ERROR_MESSAGES } from "../../constants/Errors";
 import { getInterests } from "../../services/interest";
+import { getUserData } from "../../services/auth";
 
 export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
   const { userData } = AppSelector();
@@ -59,7 +60,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
           [name]: type === "checkbox" ? checked : value,
         }));
   };
-  console.log("hh", idSelected);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -69,8 +70,9 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
       switch (toUpdate) {
         case _intro:
           response = await updateIntroProfile(token, userInfo);
+          const data = await getUserData(token);
           setLoading(false);
-          dispatch({ type: "UPDATE_USERDATA", payload: userInfo });
+          dispatch({ type: "UPDATE_USERDATA", payload: data.data.userData });
           setNotification({ type: "success", message: response.data.message });
           setTimeout(() => {
             setOpen(false);
@@ -135,8 +137,23 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
           }, 2000);
           break;
         case _intserest:
-          response = await updateInterestProfil(token, formData);
-          setLoading(false);
+          if (formData.interests.length >= 5) {
+            response = await updateInterestProfil(token, formData);
+            setLoading(false);
+            setNotification({
+              type: "success",
+              message: response.data.message,
+            });
+            setTimeout(() => {
+              setOpen(false);
+            }, 2000);
+          } else {
+            setLoading(false);
+            setNotification({
+              type: "error",
+              message: "Choose more than 5",
+            });
+          }
           // dispatch({
           //   type: "UPDATE_USERDATA",
           //   payload: {
@@ -152,10 +169,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
           //     }),
           //   },
           // });
-          setNotification({ type: "success", message: response.data.message });
-          setTimeout(() => {
-            setOpen(false);
-          }, 2000);
+
           break;
 
         default:
