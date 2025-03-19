@@ -65,10 +65,12 @@ export const ProfilInfoModal = ({
               {userData.followers ? userData.followers : "22"} followings
             </span>
           </div>
-          <Follow
-            text="follow"
-            className="bg-[#0A66C2] text-white hover:bg-blue-900 px-7 rounded-full mb-2 mt-3"
-          />
+          {!showIcon && (
+            <Follow
+              text="follow"
+              className="bg-[#0A66C2] text-white hover:bg-blue-900 px-7 rounded-full mb-2 mt-3"
+            />
+          )}
         </div>
       </div>
     </div>
