@@ -133,6 +133,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
         case _intserest:
           if (formData.interests.length >= 5) {
             response = await updateInterestProfil(token, formData);
+            const _inetrest = await getUserData(token);
             setLoading(false);
             setNotification({
               type: "success",
@@ -148,22 +149,13 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
               message: "Choose more than 5",
             });
           }
-          // dispatch({
-          //   type: "UPDATE_USERDATA",
-          //   payload: {
-          //     ...userData,
-          //     interests: interests.map((item) => {
-          //       for (let i = 0; i < formData.interests.length; i++) {
-          //         if (item._id === formData.interests[i]) {
-          //           return item;
-          //         } else {
-          //           continue;
-          //         }
-          //       }
-          //     }),
-          //   },
-          // });
-
+          dispatch({
+            type: "UPDATE_USERDATA",
+            payload: {
+              ...userData,
+              interests: _intserest.data.userData.interests,
+            },
+          });
           break;
 
         default:
@@ -174,7 +166,6 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
       }
     } catch (error) {
       setLoading(false);
-      console.log(error.response);
       error.response
         ? setNotification({
             type: "error",
