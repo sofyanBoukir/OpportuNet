@@ -23,10 +23,13 @@ export const SingleLink = ({ link, svg, text }) => {
       } w-[60px] flex flex-col items-center justify-center cursor-pointer hover:text-gray-200 duration-200`}
     >
       <div
-        className={`mt-[3px] duration-200 ${
-          link === currentPath ? "text-black" : " text-[#666666] "
+        className={`mt-[3px] duration-200 relative ${
+          link === currentPath ? "text-black" : " text-[#666666]"
         }`}
       >
+        {
+          (text === 'Notifications' || text === 'Messaging') && <div className="w-5 h-5 text-center text-white bg-red-600 absolute rounded-full top-[-8px] right-[-10px] text-sm">1</div>
+        }
         {svg}
       </div>
       <div>
