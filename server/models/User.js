@@ -9,7 +9,7 @@ const userShema = new mongoose.Schema({
     profile_picture : {type:String, default:`/users/userDefaultImage.jpg`},
     headLine : {type:String},
     companyName : {type:String},
-    about : {type:String},
+    about : {type:String, default:"Hi👋, I am using opportuNet app!"},
     location : {type:String},
     webSite : {type:String},
     skills : [ {type:String} ],
