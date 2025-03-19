@@ -8,6 +8,7 @@ import {
   EllipsisHorizontalIcon,
   FlagIcon,
   LinkIcon,
+  TrashIcon,
 } from "@heroicons/react/24/outline";
 import { PostModal } from "../modals/PostModal";
 import moment from "moment/moment";
@@ -19,7 +20,7 @@ import { Skeleton } from "@mui/material";
 import { isAlreadyLiked, toggleLike } from "../../services/post";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
-export const Post = ({ post }) => {
+export const Post = ({ post, showIcon, postSelected }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -71,6 +72,7 @@ export const Post = ({ post }) => {
   useEffect(() => {
     _alreadyLiked();
   }, []);
+
   return (
     <div className="w-[100%] md:w-[100%] bg-white rounded-xl">
       <div className="w-[100%] px-4 py-4 justify-between flex flex-row items-center">
@@ -116,12 +118,26 @@ export const Post = ({ post }) => {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={handleClose}>
-              <div className="flex flex-row items-center gap-2">
-                <FlagIcon className="text-black w-6 h-6" strokeWidth={1.2} />
-                <h1>Report</h1>
-              </div>
-            </MenuItem>
+            {showIcon ? (
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  postSelected(post._id);
+                }}
+              >
+                <div className="flex flex-row items-center gap-2">
+                  <TrashIcon className="text-black w-6 h-6" strokeWidth={1.2} />
+                  <h1>Delete</h1>
+                </div>
+              </MenuItem>
+            ) : (
+              <MenuItem onClick={handleClose}>
+                <div className="flex flex-row items-center gap-2">
+                  <FlagIcon className="text-black w-6 h-6" strokeWidth={1.2} />
+                  <h1>Report</h1>
+                </div>
+              </MenuItem>
+            )}
             <MenuItem onClick={handleClose}>
               <div className="flex flex-row items-center gap-2">
                 <LinkIcon className="text-black w-6 h-6" strokeWidth={1.2} />

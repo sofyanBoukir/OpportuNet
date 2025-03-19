@@ -4,12 +4,11 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import educationImage from "../../../public/images/educationImage.png";
 import { AppSelector } from "../../selectors/AppSelector";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
 import { deleteExperience } from "../../services/profile";
-import { Notification } from "../UI/Notification";
 import { ERROR_MESSAGES } from "../../constants/Errors";
 
 export const ExperiencesModal = ({
+  notification,
   valuetoUpdate,
   idEduSelected,
   setShowModalUpdate,
@@ -21,12 +20,10 @@ export const ExperiencesModal = ({
   const { userData } = AppSelector();
   const dispatch = useDispatch();
 
-  const [notification, setNotification] = useState(null);
-
   const token = localStorage.getItem("token");
 
   const handleClickDelete = async (experienceId) => {
-    setNotification(null);
+    notification(null);
     try {
       const response = await deleteExperience(token, experienceId);
       const _experience = experienceList.filter(
@@ -36,14 +33,14 @@ export const ExperiencesModal = ({
         type: "UPDATE_USERDATA",
         payload: { ...userData, experience: _experience },
       });
-      setNotification({ type: "success", message: response.data.message });
+      notification({ type: "success", message: response.data.message });
     } catch (error) {
       error.response
-        ? setNotification({
+        ? notification({
             type: "error",
             message: error.response.data.message,
           })
-        : setNotification({ type: "error", message: ERROR_MESSAGES.TRY_AGAIN });
+        : notification({ type: "error", message: ERROR_MESSAGES.TRY_AGAIN });
     }
   };
 
@@ -106,9 +103,6 @@ export const ExperiencesModal = ({
           </div>
         </div>
       ))}
-      {notification && (
-        <Notification type={notification.type} message={notification.message} />
-      )}
     </div>
   );
 };

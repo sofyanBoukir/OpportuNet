@@ -24,6 +24,7 @@ export const AddModal = ({ toAdd, setOpen }) => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
     setDataInfo((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -43,11 +44,11 @@ export const AddModal = ({ toAdd, setOpen }) => {
     setNotification(null);
     try {
       let response;
-      let eudRes;
+
       switch (toAdd) {
         case _education:
           response = await addEducationProfile(token, dataInfo);
-          eudRes = await getUserData(token);
+          const eudRes = await getUserData(token);
           setLoading(false);
           dispatch({
             type: "UPDATE_USERDATA",
@@ -59,11 +60,11 @@ export const AddModal = ({ toAdd, setOpen }) => {
           setNotification({ type: "success", message: response.data.message });
           setTimeout(() => {
             setOpen(false);
-          }, 2000);
+          }, 1000);
           break;
         case _experience:
           response = await addExperienceProfile(token, dataInfo);
-          expRes = await getUserData(token);
+          const expRes = await getUserData(token);
           setLoading(false);
           dispatch({
             type: "UPDATE_USERDATA",
@@ -75,7 +76,7 @@ export const AddModal = ({ toAdd, setOpen }) => {
           setNotification({ type: "success", message: response.data.message });
           setTimeout(() => {
             setOpen(false);
-          }, 2000);
+          }, 1000);
           break;
         case _skill:
           response = await addSkillProfile(token, dataInfo);
@@ -90,7 +91,7 @@ export const AddModal = ({ toAdd, setOpen }) => {
           setNotification({ type: "success", message: response.data.message });
           setTimeout(() => {
             setOpen(false);
-          }, 2000);
+          }, 1000);
           break;
         default:
           setNotification({
@@ -100,7 +101,6 @@ export const AddModal = ({ toAdd, setOpen }) => {
       }
     } catch (error) {
       setLoading(false);
-
       error.response
         ? setNotification({
             type: "error",
@@ -115,13 +115,13 @@ export const AddModal = ({ toAdd, setOpen }) => {
       <div
         className={`bg-[#ffffff] z-20 border w-full sm:w-[65%] lg:w-[50%] ${
           toAdd === _experience
-            ? "h-[520px] sm:h-[540px] lg:h-[570px] pb-4"
+            ? "h-[520px]  sm:h-[540px] lg:h-auto pb-4"
             : `${toAdd !== _skill ? "h-[400px]" : "h-auto p-4"} ${
                 toAdd !== _skill && "sm:h-[420px] lg:h-[435px]"
               }`
-        } my-auto lg:mt-[30px] px-8 rounded-lg shadow-sm overflow-auto`}
+        } my-auto) lg:mt-[30)px] px-8 rounded-lg shadow-sm overflow-auto`}
       >
-        <div className="text-center sticky top-0 pt-6 pb-2 bg-[#ffffff]">
+        <div className="text-center sticky top-0 pt-2 pb-1 bg-[#ffffff]">
           <h1 className="text-2xl font-semibold text-gray-800">{`Edit ${toAdd}`}</h1>
           <p className="text-sm text-gray-500 mt-1">
             {`Fill this inputs to Edit ${toAdd}`}
@@ -218,6 +218,19 @@ export const AddModal = ({ toAdd, setOpen }) => {
                     className="p-2 font-normal text-sm outline-2 rounded-xs "
                   />
                 </div>
+                {/* <div className="flex flex-col mt-5">
+                  <Label
+                    text="End*"
+                    className="text-sm font-normal text-gray-600 mb-1"
+                  />
+                  <Input
+                    type="date"
+                    name="end"
+                    value={dataInfo.end}
+                    onChange={handleChange}
+                    className="p-2 font-normal text-sm outline-2 rounded-xs "
+                  />
+                </div> */}
               </>
             )}
 
