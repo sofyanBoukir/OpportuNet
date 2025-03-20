@@ -45,7 +45,7 @@ export const Profil = () => {
   const hasMore = useRef(true);
   const showIcon = userData._id === id;
 
-  const _getUserById = async () => {
+  const _getUserById = async (page) => {
     try {
       if (loadingRef.current) return;
       loadingRef.current = true;
@@ -54,6 +54,7 @@ export const Profil = () => {
         id,
         page
       );
+      console.log("us", response);
       loadingRef.current = false;
 
       setTimeout(() => {
@@ -79,35 +80,21 @@ export const Profil = () => {
       }
     }
   };
+
   useEffect(() => {
+    console.log("useEffect");
     _getUserById(1);
-  }, [page]);
-
-  // useEffect(() => {
-  //   const handleScroll = async () => {
-  //     const isAtBottom =
-  //       window.innerHeight + window.scrollY >= document.body.offsetHeight - 1;
-
-  //     if (isAtBottom && !loading && loadingRef.current && hasMore.current) {
-  //       const nextPage = page + 1;
-  //       setPage((prevState) => prevState + 1);
-  //       _getUserById(nextPage);
-  //     }
-  //   };
-
-  //   window.addEventListener("scroll", handleScroll);
-
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, [page, loadingRef]);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      console.log("ffffscrol");
+      console.log("ffffscroDDl");
       if (
         window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - 10
+        document.documentElement.scrollHeight
       ) {
         if (page <= totalPages) {
+          console.log("page", page);
           const nextPage = page + 1;
           setPage((prevPage) => prevPage + 1);
           _getUserById(nextPage);
@@ -143,82 +130,6 @@ export const Profil = () => {
   };
 
   const dataInfo = {
-    posts: [
-      {
-        _id: "67d9a83925cbdd122b11296b",
-        user: {
-          _id: "67d9a393df3aebc8f05f988d",
-          name: "Soufian boukir",
-          profile_picture: "/users/1742320140690-ronaldo.jpg",
-          headLine: "Software devlooper",
-        },
-        content: "this content of post soufine",
-        image: null,
-        tags: [],
-        likes: [],
-        comments: [],
-        mentions: [],
-        createdAt: "2025-03-18T17:07:05.740Z",
-        updatedAt: "2025-03-18T17:07:05.740Z",
-        __v: 0,
-      },
-      {
-        _id: "67d9a8392erbdd122b11296b",
-        user: {
-          _id: "67d9a393df3aebc8f05f988d",
-          name: "Soufian boukir",
-          profile_picture: "/users/1742320140690-ronaldo.jpg",
-          headLine: "Software devlooper",
-        },
-        content: "this dis of post soufine",
-        image: null,
-        tags: [],
-        likes: [],
-        comments: [],
-        mentions: [],
-        createdAt: "2025-03-18T17:07:05.740Z",
-        updatedAt: "2025-03-18T17:07:05.740Z",
-        __v: 0,
-      },
-    ],
-    followers: 300,
-    following: 100,
-    education: [
-      {
-        nameSchool: "Specialized Institute of Applied Technology Tiznit",
-        date: "Sep 2023 - Jun 2025",
-        degree: "Specialized technicien in digitale developement",
-      },
-      {
-        nameSchool: "Argane heigh school",
-        date: "Sep 2021 - Jun 2022",
-        degree: "Phisics Sciences",
-      },
-    ],
-    experience: [
-      {
-        namePost: "Backend developer",
-        companyName: "Capegemeni",
-        date: "2020-2021",
-        location: "Casablanca, Morocco",
-        description:
-          "As a Backend Developer at [Company Name], I was responsible for designing, developing, and maintaining the server-side logic of web applications. My work focused on ensuring high-performance APIs and database interactions for seamless user experiences",
-      },
-      {
-        namePost: "Server administrator",
-        companyName: "Akodiis",
-        date: "2023-2024",
-        location: "Casablanca, Morocco",
-        description:
-          "As a Server Administrator at [Company Name], I was responsible for maintaining and securing the company's IT infrastructure. My role involved configuring, managing, and troubleshooting servers to ensure optimal performance and uptime. Key responsibilities included",
-      },
-    ],
-    skills: ["React", "Laravel", "Tailwind", "Express", "Nodejs", "Mongodb"],
-
-    content: `Lorem ipsum dolor si amet consectetur adipisicing elit. Magni nostrum
-            consequatur itaque nulla dignissimos non fugiat exercitationem dolor,
-            alias mollitia quas vero iure aliquam consectetur excepturi deserunt
-            maxime.`,
     suggestions: [
       { sugName: "Ayoub Mhainid", sugHead: "Devloper Front-end" },
       { sugName: "Soufiane Boukir", sugHead: "Devloper Back-End" },
@@ -236,40 +147,19 @@ export const Profil = () => {
               setShowModalUpdate={setShowUpdateModal}
               valuetoUpdate={setToUpdate}
               showIcon={showIcon}
-              userData={userData._id === id ? userData : userInfo.userData}
+              userData={userData._id === id ? userData : userInfo}
             />
           }
 
-          {userData._id === id ? (
-            userData.about ? (
-              <AboutModal
-                valuetoUpdate={setToUpdate}
-                setShowModalUpdate={setShowUpdateModal}
-                showIcon={showIcon}
-                content={
-                  userData._id === id ? userData.about : userInfo.userData.about
-                }
-              />
-            ) : (
-              <IsEmptyModal
-                setShowModalAdd={setShowAddModal}
-                valuetoAdd={setToAdd}
-                type="about"
-              />
-            )
-          ) : (
-            userInfo.about && (
-              <AboutModal
-                valuetoUpdate={setToUpdate}
-                setShowModalUpdate={setShowUpdateModal}
-                showIcon={showIcon}
-                content={
-                  userData._id === id ? userData.about : userInfo.userData.about
-                }
-              />
-            )
-          )}
           {
+            <AboutModal
+              valuetoUpdate={setToUpdate}
+              setShowModalUpdate={setShowUpdateModal}
+              showIcon={showIcon}
+              content={userData._id === id ? userData.about : userInfo.about}
+            />
+          }
+          {userInfo.education && (
             <EducationsModal
               notification={setNotification}
               idEduSelected={setSelectedId}
@@ -279,13 +169,11 @@ export const Profil = () => {
               valuetoAdd={setToAdd}
               showIcon={showIcon}
               educationList={
-                userData._id === id
-                  ? userData.education
-                  : userInfo.userData.education
+                userData._id === id ? userData.education : userInfo.education
               }
             />
-          }
-          {
+          )}
+          {userInfo.experience && (
             <ExperiencesModal
               notification={setNotification}
               idEduSelected={setSelectedId}
@@ -295,32 +183,28 @@ export const Profil = () => {
               valuetoAdd={setToAdd}
               showIcon={showIcon}
               experienceList={
-                userData._id === id
-                  ? userData.experience
-                  : userInfo.userData.experience
+                userData._id === id ? userData.experience : userInfo.experience
               }
             />
-          }
-          {
+          )}
+          {userInfo.skills && (
             <SkillsModal
               notification={setNotification}
               setShowModalAdd={setShowAddModal}
               valuetoAdd={setToAdd}
               showIcon={showIcon}
               skillList={
-                userData._id === id ? userData.skills : userInfo.userData.skills
+                userData._id === id ? userData.skills : userInfo.skills
               }
             />
-          }
-          {userData.interests && (
+          )}
+          {userInfo.interests && (
             <InterestsModal
               setShowModalUpdate={setShowUpdateModal}
               valuetoUpdate={setToUpdate}
               showIcon={showIcon}
               interestList={
-                userData._id === id
-                  ? userData.interests
-                  : userInfo.userData.interests
+                userData._id === id ? userData.interests : userInfo.interests
               }
             />
           )}
@@ -330,6 +214,7 @@ export const Profil = () => {
               ? postsList.map((post) => {
                   return (
                     <Post
+                      key={post._id}
                       post={post}
                       showIcon={showIcon}
                       postSelected={setPostId}

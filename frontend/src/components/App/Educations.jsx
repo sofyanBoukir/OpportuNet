@@ -59,7 +59,7 @@ export const EducationsModal = ({
       )}
       <h2 className="text-2xl font-semibold mb-4">Education</h2>
       {educationList.map((item) => (
-        <div className="flex items-center gap-3">
+        <div key={item._id} className="flex items-center gap-3">
           <div className="mb-4 ">
             <img
               src={educationImage}
