@@ -17,6 +17,7 @@ import { NotFound } from "./pages/error/NotFound";
 import React from "react";
 import { PostId } from "./shared/PostId";
 import { Notifications } from "./shared/Notifications";
+import { SavedPost } from "./shared/SavedPost";
 
 function App() {
   return (
@@ -41,6 +42,8 @@ function App() {
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/user/profil/:id" element={<Profil />} />
             <Route path="/post/:postId" element={<PostId />} />
+            <Route path="/saved" element={<SavedPost />} />
+
           </Route>
         </Route>
       </Routes>
