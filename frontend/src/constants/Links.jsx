@@ -31,8 +31,8 @@ export const dataHeader = [
   {
     ROLE: "candidate",
     SVG: <BookmarkIcon strokeWidth="1" className="w-7 h-7" />,
-    TEXT: "Saves",
-    LINK: `/saves`,
+    TEXT: "Saved",
+    LINK: `/saved`,
   },
   {
     ROLE: "candidate",

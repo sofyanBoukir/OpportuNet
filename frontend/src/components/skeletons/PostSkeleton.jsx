@@ -21,6 +21,10 @@ export const PostSkeleton = () => {
             </React.Fragment>
         </div>
         <Skeleton sx={{ height: 400 }} animation="wave" variant="rectangular" />
+        <div className='flex justify-between mt-2'>
+            <Skeleton animation="wave" height={15} width="20%" />
+            <Skeleton animation="wave" height={15} width="20%" />
+        </div>
     </div>
 
 )
