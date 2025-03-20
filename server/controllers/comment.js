@@ -2,6 +2,8 @@ const Comment = require("../models/Comment");
 const Notification = require("../models/Notification");
 const Post = require("../models/Post");
 const User = require("../models/User");
+const notifyOnlineUser = require("../sockets/real-time-notifications");
+const { getIO } = require("../sockets/socket");
 
 
 const getComments = async (request,response) =>{
@@ -71,6 +73,7 @@ const commentOnPost = async (request,response) =>{
             comment : comment,
         })
 
+        const io = getIO()
         if(postExists.user.toString() !== userId){
             const newNotification = new Notification({
                 user:postExists.user,
@@ -79,6 +82,7 @@ const commentOnPost = async (request,response) =>{
                 message:"Commented on your post"
             })
             await newNotification.save();
+            notifyOnlineUser(io,postExists.user,newNotification)
         }
 
         postExists.comments.push(newComment._id);

@@ -149,6 +149,7 @@ const toggleLike = async (request,response) =>{
 
             await postExists.save();
             await user.save();
+            const io = getIO()
 
             if(postExists.user.toString() !== userId){
                 const newNotification = new Notification({
@@ -158,6 +159,7 @@ const toggleLike = async (request,response) =>{
                     message: 'Liked your post',
                 });
                 await newNotification.save();
+                notifyOnlineUser(io,postExists.user,newNotification)
             }
 
             return response.status(200).json({

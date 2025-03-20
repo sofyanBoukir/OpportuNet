@@ -53,7 +53,7 @@ export const Notifications = () => {
       const response = await makeNotificationsSeen(localStorage.getItem('token'));
       
       if(response.status === 200){
-        dispatch({type:'UPDATE_NOTIFIED_TIMES',payload:null})
+        dispatch({type:'UPDATE_NOTIFIED_TIMES',payload:0})
       }
     }
 

@@ -8,6 +8,7 @@ import { ERROR_MESSAGES } from '../../constants/Errors'
 import { useDispatch } from 'react-redux'
 import { VerifyCode } from './VerifyCode'
 import { ExtraLoading } from '../../components/App/ExtraLoading'
+import ExtraLoader from '../../components/UI/ExtraLoader'
 
 export const Login = () => {
 
@@ -105,13 +106,13 @@ export const Login = () => {
                         </div>
                     </div>
 
-
                     <div className='md:w-[40%] w-[100%] bg-gray-100 h-[100vh] pt-20'>
                         <div className='mt-6 w-[70%] mx-auto'>
                             <h1 className='text-4xl font-semibold'>Login</h1>
                             <p className='text-gray-500 font-semibold mt-2'>You d'ont have an account? <Link className='underline text-black' to={'/user/sign_up'}>Create account</Link><br></br>
                             it's FREE! Takes less than a minute.
                             </p>
+                            
                             <form className='mt-8 flex flex-col gap-3' onSubmit={handleSubmit}>
                                     
                                     <div className='flex flex-col gap-1'>

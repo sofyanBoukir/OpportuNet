@@ -6,12 +6,13 @@ import {
 import { SingleLink } from "../components/UI/SingleLink";
 import { dataHeader } from "../constants/Links";
 import { AppSelector } from "../selectors/AppSelector";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import socket from "../functions/socket";
 import { useDispatch } from "react-redux";
+import ExtraLoader from "../components/UI/ExtraLoader";
 const serverURL = import.meta.env.VITE_SERVER_URL;
 
 export const Layout = () => {
@@ -25,6 +26,12 @@ export const Layout = () => {
 
   const dispatch = useDispatch()
   const { notifiedTimes } = AppSelector();
+
+  const notifiedTimesRef = useRef(notifiedTimes);
+
+  useEffect(() =>{
+    notifiedTimesRef.current = notifiedTimes
+  },[notifiedTimes])
 
   useEffect(() => {
     if (darkMode) {
@@ -41,9 +48,31 @@ export const Layout = () => {
     showProfil === false ? setShowProfil(true) : setShowProfil(false);
   };
 
+  console.log(notifiedTimes);
+  
+
+  useEffect(() => {
+    const reconnectIfNeeded = () => {
+      if (!socket.connected) {
+        socket.connect();
+        socket.emit('registerUser',localStorage.getItem('token'))
+      }
+    };
+  
+    window.addEventListener("focus", reconnectIfNeeded);
+    window.addEventListener("click", reconnectIfNeeded);
+  
+    return () => {
+      window.removeEventListener("focus", reconnectIfNeeded);
+      window.removeEventListener("click", reconnectIfNeeded);
+    };
+  }, []);
+
+  const notificationSound = new Audio('/public/audios/notificationSound.wav')
   useEffect(() =>{
     if(!socket.connected){
       socket.connect();
+
       socket.on('connect',() =>{
         console.log('connected to the server');
       })
@@ -54,7 +83,8 @@ export const Layout = () => {
       })
 
       socket.on('newNotification',(newNotification) =>{
-        dispatch({type:"UPDATE_NOTIFIED_TIMES",payload:notifiedTimes+1})
+        dispatch({type:"UPDATE_NOTIFIED_TIMES",payload:notifiedTimesRef.current+1})
+        notificationSound.play()
         console.log(notifiedTimes);
         console.log('notified');
       })
@@ -71,7 +101,7 @@ export const Layout = () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
       socket.disconnect();
     };
-  },[])
+  },[dispatch])
 
   return (
     <div>
@@ -112,7 +142,6 @@ export const Layout = () => {
                   text={element.TEXT}
                 />
               ))}
-
             <div
               className={`w-[60px] flex flex-col items-center justify-center mt-[3px] cursor-pointer`}
               onClick={() => setDarkMode(!darkMode)}
