@@ -24,7 +24,7 @@ import { isAlreadyLiked, toggleLike, toggleSave } from "../../services/post";
 import { AppSelector } from "../../selectors/AppSelector";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
-export const Post = ({ post, showIcon, postSelected }) => {
+export const Post = ({ post, showIcon, postSelected, openDelete }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -139,6 +139,7 @@ export const Post = ({ post, showIcon, postSelected }) => {
                 onClick={() => {
                   handleClose();
                   postSelected(post._id);
+                  openDelete(true);
                 }}
               >
                 <div className="flex flex-row items-center gap-2">
