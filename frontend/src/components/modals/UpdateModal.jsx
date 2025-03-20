@@ -45,6 +45,40 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
 
   const handleChange = (e) => {
     const { name, value, type, files, checked } = e.target;
+
+    if (toUpdate === _intro || toUpdate === _about) {
+      setUserInfo((prev) => ({
+        ...prev,
+        [name]: type === "file" ? files[0] : value,
+      }));
+    } else if (toUpdate === _education) {
+      if (type === "date") {
+        const _date = new Date(value);
+        setEducationInfo((prev) => ({
+          ...prev,
+          [name]: `${_date.getMonth() + 1}-${_date.getFullYear()}`,
+        }));
+      } else {
+        setEducationInfo((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+      }
+    } else {
+      if (type === "date") {
+        const _date = new Date(value);
+        setExperienceInfo((prev) => ({
+          ...prev,
+          [name]: `${_date.getMonth() + 1}-${_date.getFullYear()}`,
+        }));
+      } else {
+        setExperienceInfo((prev) => ({
+          ...prev,
+          [name]: type === "checkbox" ? checked : value,
+        }));
+      }
+    }
+    /*
     toUpdate === _intro || toUpdate === _about
       ? setUserInfo((prev) => ({
           ...prev,
@@ -58,7 +92,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
       : setExperienceInfo((prev) => ({
           ...prev,
           [name]: type === "checkbox" ? checked : value,
-        }));
+        }));*/
   };
 
   const handleSubmit = async (e) => {
@@ -91,10 +125,15 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
           }, 1000);
           break;
         case _education:
+          const _dataEducation = {
+            institution: educationInfo.institution,
+            degree: educationInfo.degree,
+            year: educationInfo.start + "/" + educationInfo.end,
+          };
           response = await updateEducationProfile(
             token,
             idSelected,
-            educationInfo
+            _dataEducation
           );
           const edu = await getUserData(token);
           setLoading(false);
@@ -111,10 +150,18 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
           }, 2000);
           break;
         case _experience:
+          const _dataExperience = {
+            position: experienceInfo.position,
+            company: experienceInfo.company,
+            location: experienceInfo.location,
+            year: experienceInfo.start + "/" + experienceInfo.end,
+            current: experienceInfo.current,
+            description: experienceInfo.description,
+          };
           response = await updateExperienceProfile(
             token,
             idSelected,
-            experienceInfo
+            _dataExperience
           );
           const exper = await getUserData(token);
           setLoading(false);
@@ -133,7 +180,15 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
         case _intserest:
           if (formData.interests.length >= 5) {
             response = await updateInterestProfil(token, formData);
+            const _newIneterest = await getUserData(token);
             setLoading(false);
+            dispatch({
+              type: "UPDATE_USERDATA",
+              payload: {
+                ...userData,
+                interests: _newIneterest.data.userData.interests,
+              },
+            });
             setNotification({
               type: "success",
               message: response.data.message,
@@ -148,22 +203,8 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
               message: "Choose more than 5",
             });
           }
-          // dispatch({
-          //   type: "UPDATE_USERDATA",
-          //   payload: {
-          //     ...userData,
-          //     interests: interests.map((item) => {
-          //       for (let i = 0; i < formData.interests.length; i++) {
-          //         if (item._id === formData.interests[i]) {
-          //           return item;
-          //         } else {
-          //           continue;
-          //         }
-          //       }
-          //     }),
-          //   },
-          // });
 
+          console.log("after user interest");
           break;
 
         default:
@@ -174,11 +215,11 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
       }
     } catch (error) {
       setLoading(false);
-      console.log(error.response);
+      console.log("catch", error.response);
       error.response
         ? setNotification({
             type: "error",
-            message: error.response.data.message,
+            message: error.response.data,
           })
         : setNotification({ type: "error", message: "try later again" });
     }
@@ -213,7 +254,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
   }, []);
 
   return (
-    <div className="z-20 abso)lute fixed w-full inset-0 p-2 flex bg-black/50 text-gray-700 justify-center lg:backdrop-blur-xs">
+    <div className="z-20 abso)lute fixed w-full inset-0 pb-2 flex bg-black/50 text-gray-700 justify-center lg:backdrop-blur-xs">
       <div
         className={`bg-[#ffffff] z-20 border w-full sm:w-[65%] ${
           toUpdate !== _intserest ? "lg:w-[50%]" : "lg:w-[65%]"
@@ -221,11 +262,18 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
           toUpdate === _intro ||
           toUpdate === _experience ||
           toUpdate === _intserest
-            ? "h-[520px] sm:h-[540px] lg:h-[555px] pb-4"
-            : "h-[400px] sm:h-[420px] lg:h-[435px]"
-        } my-auto lg:mt-[30px] px-8 rounded-lg shadow-sm overflow-auto`}
+            ? `${
+                toUpdate !== _experience
+                  ? `p-4 ${
+                      toUpdate === _intserest &&
+                      "!p-0 !px-2 !lg:px-4 !pb-4 h-[635px] lg:h-auto"
+                    }`
+                  : "p-0 lg:px-[5px] sm:pb-1 h-[635px] lg:h-auto"
+              }`
+            : "pb-3"
+        } my-auto lg:mt-[30)px] px-8 rounded-lg shadow-sm overflow-auto sc)roll-auto`}
       >
-        <div className="text-center sticky top-0 pt-6 pb-2 bg-[#ffffff]">
+        <div className="text-center sticky top-0 pt-4 pb-2 mb-1 bg-[#ffffff]">
           <h1 className="text-2xl font-semibold text-gray-800">{`Edit ${toUpdate}`}</h1>
           <p className="text-sm text-gray-500 mt-1">
             {`Fill this inputs to Edit ${toUpdate}`}
@@ -346,35 +394,49 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                   />
                 </div>
               )}
-              {toUpdate !== _intserest && (
+              {toUpdate === _intro && (
                 <div className="flex flex-col mt-5">
                   <Label
-                    text={
-                      toUpdate === _intro
-                        ? "Adresse*"
-                        : toUpdate === _education && "Year*"
-                    }
+                    text="Adresse*"
                     className="text-sm font-normal text-gray-600 mb-1"
                   />
                   <Input
                     type="text"
-                    name={
-                      toUpdate === _intro
-                        ? "location"
-                        : toUpdate === _education
-                        ? "year"
-                        : toUpdate === _experience && "year"
-                    }
-                    value={
-                      toUpdate === _intro
-                        ? userInfo.location
-                        : toUpdate === _education
-                        ? educationInfo.year
-                        : toUpdate === _experience && experienceInfo.year
-                    }
+                    name="location"
+                    value={userInfo.location}
                     onChange={handleChange}
                     className="p-2 font-normal text-sm outline-2 rounded-xs "
                   />
+                </div>
+              )}
+              {(toUpdate === _education || toUpdate === _experience) && (
+                <div className="flex justify-between">
+                  <div className="flex flex-col mt-5 w-[47%]">
+                    <Label
+                      text="Start*"
+                      className="text-sm font-normal text-gray-600 mb-1"
+                    />
+                    <Input
+                      type="date"
+                      name="start"
+                      // value={dataInfo.year}
+                      onChange={handleChange}
+                      className="p-2  font-normal text-sm outline-2 rounded-xs "
+                    />
+                  </div>
+                  <div className="flex flex-col mt-5 w-[47%]">
+                    <Label
+                      text="End"
+                      className="text-sm font-normal text-gray-600 mb-1"
+                    />
+                    <Input
+                      type="date"
+                      name="end"
+                      // value={dataInfo.end}
+                      onChange={handleChange}
+                      className="p-2 font-normal text-sm outline-2 rounded-xs "
+                    />
+                  </div>
                 </div>
               )}
               {toUpdate === _intro && (
