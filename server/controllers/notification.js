@@ -44,6 +44,32 @@ const getUserNotifications = async (request,response) =>{
     }
 }
 
+const makeNotificationsSeen = async (request,response) =>{
+    try{
+        const userId = request.user.id;
+        const user = await User.findById(userId)
+
+        if(!user){
+            return response.status(404).json({
+                'message' : 'user not found'
+            })
+        }
+
+        await Notification.updateMany(
+            {user : userId, status : 'delivred'},
+            {$set : {status : 'seen'}}
+        )
+
+        return response.json({
+            'message' : 'notifications marked as seen'
+        })
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+}
+
 
 const deleteNotification = async (request,response) =>{
     try{
@@ -73,4 +99,4 @@ const deleteNotification = async (request,response) =>{
         })
     }
 }
-module.exports = {getUserNotifications,deleteNotification}
+module.exports = {getUserNotifications,makeNotificationsSeen,deleteNotification}

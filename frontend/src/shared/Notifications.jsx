@@ -3,12 +3,10 @@ import { SuggestionsModal } from "../components/App/Suggestions";
 import { ProfileStatus } from "../components/App/ProfileStatus";
 import { NotificationApp } from "../components/App/NotificationApp";
 import { NotificationsSkeleton } from "../components/skeletons/NotificationsSkeleton";
-import { deleteNotification, getUserNotifications } from "../services/notification";
+import { deleteNotification, getUserNotifications, makeNotificationsSeen } from "../services/notification";
 import { Button } from "../components/UI/Button";
 import { ArrowDownCircleIcon } from "@heroicons/react/24/solid";
-
-
-
+import { useDispatch } from "react-redux";
 const authService = import.meta.env.VITE_SERVER_URL;
 
 export const Notifications = () => {
@@ -21,6 +19,7 @@ export const Notifications = () => {
     const [lastPage,setLastPage] = useState(null)
     const [totalNotifications,setTotalNotifications] = useState(null)
     const [close,setClose] = useState(false)
+    const dispatch = useDispatch()
 
     const _getUserNotifications = async () =>{
         try{
@@ -48,6 +47,14 @@ export const Notifications = () => {
         }
     }
 
+    const _makeNotificationsSeen = async () =>{
+      const response = await makeNotificationsSeen(localStorage.getItem('token'));
+      console.log(response);
+      
+      if(response.status === 200){
+        dispatch({type:'notifiedTimes',payload:null})
+      }
+    }
     const _deleteNotification = async (notificationId) =>{
         setClose(false)
         const response = await deleteNotification(localStorage.getItem('token'),notificationId)
@@ -62,6 +69,10 @@ export const Notifications = () => {
     useEffect(() =>{
         _getUserNotifications()
     },[page])
+
+    useEffect(() =>{
+      _makeNotificationsSeen()
+    },[])
   const suggestions = [
     { sugName: "Ayoub Mhainid", sugHead: "UI/UX designer" },
     { sugName: "Soufiane Boukir", sugHead: "Go developer" },

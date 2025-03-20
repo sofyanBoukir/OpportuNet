@@ -2,15 +2,47 @@ const express = require("express");
 const dbConnect = require("./config/db");
 const cors = require("cors");
 require("dotenv").config();
+const http = require('http')
+const { Server } = require("socket.io");
+const { registerUser, users } = require("./sockets/connected-users");
+const getMissedNotifications = require("./sockets/missed-notifications");
 
 const app = express();
+const server = http.createServer(app);
+
+
+app.use(cors({
+  origin : process.env.FRONTEND_URL,
+  methods : ['GET','POST','PUT','DELETE']
+}));
+
+
+const io = new Server(server,{
+  cors :{
+    origin : process.env.FRONTEND_URL,
+    methods : ['GET','POST']
+  } 
+})
+
+
+io.on('connection',(socket) =>{
+  console.log('user connected ' + socket.id);
+
+  socket.on('registerUser',async (token) =>{
+    userId = registerUser(token,socket.id);
+    missedNotifications = await getMissedNotifications(userId);
+
+    if(missedNotifications.length > 0){
+      io.to(users[userId]).emit('missedNotifications',missedNotifications);
+    }
+  })
+
+  socket.on('disconnect',() =>{
+    console.log('user disconnected '+socket.id);
+  })
+})
 
 dbConnect();
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL,
-  })
-);
 
 app.use(express.json());
 
@@ -26,6 +58,9 @@ app.use("/comment",require("./routes/comment"));
 app.use("/notification",require("./routes/notification"))
 app.use("/saved",require("./routes/saved"));
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   console.log(`User service is running on port ${process.env.PORT}`);
 });
+
+
+module.exports = {io}

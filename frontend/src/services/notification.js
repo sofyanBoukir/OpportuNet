@@ -20,3 +20,12 @@ export const deleteNotification = async (token,notificationId) =>{
     });
     return response;
 }
+
+export const makeNotificationsSeen = async (token) =>{
+    const response = await axios.put(`${serverURL}/notification/makeNotificationsSeen`,null,{
+        headers : {
+            Authorization : `Bearer ${token}`
+        }
+    });
+    return response;
+}

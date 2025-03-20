@@ -17,7 +17,7 @@ const getSavedPosts = async (request,response) =>{
                                         select : 'content image',
                                         populate: {
                                             path: "user",
-                                            select: "name headLine profile_picture" // Select only necessary fields
+                                            select: "name headLine profile_picture"
                                         }
                                     })
 
