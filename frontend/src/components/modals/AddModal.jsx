@@ -24,18 +24,10 @@ export const AddModal = ({ toAdd, setOpen }) => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (type === "date") {
-      const _date = new Date(value);
-      setDataInfo((prev) => ({
-        ...prev,
-        [name]: `${_date.getMonth() + 1}-${_date.getFullYear()}`,
-      }));
-    } else {
-      setDataInfo((prev) => ({
-        ...prev,
-        [name]: type === "checkbox" ? checked : value,
-      }));
-    }
+    setDataInfo((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const token = localStorage.getItem("token");
@@ -54,10 +46,16 @@ export const AddModal = ({ toAdd, setOpen }) => {
 
       switch (toAdd) {
         case _education:
+          const startEducation = new Date(dataInfo.start);
+          const endEducation = new Date(dataInfo.end);
           const _dataEducation = {
             institution: dataInfo.institution,
             degree: dataInfo.degree,
-            year: dataInfo.start + "/" + dataInfo.end,
+            year: `${
+              startEducation.getMonth() + 1
+            }-${startEducation.getFullYear()} / ${
+              endEducation.getMonth() + 1
+            }-${endEducation.getFullYear()}`,
           };
           response = await addEducationProfile(token, _dataEducation);
           const eudRes = await getUserData(token);
@@ -75,14 +73,25 @@ export const AddModal = ({ toAdd, setOpen }) => {
           }, 1000);
           break;
         case _experience:
+          const startExperience = new Date(dataInfo.start);
+          const endExperience = new Date(dataInfo.end);
           const _dataExperience = {
             position: dataInfo.position,
             company: dataInfo.company,
             location: dataInfo.location,
-            year: dataInfo.start + "/" + dataInfo.end,
             current: dataInfo.current,
+            year: `${
+              startExperience.getMonth() + 1
+            }-${startExperience.getFullYear()} / ${
+              dataInfo.current
+                ? "Current"
+                : `${
+                    endExperience.getMonth() + 1
+                  }-${endExperience.getFullYear()}`
+            }`,
             description: dataInfo.description,
           };
+
           response = await addExperienceProfile(token, _dataExperience);
           const expRes = await getUserData(token);
           setLoading(false);
@@ -223,41 +232,8 @@ export const AddModal = ({ toAdd, setOpen }) => {
                     className="p-2 font-normal text-sm outline-2 rounded-xs "
                   />
                 </div>
-                <div className="flex justify-between">
-                  <div className="flex flex-col mt-5 w-[47%]">
-                    <Label
-                      text="Start*"
-                      className="text-sm font-normal text-gray-600 mb-1"
-                    />
-                    <Input
-                      type="date"
-                      name="start"
-                      // value={dataInfo.year}
-                      onChange={handleChange}
-                      className="p-2  font-normal text-sm outline-2 rounded-xs "
-                    />
-                  </div>
-                  <div className="flex flex-col mt-5 w-[47%]">
-                    <Label
-                      text="End"
-                      className="text-sm font-normal text-gray-600 mb-1"
-                    />
-                    <Input
-                      type="date"
-                      name="end"
-                      // value={dataInfo.end}
-                      onChange={handleChange}
-                      className="p-2 font-normal text-sm outline-2 rounded-xs "
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-
-            {(toAdd === _experience || toAdd === _about) && (
-              <>
                 {toAdd === _experience && (
-                  <div className="flex items-center mt-5">
+                  <div className="flex items-center mt-5 mb-0">
                     <Label
                       text="Current"
                       className="text-sm font-normal text-gray-600 mb-1 mr-2"
@@ -271,38 +247,70 @@ export const AddModal = ({ toAdd, setOpen }) => {
                     />
                   </div>
                 )}
-                <div className="flex flex-col mt-5">
-                  <Label
-                    text={
-                      toAdd === _experience
-                        ? "Description"
-                        : toAdd === _about && "About"
-                    }
-                    className="text-sm font-normal text-gray-600 mb-1"
-                  />
-
-                  <Textarea
-                    name={
-                      toAdd === _experience
-                        ? "description"
-                        : toAdd === _about && "about"
-                    }
-                    rows="8"
-                    placeholder={
-                      toAdd === _experience
-                        ? "description"
-                        : toAdd === _about && "about"
-                    }
-                    value={
-                      toAdd === _experience
-                        ? dataInfo.description
-                        : toAdd === _about && dataInfo.about
-                    }
-                    onChange={handleChange}
-                    className="p-3 font-normal text-sm outline-2 rounded-xs "
-                  />
+                <div className="flex justify-between mt-5">
+                  <div className="flex flex-col  w-[47%]">
+                    <Label
+                      text="Start*"
+                      className="text-sm font-normal text-gray-600 mb-1"
+                    />
+                    <Input
+                      type="date"
+                      name="start"
+                      value={dataInfo.start}
+                      onChange={handleChange}
+                      className="p-2  font-normal text-sm outline-2 rounded-xs "
+                    />
+                  </div>
+                  <div className="flex flex-col w-[47%]">
+                    <Label
+                      text="End"
+                      className="text-sm font-normal text-gray-600 mb-1"
+                    />
+                    <Input
+                      type={dataInfo.current ? "text" : "date"}
+                      name="end"
+                      value={dataInfo.current ? "Current" : dataInfo.end}
+                      onChange={handleChange}
+                      className="p-2 font-normal text-sm outline-2 rounded-xs "
+                      disabled={dataInfo.current}
+                    />
+                  </div>
                 </div>
               </>
+            )}
+
+            {(toAdd === _experience || toAdd === _about) && (
+              <div className="flex flex-col mt-5">
+                <Label
+                  text={
+                    toAdd === _experience
+                      ? "Description"
+                      : toAdd === _about && "About"
+                  }
+                  className="text-sm font-normal text-gray-600 mb-1"
+                />
+
+                <Textarea
+                  name={
+                    toAdd === _experience
+                      ? "description"
+                      : toAdd === _about && "about"
+                  }
+                  rows="8"
+                  placeholder={
+                    toAdd === _experience
+                      ? "description"
+                      : toAdd === _about && "about"
+                  }
+                  value={
+                    toAdd === _experience
+                      ? dataInfo.description
+                      : toAdd === _about && dataInfo.about
+                  }
+                  onChange={handleChange}
+                  className="p-3 font-normal text-sm outline-2 rounded-xs "
+                />
+              </div>
             )}
           </div>
 

@@ -52,47 +52,16 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
         [name]: type === "file" ? files[0] : value,
       }));
     } else if (toUpdate === _education) {
-      if (type === "date") {
-        const _date = new Date(value);
-        setEducationInfo((prev) => ({
-          ...prev,
-          [name]: `${_date.getMonth() + 1}-${_date.getFullYear()}`,
-        }));
-      } else {
-        setEducationInfo((prev) => ({
-          ...prev,
-          [name]: value,
-        }));
-      }
+      setEducationInfo((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
     } else {
-      if (type === "date") {
-        const _date = new Date(value);
-        setExperienceInfo((prev) => ({
-          ...prev,
-          [name]: `${_date.getMonth() + 1}-${_date.getFullYear()}`,
-        }));
-      } else {
-        setExperienceInfo((prev) => ({
-          ...prev,
-          [name]: type === "checkbox" ? checked : value,
-        }));
-      }
+      setExperienceInfo((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      }));
     }
-    /*
-    toUpdate === _intro || toUpdate === _about
-      ? setUserInfo((prev) => ({
-          ...prev,
-          [name]: type === "file" ? files[0] : value,
-        }))
-      : toUpdate === _education
-      ? setEducationInfo((prev) => ({
-          ...prev,
-          [name]: value,
-        }))
-      : setExperienceInfo((prev) => ({
-          ...prev,
-          [name]: type === "checkbox" ? checked : value,
-        }));*/
   };
 
   const handleSubmit = async (e) => {
@@ -125,10 +94,16 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
           }, 1000);
           break;
         case _education:
+          const startEducation = new Date(educationInfo.start);
+          const endEducation = new Date(educationInfo.end);
           const _dataEducation = {
             institution: educationInfo.institution,
             degree: educationInfo.degree,
-            year: educationInfo.start + "/" + educationInfo.end,
+            year: `${
+              startEducation.getMonth() + 1
+            }-${startEducation.getFullYear()} / ${
+              endEducation.getMonth() + 1
+            }-${endEducation.getFullYear()}`,
           };
           response = await updateEducationProfile(
             token,
@@ -150,12 +125,22 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
           }, 2000);
           break;
         case _experience:
+          const startExperience = new Date(experienceInfo.start);
+          const endExperience = new Date(experienceInfo.end);
           const _dataExperience = {
             position: experienceInfo.position,
             company: experienceInfo.company,
             location: experienceInfo.location,
-            year: experienceInfo.start + "/" + experienceInfo.end,
             current: experienceInfo.current,
+            year: `${
+              startExperience.getMonth() + 1
+            }-${startExperience.getFullYear()} / ${
+              experienceInfo.current
+                ? "Current"
+                : `${
+                    endExperience.getMonth() + 1
+                  }-${endExperience.getFullYear()}`
+            }`,
             description: experienceInfo.description,
           };
           response = await updateExperienceProfile(
@@ -409,35 +394,59 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                   />
                 </div>
               )}
+
               {(toUpdate === _education || toUpdate === _experience) && (
-                <div className="flex justify-between">
-                  <div className="flex flex-col mt-5 w-[47%]">
-                    <Label
-                      text="Start*"
-                      className="text-sm font-normal text-gray-600 mb-1"
-                    />
-                    <Input
-                      type="date"
-                      name="start"
-                      // value={dataInfo.year}
-                      onChange={handleChange}
-                      className="p-2  font-normal text-sm outline-2 rounded-xs "
-                    />
+                <>
+                  {toUpdate === _experience && (
+                    <div className="flex items-center mt-5">
+                      <Label
+                        text="Current"
+                        className="text-sm font-normal text-gray-600 mb-1 mr-2"
+                      />
+                      <input
+                        type="checkbox"
+                        name="current"
+                        checked={experienceInfo.current}
+                        onChange={handleChange}
+                        className="p-2 font-normal text-sm rounded-xs "
+                        // required={false}
+                      />
+                    </div>
+                  )}
+                  <div className="flex justify-between">
+                    <div className="flex flex-col mt-5 w-[47%]">
+                      <Label
+                        text="Start*"
+                        className="text-sm font-normal text-gray-600 mb-1"
+                      />
+                      <Input
+                        type="date"
+                        name="start"
+                        value={experienceInfo.start}
+                        onChange={handleChange}
+                        className="p-2  font-normal text-sm outline-2 rounded-xs "
+                      />
+                    </div>
+                    <div className="flex flex-col mt-5 w-[47%]">
+                      <Label
+                        text="End"
+                        className="text-sm font-normal text-gray-600 mb-1"
+                      />
+                      <Input
+                        type={experienceInfo.current ? "text" : "date"}
+                        name="end"
+                        value={
+                          experienceInfo.current
+                            ? "Current"
+                            : experienceInfo.end
+                        }
+                        onChange={handleChange}
+                        className="p-2 font-normal text-sm outline-2 rounded-xs "
+                        disabled={experienceInfo.current}
+                      />
+                    </div>
                   </div>
-                  <div className="flex flex-col mt-5 w-[47%]">
-                    <Label
-                      text="End"
-                      className="text-sm font-normal text-gray-600 mb-1"
-                    />
-                    <Input
-                      type="date"
-                      name="end"
-                      // value={dataInfo.end}
-                      onChange={handleChange}
-                      className="p-2 font-normal text-sm outline-2 rounded-xs "
-                    />
-                  </div>
-                </div>
+                </>
               )}
               {toUpdate === _intro && (
                 <div className="flex flex-col mt-5">
@@ -456,37 +465,21 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                 </div>
               )}
               {toUpdate === _experience && (
-                <>
-                  <div className="flex items-center mt-5">
-                    <Label
-                      text="Current"
-                      className="text-sm font-normal text-gray-600 mb-1 mr-2"
-                    />
-                    <input
-                      type="checkbox"
-                      name="current"
-                      checked={experienceInfo.current}
-                      onChange={handleChange}
-                      className="p-2 font-normal text-sm rounded-xs "
-                      // required={false}
-                    />
-                  </div>
-                  <div className="flex flex-col mt-5">
-                    <Label
-                      text="Description"
-                      className="text-sm font-normal text-gray-600 mb-1"
-                    />
+                <div className="flex flex-col mt-5">
+                  <Label
+                    text="Description"
+                    className="text-sm font-normal text-gray-600 mb-1"
+                  />
 
-                    <Textarea
-                      name="description"
-                      rows="8"
-                      placeholder="description"
-                      value={experienceInfo.description}
-                      onChange={handleChange}
-                      className="p-3 font-normal text-sm outline-2 rounded-xs "
-                    />
-                  </div>
-                </>
+                  <Textarea
+                    name="description"
+                    rows="8"
+                    placeholder="description"
+                    value={experienceInfo.description}
+                    onChange={handleChange}
+                    className="p-3 font-normal text-sm outline-2 rounded-xs "
+                  />
+                </div>
               )}
               {toUpdate === _intserest && (
                 <div>

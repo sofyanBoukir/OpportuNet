@@ -18,6 +18,7 @@ import { ERROR_MESSAGES } from "../constants/Errors";
 import { PostSkeleton } from "../components/skeletons/PostSkeleton";
 import { deletePost } from "../services/post";
 import { Notification } from "../components/UI/Notification";
+import { DeleteModal } from "../components/modals/DeleteModal";
 
 export const Profil = () => {
   const { userData } = AppSelector();
@@ -36,6 +37,8 @@ export const Profil = () => {
   const [totalPosts, setTotalPosts] = useState(0);
   const [error, setError] = useState("");
   const [postId, setPostId] = useState(null);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
 
   const [selectedId, setSelectedId] = useState(null);
   const loadingRef = useRef(false);
@@ -116,32 +119,28 @@ export const Profil = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [page]);
 
-  useEffect(() => {
-    const _deletePost = async () => {
-      setNotification(null);
-      try {
-        const response = await deletePost(
-          localStorage.getItem("token"),
-          postId
-        );
-        const newPosts = postsList.filter((item) => item._id !== postId);
-        setPostsList(newPosts);
-        setNotification({ type: "success", message: response.data.message });
-      } catch (error) {
-        error.response
-          ? setNotification({
-              type: "error",
-              message: error.response.data.message,
-            })
-          : setNotification({
-              type: "error",
-              message: ERROR_MESSAGES.TRY_AGAIN,
-            });
-      }
-    };
-
-    postId && _deletePost();
-  }, [postId]);
+  const _deletePost = async () => {
+    setNotification(null);
+    setLoadingDelete(true);
+    try {
+      const response = await deletePost(localStorage.getItem("token"), postId);
+      setLoadingDelete(false);
+      setOpenDelete(false);
+      setNotification({ type: "success", message: response.data.message });
+      const newPosts = postsList.filter((item) => item._id !== postId);
+      setPostsList(newPosts);
+    } catch (error) {
+      error.response
+        ? setNotification({
+            type: "error",
+            message: error.response.data.message,
+          })
+        : setNotification({
+            type: "error",
+            message: ERROR_MESSAGES.TRY_AGAIN,
+          });
+    }
+  };
 
   const dataInfo = {
     posts: [
@@ -334,6 +333,7 @@ export const Profil = () => {
                       post={post}
                       showIcon={showIcon}
                       postSelected={setPostId}
+                      openDelete={setOpenDelete}
                     />
                   );
                 })
@@ -357,6 +357,14 @@ export const Profil = () => {
           />
         )}
         {showAddModal && <AddModal toAdd={toAdd} setOpen={setShowAddModal} />}
+        {openDelete && (
+          <DeleteModal
+            setOpen={setOpenDelete}
+            deleteItem={_deletePost}
+            itemType="post"
+            loading={loadingDelete}
+          />
+        )}
         {notification && (
           <Notification
             type={notification.type}
