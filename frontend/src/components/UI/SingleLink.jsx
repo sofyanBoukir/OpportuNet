@@ -1,9 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import React from "react"
+import { AppSelector } from "../../selectors/AppSelector";
 
 export const SingleLink = ({ link, svg, text }) => {
   const navigate = useNavigate();
   const currentPath = window.location.pathname;
+  const { notifiedTimes } = AppSelector()
+
+  
   //   const [showBorder, setShowBorder] = useState(false);
   //   const refDiv = useRef("");
 
@@ -28,7 +32,10 @@ export const SingleLink = ({ link, svg, text }) => {
         }`}
       >
         {
-          (text === 'Notifications' || text === 'Messaging') && <div className="w-5 h-5 text-center text-white bg-red-600 absolute rounded-full top-[-8px] right-[-10px] text-sm">1</div>
+          // text === 'Messaging' && <div className="w-5 h-5 text-center text-white bg-red-600 absolute rounded-full top-[-7px] right-[-10px] text-sm">1</div>
+        }
+        {
+          text === 'Notifications' &&  notifiedTimes !== 0 && <div className="w-5 h-5 text-center text-white bg-red-600 absolute flex items-center justify-center rounded-full top-[-7px] right-[-10px] text-[13px]">{notifiedTimes > 9 ? "+9" : notifiedTimes }</div>
         }
         {svg}
       </div>

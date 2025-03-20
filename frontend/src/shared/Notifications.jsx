@@ -3,12 +3,10 @@ import { SuggestionsModal } from "../components/App/Suggestions";
 import { ProfileStatus } from "../components/App/ProfileStatus";
 import { NotificationApp } from "../components/App/NotificationApp";
 import { NotificationsSkeleton } from "../components/skeletons/NotificationsSkeleton";
-import { deleteNotification, getUserNotifications } from "../services/notification";
+import { deleteNotification, getUserNotifications, makeNotificationsSeen } from "../services/notification";
 import { Button } from "../components/UI/Button";
 import { ArrowDownCircleIcon } from "@heroicons/react/24/solid";
-
-
-
+import { useDispatch } from "react-redux";
 const authService = import.meta.env.VITE_SERVER_URL;
 
 export const Notifications = () => {
@@ -20,7 +18,9 @@ export const Notifications = () => {
     const loadingRef = useRef(false)
     const [lastPage,setLastPage] = useState(null)
     const [totalNotifications,setTotalNotifications] = useState(null)
-    const [close,setClose] = useState(false)
+    const [close,setClose] = useState(false);
+    const [notificationsDelivred,setNotificationsDelivred] = useState(false)
+    const dispatch = useDispatch()
 
     const _getUserNotifications = async () =>{
         try{
@@ -42,11 +42,21 @@ export const Notifications = () => {
                 if(response.data.notifications){
                     setNotifications((prevNotifications) => [...prevNotifications, ...response.data.notifications]);
                 }
+                setNotificationsDelivred(true)
             }
         }catch(err){
             setErrMessage(err.response.data.message)
         }
     }
+
+    const _makeNotificationsSeen = async () =>{
+      const response = await makeNotificationsSeen(localStorage.getItem('token'));
+      
+      if(response.status === 200){
+        dispatch({type:'UPDATE_NOTIFIED_TIMES',payload:0})
+      }
+    }
+
 
     const _deleteNotification = async (notificationId) =>{
         setClose(false)
@@ -62,6 +72,10 @@ export const Notifications = () => {
     useEffect(() =>{
         _getUserNotifications()
     },[page])
+
+    useEffect(() =>{
+      notificationsDelivred && _makeNotificationsSeen()
+    },[notificationsDelivred])
   const suggestions = [
     { sugName: "Ayoub Mhainid", sugHead: "UI/UX designer" },
     { sugName: "Soufiane Boukir", sugHead: "Go developer" },
