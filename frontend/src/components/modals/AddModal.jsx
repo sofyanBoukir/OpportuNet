@@ -24,11 +24,18 @@ export const AddModal = ({ toAdd, setOpen }) => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-
-    setDataInfo((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    if (type === "date") {
+      const _date = new Date(value);
+      setDataInfo((prev) => ({
+        ...prev,
+        [name]: `${_date.getMonth() + 1}-${_date.getFullYear()}`,
+      }));
+    } else {
+      setDataInfo((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      }));
+    }
   };
 
   const token = localStorage.getItem("token");
@@ -47,7 +54,12 @@ export const AddModal = ({ toAdd, setOpen }) => {
 
       switch (toAdd) {
         case _education:
-          response = await addEducationProfile(token, dataInfo);
+          const _dataEducation = {
+            institution: dataInfo.institution,
+            degree: dataInfo.degree,
+            year: dataInfo.start + "/" + dataInfo.end,
+          };
+          response = await addEducationProfile(token, _dataEducation);
           const eudRes = await getUserData(token);
           setLoading(false);
           dispatch({
@@ -63,7 +75,15 @@ export const AddModal = ({ toAdd, setOpen }) => {
           }, 1000);
           break;
         case _experience:
-          response = await addExperienceProfile(token, dataInfo);
+          const _dataExperience = {
+            position: dataInfo.position,
+            company: dataInfo.company,
+            location: dataInfo.location,
+            year: dataInfo.start + "/" + dataInfo.end,
+            current: dataInfo.current,
+            description: dataInfo.description,
+          };
+          response = await addExperienceProfile(token, _dataExperience);
           const expRes = await getUserData(token);
           setLoading(false);
           dispatch({
@@ -115,16 +135,14 @@ export const AddModal = ({ toAdd, setOpen }) => {
       <div
         className={`bg-[#ffffff] z-20 border w-full sm:w-[65%] lg:w-[50%] ${
           toAdd === _experience
-            ? "h-[520px]  sm:h-[540px] lg:h-auto pb-4"
-            : `${toAdd !== _skill ? "h-[400px]" : "h-auto p-4"} ${
-                toAdd !== _skill && "sm:h-[420px] lg:h-[435px]"
-              }`
-        } my-auto) lg:mt-[30)px] px-8 rounded-lg shadow-sm overflow-auto`}
+            ? "p-0 lg:px-[32px] sm:pb-1 h-[635px] lg:h-auto"
+            : " my-auto lg:p-4 pb-4 "
+        } my-auto) lg:mt-[30)px] px-)8 rounded-lg shadow-sm overflow-auto`}
       >
-        <div className="text-center sticky top-0 pt-2 pb-1 bg-[#ffffff]">
-          <h1 className="text-2xl font-semibold text-gray-800">{`Edit ${toAdd}`}</h1>
+        <div className="text-center sticky top-0 pt-2 pb-1 mb-1 bg-[#ffffff]">
+          <h1 className="text-2xl font-semibold text-gray-800">{`Add ${toAdd}`}</h1>
           <p className="text-sm text-gray-500 mt-1">
-            {`Fill this inputs to Edit ${toAdd}`}
+            {`Fill this inputs to Add ${toAdd}`}
           </p>
         </div>
         <form onSubmit={handleSubmit}>
@@ -204,33 +222,35 @@ export const AddModal = ({ toAdd, setOpen }) => {
                     onChange={handleChange}
                     className="p-2 font-normal text-sm outline-2 rounded-xs "
                   />
-                </div>{" "}
-                <div className="flex flex-col mt-5">
-                  <Label
-                    text="Year*"
-                    className="text-sm font-normal text-gray-600 mb-1"
-                  />
-                  <Input
-                    type="text"
-                    name="year"
-                    value={dataInfo.year}
-                    onChange={handleChange}
-                    className="p-2 font-normal text-sm outline-2 rounded-xs "
-                  />
                 </div>
-                {/* <div className="flex flex-col mt-5">
-                  <Label
-                    text="End*"
-                    className="text-sm font-normal text-gray-600 mb-1"
-                  />
-                  <Input
-                    type="date"
-                    name="end"
-                    value={dataInfo.end}
-                    onChange={handleChange}
-                    className="p-2 font-normal text-sm outline-2 rounded-xs "
-                  />
-                </div> */}
+                <div className="flex justify-between">
+                  <div className="flex flex-col mt-5 w-[47%]">
+                    <Label
+                      text="Start*"
+                      className="text-sm font-normal text-gray-600 mb-1"
+                    />
+                    <Input
+                      type="date"
+                      name="start"
+                      // value={dataInfo.year}
+                      onChange={handleChange}
+                      className="p-2  font-normal text-sm outline-2 rounded-xs "
+                    />
+                  </div>
+                  <div className="flex flex-col mt-5 w-[47%]">
+                    <Label
+                      text="End"
+                      className="text-sm font-normal text-gray-600 mb-1"
+                    />
+                    <Input
+                      type="date"
+                      name="end"
+                      // value={dataInfo.end}
+                      onChange={handleChange}
+                      className="p-2 font-normal text-sm outline-2 rounded-xs "
+                    />
+                  </div>
+                </div>
               </>
             )}
 
@@ -245,7 +265,7 @@ export const AddModal = ({ toAdd, setOpen }) => {
                     <input
                       type="checkbox"
                       name="current"
-                      checked={userInfo.current}
+                      checked={dataInfo.current}
                       onChange={handleChange}
                       className="p-2 font-normal text-sm rounded-xs "
                     />
@@ -275,8 +295,8 @@ export const AddModal = ({ toAdd, setOpen }) => {
                     }
                     value={
                       toAdd === _experience
-                        ? userInfo.description
-                        : toAdd === _about && userInfo.about
+                        ? dataInfo.description
+                        : toAdd === _about && dataInfo.about
                     }
                     onChange={handleChange}
                     className="p-3 font-normal text-sm outline-2 rounded-xs "
@@ -286,7 +306,7 @@ export const AddModal = ({ toAdd, setOpen }) => {
             )}
           </div>
 
-          <div className="flex justify-end gap-4 mt-7">
+          <div className="flex justify-end mr-4 gap-4 mt-7">
             <Button
               type="button"
               text="Cancel"
