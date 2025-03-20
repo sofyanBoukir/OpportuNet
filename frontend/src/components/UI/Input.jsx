@@ -1,7 +1,7 @@
-import React from "react"
-
+import React from "react";
 
 export const Input = ({
+  disabled,
   type,
   name,
   placeholder,
@@ -10,10 +10,11 @@ export const Input = ({
   required = true,
   maxLength,
   className,
-  onClick
+  onClick,
 }) => {
   return (
     <input
+      disabled={disabled}
       type={type}
       name={name}
       placeholder={placeholder}

@@ -119,7 +119,6 @@ export const Profil = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [page]);
 
-  // useEffect(() => {
   const _deletePost = async () => {
     setNotification(null);
     setLoadingDelete(true);
@@ -142,9 +141,6 @@ export const Profil = () => {
           });
     }
   };
-
-  //   postId && _deletePost();
-  // }, [postId]);
 
   const dataInfo = {
     posts: [
