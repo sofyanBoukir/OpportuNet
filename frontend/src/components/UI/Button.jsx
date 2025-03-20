@@ -19,7 +19,7 @@ export const Button = ({
       } font-semibold ${rounded ? rounded : 'rounded-md'} relative px-3 h-9 flex items-center duration-200 justify-center text-md ${className}`}
       disabled={loading ? loading : disabled}
     >
-      {loading ? <ExtraLoader /> : text}
+      {loading ? <ExtraLoader />  : text}
     </button>
   );
 };
