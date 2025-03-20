@@ -18,7 +18,8 @@ export const Notifications = () => {
     const loadingRef = useRef(false)
     const [lastPage,setLastPage] = useState(null)
     const [totalNotifications,setTotalNotifications] = useState(null)
-    const [close,setClose] = useState(false)
+    const [close,setClose] = useState(false);
+    const [notificationsDelivred,setNotificationsDelivred] = useState(false)
     const dispatch = useDispatch()
 
     const _getUserNotifications = async () =>{
@@ -41,6 +42,7 @@ export const Notifications = () => {
                 if(response.data.notifications){
                     setNotifications((prevNotifications) => [...prevNotifications, ...response.data.notifications]);
                 }
+                setNotificationsDelivred(true)
             }
         }catch(err){
             setErrMessage(err.response.data.message)
@@ -49,12 +51,13 @@ export const Notifications = () => {
 
     const _makeNotificationsSeen = async () =>{
       const response = await makeNotificationsSeen(localStorage.getItem('token'));
-      console.log(response);
       
       if(response.status === 200){
-        dispatch({type:'notifiedTimes',payload:null})
+        dispatch({type:'UPDATE_NOTIFIED_TIMES',payload:null})
       }
     }
+
+
     const _deleteNotification = async (notificationId) =>{
         setClose(false)
         const response = await deleteNotification(localStorage.getItem('token'),notificationId)
@@ -71,8 +74,8 @@ export const Notifications = () => {
     },[page])
 
     useEffect(() =>{
-      _makeNotificationsSeen()
-    },[])
+      notificationsDelivred && _makeNotificationsSeen()
+    },[notificationsDelivred])
   const suggestions = [
     { sugName: "Ayoub Mhainid", sugHead: "UI/UX designer" },
     { sugName: "Soufiane Boukir", sugHead: "Go developer" },

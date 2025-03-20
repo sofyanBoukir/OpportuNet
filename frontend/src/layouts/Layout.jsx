@@ -24,6 +24,7 @@ export const Layout = () => {
   );
 
   const dispatch = useDispatch()
+  const { notifiedTimes } = AppSelector();
 
   useEffect(() => {
     if (darkMode) {
@@ -50,6 +51,12 @@ export const Layout = () => {
 
       socket.on('missedNotifications',(missedNotifications) =>{
         dispatch({type:"UPDATE_NOTIFIED_TIMES",payload:missedNotifications.length})
+      })
+
+      socket.on('newNotification',(newNotification) =>{
+        dispatch({type:"UPDATE_NOTIFIED_TIMES",payload:notifiedTimes+1})
+        console.log(notifiedTimes);
+        console.log('notified');
       })
     }
 

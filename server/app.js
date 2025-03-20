@@ -6,6 +6,8 @@ const http = require('http')
 const { Server } = require("socket.io");
 const { registerUser, users } = require("./sockets/connected-users");
 const getMissedNotifications = require("./sockets/missed-notifications");
+const eventListennerOnNotificationModel = require("./sockets/real-time-notifications");
+const { initialSocket } = require("./sockets/socket");
 
 const app = express();
 const server = http.createServer(app);
@@ -17,31 +19,7 @@ app.use(cors({
 }));
 
 
-const io = new Server(server,{
-  cors :{
-    origin : process.env.FRONTEND_URL,
-    methods : ['GET','POST']
-  } 
-})
-
-
-io.on('connection',(socket) =>{
-  console.log('user connected ' + socket.id);
-
-  socket.on('registerUser',async (token) =>{
-    userId = registerUser(token,socket.id);
-    missedNotifications = await getMissedNotifications(userId);
-
-    if(missedNotifications.length > 0){
-      io.to(users[userId]).emit('missedNotifications',missedNotifications);
-    }
-  })
-
-  socket.on('disconnect',() =>{
-    console.log('user disconnected '+socket.id);
-  })
-})
-
+const io = initialSocket(server);
 dbConnect();
 
 app.use(express.json());
@@ -63,4 +41,4 @@ server.listen(process.env.PORT, () => {
 });
 
 
-module.exports = {io}
+module.exports = { io }

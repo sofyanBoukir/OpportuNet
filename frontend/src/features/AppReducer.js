@@ -2,7 +2,7 @@ const appState = {
   userData: { name: "said", role: "candidate" },
   // isMessaged: false,
   // isNotified: false,
-  notifiedTimes : null,
+  notifiedTimes : 0,
   istheme: "light",
   skills: [],
   interests: [],

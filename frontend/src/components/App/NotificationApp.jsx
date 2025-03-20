@@ -17,6 +17,7 @@ export const NotificationApp = ({notification,deleteNotification,close}) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  
 
   useEffect(() => {
     close && handleClose()

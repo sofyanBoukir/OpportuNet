@@ -1,7 +1,8 @@
-const Comment = require("../models/Comment");
 const Notification = require("../models/Notification");
 const Post = require("../models/Post");
 const User = require("../models/User");
+const notifyOnlineUser = require("../sockets/real-time-notifications");
+const { getIO } = require("../sockets/socket");
 
 
 const getPost = async (request,response) =>{
@@ -48,20 +49,25 @@ const addPost = async (request,response) =>{
         })
 
         await newPost.save();
+        const io = getIO();
         if(mentionsIds){
             const notifications = mentionsIds.map((mentionId) => {
-                return new Notification({
+                const notification = new Notification({
                     user: mentionId,
                     from_user: userId,
                     post: newPost._id,
                     message: 'Mentioned you in a post',
                 });
+                notifyOnlineUser(io,mentionId,notification)
+                return notification;
             });
+
             await Notification.insertMany(notifications);
             return response.json({
                 'message' : 'Posted successfully!'
             })
         }
+
         return response.json({
             'message' : 'Posted successfully!'
         })
@@ -103,44 +109,6 @@ const deletePost = async (request,response) =>{
         })
     }
 }
-
-// const alreadyLiked = async (request,response) =>{
-//     try{
-
-//         const userId = request.user.id;
-//         const { postId } = request.params;
-//         const user = await User.findById(userId)
-        
-//         if(!user){
-//             return response.status(404).json({
-//                 'message' : 'user not found'
-//             })
-//         }
-
-//         const post = await Post.findById(postId);
-//         if(!post){
-//             return response.status(404).json({
-//                 'message' : 'Post not found'
-//             })
-//         }
-
-//         const alreadyLiked = await Post.findOne({likes:{$in:userId}});
-//         if(alreadyLiked){
-//             return response.json({
-//                 'liked' : true
-//             })
-//         }else{
-//             return response.json({
-//                 'liked' : false
-//             })
-//         }
-
-//     }catch(err){
-//         return response.status(500).json({
-//             'message' : err.message
-//         })
-//     }
-// }
 
 const toggleLike = async (request,response) =>{
     try{

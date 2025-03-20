@@ -12,6 +12,8 @@ const registerUser = (token,socketId) =>{
         
         users[userId] = socketId;
 
+        console.log('user ' + userId + ' is now online') ;
+        
         return userId;
     }catch(err){
         return response.status(500).json({
