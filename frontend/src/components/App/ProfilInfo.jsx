@@ -2,6 +2,9 @@ import coverProfil from "../../../public/images/coverProfil.png";
 import ProfilImg from "../../../public/images/profilDefault.png";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import { Follow } from "../UI/Follow";
+import { UserPlusIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
+import { Follows } from "../modals/Follows";
 
 const serverURL = import.meta.env.VITE_SERVER_URL;
 
@@ -15,7 +18,9 @@ export const ProfilInfoModal = ({
     backgroundImage: `url(${coverProfil})`,
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
-  };
+  };  
+  
+  const [toView,setToView] = useState(null)
   return (
     <div className="bg-white w-full lg:w-[89%] pb-[1px] lg:ml-[15%] relative lg:rounded-md z-15">
       <div
@@ -55,22 +60,25 @@ export const ProfilInfoModal = ({
           {userData.webSite}
         </a>
         <div className="flex gap-2">
-          <div className="border-2 border-[#0A66C2] px-2 rounded-full mb-2 mt-3">
-            <span className="text-[#0A66C2] font-semibold cursor-pointer">
-              {userData.followers ? userData.followers : "103"} followers
+          <div className="border-2 border-[#0A66C2] px-2 py-0.5 rounded-full mb-2 mt-3">
+            <span className="text-[#0A66C2] font-semibold cursor-pointer" onClick={() => setToView('followers')}>
+              {userData.followers ? userData.followers?.length : "103"} followers
             </span>
           </div>
-          <div className="border-2 border-[#0A66C2] px-2 rounded-full mb-2 mt-3">
-            <span className="text-[#0A66C2] font-semibold cursor-pointer">
-              {userData.followers ? userData.followers : "22"} followings
+          <div className="border-2 border-[#0A66C2] px-2 py-0.5 rounded-full mb-2 mt-3">
+            <span className="text-[#0A66C2] font-semibold cursor-pointer" onClick={() => setToView('following')}>
+              {userData.followers ? userData.following?.length : "22"} following
             </span>
           </div>
           {!showIcon && (
             <Follow
-              text="follow"
-              className="bg-[#0A66C2] text-white hover:bg-blue-900 px-7 rounded-full mb-2 mt-3"
+              userId={userData._id}
+              className="bg-[#0A66C2] text-white w-[15%] py-0.5 hover:bg-blue-900 px-7 rounded-full mb-2 mt-3"
             />
           )}
+          {
+            toView && <Follows toView={toView} setToView={setToView} />
+          }
         </div>
       </div>
     </div>

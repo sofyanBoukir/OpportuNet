@@ -10,7 +10,7 @@ export const SuggestionsModal = ({ suggestionList }) => {
   return (
     <div>
       {!loading && (
-        <div className="p-3 bg-white w-full lg:w-full lg:rounded-lg z-10">
+        <div className="p-3 bg-white w-full lg:w-full lg:rounded-lg">
           <h1 className="text-xl font-semibold">People you may know</h1>
           <span className="text-gray-500">Based on your interests</span>
           {suggestionList.map((item) => (
@@ -31,7 +31,7 @@ export const SuggestionsModal = ({ suggestionList }) => {
                   type={"text"}
                   text={"follow"}
                   className={
-                    "bg-inherit hover:bg-gray-100 duration-200 rounded-full font-semibold border-2 border-gray-500 text-gray-600"
+                    "bg-inherit hover:bg-gray-100 w-[70%] h-7 duration-200 rounded-full font-semibold border-2 border-gray-500 text-gray-600"
                   }
                 />
               </div>

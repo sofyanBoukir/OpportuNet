@@ -17,7 +17,7 @@ export const InterestsModal = ({
   };
 
   return (
-    <div className="bg-white w-full lg:w-[89%] p-[30px] lg:ml-[15%] relative lg:rounded-md z-15">
+    <div className="bg-white w-full lg:w-[89%] p-[30px] lg:ml-[15%] relative lg:rounded-md">
       {showIcon && (
         <div
           onClick={() => {

@@ -40,7 +40,7 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/feed" element={<Home />} />
             <Route path="/notifications" element={<Notifications />} />
-            <Route path="/user/profil/:id" element={<Profil />} />
+            <Route path="/user/profile/:id" element={<Profil />} />
             <Route path="/post/:postId" element={<PostId />} />
             <Route path="/saved" element={<SavedPosts />} />
 

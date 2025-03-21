@@ -35,6 +35,9 @@ app.use("/post",require("./routes/post"));
 app.use("/comment",require("./routes/comment"));
 app.use("/notification",require("./routes/notification"))
 app.use("/saved",require("./routes/saved"));
+app.use("/follow",require("./routes/follow"));
+
+
 
 server.listen(process.env.PORT, () => {
   console.log(`User service is running on port ${process.env.PORT}`);

@@ -2,7 +2,7 @@ import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 
 export const UrlProfilModal = () => {
   return (
-    <div className="p-3 bg-white w-full lg:w-[100%] lg:rounded-lg z-15">
+    <div className="p-3 bg-white w-full lg:w-[100%] lg:rounded-lg">
       <div>
         <h1 className="font-semibold text-xl">Profile URL as Linkedin</h1>
       </div>
