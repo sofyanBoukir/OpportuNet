@@ -84,7 +84,7 @@ export const Profil = () => {
   useEffect(() => {
     console.log("useEffect");
     _getUserById(1);
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -135,9 +135,6 @@ export const Profil = () => {
       { sugName: "Soufiane Boukir", sugHead: "Devloper Back-End" },
     ],
   };
-  console.log("state post", postsList);
-  console.log("userInfopost", userInfo);
-  console.log("userData", userData);
   return (
     <div>
       <div className={`w-full flex flex-col gap-y-2 lg:flex-row justify-start`}>
