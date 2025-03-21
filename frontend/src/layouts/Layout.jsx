@@ -159,7 +159,7 @@ export const Layout = () => {
               onClick={showProfil_FUNCTION}
             >
               <img
-                src={`${serverURL}` + userData.profile_picture}
+                src={userData.profilePictureUrl}
                 className="w-7 h-7 rounded-full mt-0.5"
               />
               <div className="text-xs font-normal hidden lg:block text-gray-600 2xl:block">
@@ -175,7 +175,7 @@ export const Layout = () => {
         >
           <div className="flex items-center gap-2">
             <div>
-              <img src={`${serverURL}` + userData.profile_picture} className="rounded-full w-16 h-16" />
+              <img src={userData.profilePictureUrl} className="rounded-full w-16 h-16" />
             </div>
             <div>
               <p className="text-lg font-semibold">{userData.name}</p>

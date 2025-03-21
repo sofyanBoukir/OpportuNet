@@ -22,14 +22,14 @@ export const ProfilInfoModal = ({
   
   const [toView,setToView] = useState(null)
   return (
-    <div className="bg-white w-full lg:w-[89%] pb-[1px] lg:ml-[15%] relative lg:rounded-md z-15">
+    <div className="bg-white w-full lg:w-[89%] pb-[1px] lg:ml-[15%] relative lg:rounded-md z-10">
       <div
         style={styleCover}
         className="w-full h-[120px] md:h-[160px] 2xl:h-[215px] lg:rounded-t-md"
       ></div>
       <div className="bg-white absolute top-18 md:top-[105px] 2xl:top-[100px] left-[5%] 2xl:left-[3%] h-[100px] 2xl:h-[155px] w-[100px] 2xl:w-[155px] rounded-[50%] p-[3px] cursor-pointer">
         <img
-          src={`${serverURL}` + userData.profile_picture}
+          src={userData.profilePictureUrl}
           alt="photo profil"
           className="w-[95px] h-[95px] 2xl:w-[150px] 2xl:h-[150px] rounded-[50%]"
         />
@@ -77,7 +77,7 @@ export const ProfilInfoModal = ({
             />
           )}
           {
-            toView && <Follows toView={toView} setToView={setToView} />
+            toView && showIcon && <Follows toView={toView} setToView={setToView} />
           }
         </div>
       </div>

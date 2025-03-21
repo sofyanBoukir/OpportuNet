@@ -84,7 +84,7 @@ export const Profil = () => {
   useEffect(() => {
     console.log("useEffect");
     _getUserById(1);
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     const handleScroll = () => {

@@ -4,7 +4,7 @@ import { CheckIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import { toggleFollow } from '../../services/follow';
 import ExtraLoader from './ExtraLoader';
 
-export const Follow = ({ type,disabled, userId, onClick, className }) => {
+export const Follow = ({ type,disabled, userId,text, className }) => {
   
   const {userData} = AppSelector()
   const [isFollowed,setIsFollowed] = useState(userData.following.includes(userId))
@@ -49,7 +49,7 @@ export const Follow = ({ type,disabled, userId, onClick, className }) => {
         {loading ? "...Loading" : text} */}
         {
           !isFollowed && !loading && <div className='flex gap-2 items-center'>
-            <UserPlusIcon className="w-5 h-5" strokeWidth={'2'}/> <span>Follow</span>
+            <UserPlusIcon className="w-5 h-5" strokeWidth={'2'}/> <span>Follow {text}</span>
           </div>
         }
         {

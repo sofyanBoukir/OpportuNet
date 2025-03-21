@@ -29,9 +29,8 @@ export const SuggestionsModal = ({ suggestionList }) => {
                 <span className="text-gray-900">{item.sugHead}</span>
                 <Follow
                   type={"text"}
-                  text={"follow"}
                   className={
-                    "bg-inherit hover:bg-gray-100 w-[70%] h-7 duration-200 rounded-full font-semibold border-2 border-gray-500 text-gray-600"
+                    "bg-inherit hover:bg-gray-100 w-[90%] h-7 duration-200 rounded-full font-semibold border-2 border-gray-500 text-gray-600"
                   }
                 />
               </div>

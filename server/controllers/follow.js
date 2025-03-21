@@ -11,13 +11,13 @@ const toggleFollow = async (request,response) =>{
 
         const user = await User.findById(userId);
         if(!user){
-            return response.json({
+            return response.status(404).json({
                 'message' : 'User not found'
             })
         }
         const userToFollow = await User.findById(followingId)
         if(!userToFollow){
-            return response.json({
+            return response.status(404).json({
                 'message' : 'User not found'
             })
         }
@@ -76,7 +76,7 @@ const getFollowers = async (request,response) =>{
 
         const user = await User.findById(userId);
         if(!user){
-            return response.json({
+            return response.status(404).json({
                 'message' : 'User not found'
             })
         }
@@ -104,7 +104,7 @@ const getFollowing = async (request,response) =>{
 
         const user = await User.findById(userId);
         if(!user){
-            return response.json({
+            return response.status(404).json({
                 'message' : 'User not found'
             })
         }
@@ -123,4 +123,43 @@ const getFollowing = async (request,response) =>{
         })
     }
 }
-module.exports = { toggleFollow, getFollowers, getFollowing }
+
+const removeFollower = async (request,response) =>{
+    try{
+        const userId = request.user.id;
+
+        const user = await User.findById(userId);
+        if(!user){
+            return response.status(404).json({
+                'message' : 'User not found'
+            })
+        }
+
+        const { followerId } = request.params;
+        const follower = await User.findById(followerId);
+        if(!follower){
+            return response.status(404).json({
+                'message' : 'User not found'
+            })
+        }
+
+        const newFollowers = user.followers.filter((id) => id.toString() !== followerId.toString());
+        user.followers = newFollowers;
+        await user.save();
+
+        const newFollowing = follower.following.filter((id) => id.toString() !== userId.toString());
+        follower.following = newFollowing;
+        await follower.save();
+
+        return response.json({
+            'message' : 'Follower deleted',
+            'deleted' : true
+        })
+
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+}
+module.exports = { toggleFollow, getFollowers, getFollowing ,removeFollower}

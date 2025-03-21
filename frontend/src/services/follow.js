@@ -29,3 +29,13 @@ export const getFollowing = async (token) =>{
     })
     return response;
 }
+
+
+export const removeFollower = async(token,followerId) =>{
+    const response = await axios.delete(`${serverURL}/follow/removeFollower/${followerId}`,{
+        headers : {
+            Authorization : `Bearer ${token}`
+        }
+    });
+    return response;
+}
