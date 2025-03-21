@@ -5,6 +5,7 @@ import { getSavedPost } from "../services/saved";
 import { Link, useNavigate } from "react-router-dom";
 import { SvgIcon } from "@mui/material";
 import { ArrowDownCircleIcon, BookmarkIcon } from "@heroicons/react/24/solid";
+import { SavedPostSkeleton } from "../components/skeletons/SavedPostSkeleton";
 
 const serverURL = import.meta.env.VITE_SERVER_URL;
 
@@ -22,15 +23,23 @@ export const SavedPosts = () => {
       setLastPage(response.data.lastPage);
       setTotalSavedPosts(response.data.totalSavedPosts);
 
-      if (response.data.savedPosts?.savedPosts) {
-        setDataSavedPost((prevPosts) => [...prevPosts, ...response.data.savedPosts.savedPosts]); 
+      if (page === 1) {
+        setDataSavedPost(response.data.savedPosts.savedPosts);
+      } else {
+        setDataSavedPost((prevPosts) => [
+          ...prevPosts,
+          ...response.data.savedPosts.savedPosts,
+        ]);
       }
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false)
+    }, 3000);
     } catch (error) {
       console.error("Error fetching saved posts:", error);
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     SavedPost();
@@ -44,7 +53,7 @@ export const SavedPosts = () => {
   return (
     <div className="md:px-[10%] px-3 relative top-16">
       <div className="flex justify-center gap-[1%]">
-        <div className="bg-white px-2 py-3 rounded-2xl h-fit">
+        <div className="hidden md:block bg-white px-2 py-3 rounded-2xl h-fit">
           <div className="flex flex-row gap-2 py-1  ">
             <BookmarkIcon className="text-gray-500 w-5" />
             <h1 className="text-gray-500 font-semibold">My elements</h1>
@@ -60,6 +69,7 @@ export const SavedPosts = () => {
           </div>
         </div>
         <div className="flex flex-col w-[100%] lg:w-[43%] h-max  lg:relative bg-white rounded-2xl ">
+        {loading && <SavedPostSkeleton />}
           {dataSavedPost && !loading
             ? dataSavedPost.map((saved, index) => {
                 const contentPreview = saved.content?.slice(
