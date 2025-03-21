@@ -5,12 +5,18 @@ const getSavedPosts = async (request,response) =>{
 
         const userId = request.user.id;
 
+        const page = parseInt(request.query.page) || 1;
+
         const user = await User.findById(userId);
         if(!user){
             return response.status(404).json({
                 'message' : 'User not found' 
             })
         }
+
+        const pageSize = 3;
+        const skip = (page - 1) * pageSize;
+
         const userSavedPosts = await User.findById(userId)
                                     .select('savedPosts')
                                     .populate({path: "savedPosts",
@@ -20,10 +26,18 @@ const getSavedPosts = async (request,response) =>{
                                             select: "name headLine profile_picture"
                                         }
                                     })
+                                    .skip(skip)
+                                    .limit(pageSize)
+
+        const totalSavedPosts = user.savedPosts.length;
+        const totalPages = Math.ceil(totalSavedPosts / pageSize);
+        const lastPage = totalPages;
 
         if(userSavedPosts){
             return response.json({
-                'savedPosts' : userSavedPosts
+                'savedPosts' : userSavedPosts,
+                'totalSavedPosts' : totalSavedPosts,
+                'lastPage' : lastPage
             })
         }
 

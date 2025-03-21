@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { SuggestionsModal } from "../components/App/Suggestions";
 import { ProfileStatus } from "../components/App/ProfileStatus";
-import { getSavedPost } from "../services/Saved";
+import { getSavedPost } from "../services/saved";
 import { Link, useNavigate } from "react-router-dom";
 
-const authService = import.meta.env.VITE_SERVER_URL;
+const serverURL = import.meta.env.VITE_SERVER_URL;
 
-export const SavedPost = () => {
+export const SavedPosts = () => {
   const [dataSavedPost, setDataSavedPost] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ export const SavedPost = () => {
                   >
                     <div className="flex flex-row items-center gap-3">
                       <img
-                        src={saved.user.profile_picture}
+                        src={serverURL+saved.user.profile_picture}
                         className="w-[10%] rounded-full"
                       />
                       <h1 className="text-lg font-semibold">
@@ -60,7 +60,7 @@ export const SavedPost = () => {
                     <div className="mt-4 w-full flex flex-row gap-3">
                       {saved.image && (
                         <img
-                          src={`http://localhost:3000${saved.image}`}
+                          src={serverURL+saved.image}
                           alt="image not found"
                           className="w-[40%] rounded-2xl"
                         />
