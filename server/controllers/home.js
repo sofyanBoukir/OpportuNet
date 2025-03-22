@@ -36,4 +36,38 @@ const getFeed = async (request,response) =>{
     }
 }
 
-module.exports = {getFeed}
+const getSuggesstedUsers = async (request,response) =>{
+    try{
+        const userId = request.user.id;
+        
+        const user = await User.findById(userId);
+        if(!user){
+            return response.status(404).json({
+                'message' : 'User not found'
+            })
+        }
+
+        const suggesstedUsers = await User.find({
+            _id : {$ne:userId},
+            _id : {$nin:user.following},
+            $or:[
+                {interests : {$in:user.interests}},
+                {followers : {$in:user.followers}},
+                {following : {$in:user.following}},
+            ]
+        })
+        .select('name headLine profilePictureUrl');
+        
+        if(suggesstedUsers){
+            return response.json({
+                'suggesstedUsers' : suggesstedUsers
+            })
+        }
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+}
+
+module.exports = {getFeed, getSuggesstedUsers}
