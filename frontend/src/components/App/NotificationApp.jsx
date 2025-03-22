@@ -25,7 +25,8 @@ export const NotificationApp = ({notification,deleteNotification,close}) => {
   const navigate = useNavigate();
   return (
     <div>
-      <div className={`p-4 flex justify-between cursor-pointer ${notification.status === 'delivred' ? 'bg-blue-100 hover:bg-blue-200 duration-200' : 'hover:bg-gray-100 duration-200'}`} onClick={() => navigate(`/post/${notification?.post?._id}`)}>
+      <div className={`p-4 flex justify-between cursor-pointer ${notification.status === 'delivred' ? 'bg-blue-100 hover:bg-blue-200 duration-200' : 'hover:bg-gray-100 duration-200'}`}
+       onClick={() => notification.message === 'Started following you'? navigate(`/user/profile/${notification?.from_user?._id}`) : navigate(`/post/${notification?.post?._id}`)}>
         <div className="flex gap-2">
           {
             notification.message === 'Mentioned you in a post' ?
@@ -40,7 +41,10 @@ export const NotificationApp = ({notification,deleteNotification,close}) => {
             />
           }
           <div>
-            <h2 className="text-lg"><span className="font-semibold text-xl cursor-pointer hover:text-blue-800 duration-75">{notification?.from_user?.name}</span> {notification.message}</h2>
+            <h2 className="text-lg"><span className="font-semibold text-xl cursor-pointer hover:text-blue-800 duration-75" onClick={(e) =>{
+              e.stopPropagation();
+              navigate(`/user/profile/${notification.from_user?._id}`)
+            }}>{notification?.from_user?.name}</span> {notification.message}</h2>
             <h2 className="text-sm">{moment(notification.createdAt).fromNow()}</h2>
           </div>
         </div>

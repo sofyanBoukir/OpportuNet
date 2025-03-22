@@ -19,6 +19,7 @@ import { PostSkeleton } from "../components/skeletons/PostSkeleton";
 import { deletePost } from "../services/post";
 import { Notification } from "../components/UI/Notification";
 import { DeleteModal } from "../components/modals/DeleteModal";
+import { ArrowDownCircleIcon } from "@heroicons/react/24/solid";
 
 export const Profil = () => {
   const { userData } = AppSelector();
@@ -42,10 +43,11 @@ export const Profil = () => {
 
   const [selectedId, setSelectedId] = useState(null);
   const loadingRef = useRef(false);
-  const hasMore = useRef(true);
+
   const showIcon = userData._id === id;
 
   const _getUserById = async (page) => {
+    page === 1 && setPostsList([]);
     try {
       if (loadingRef.current) return;
       loadingRef.current = true;
@@ -83,10 +85,11 @@ export const Profil = () => {
 
   useEffect(() => {
     console.log("useEffect");
-    _getUserById(1);
-  }, []);
+    userInfo._id !== id && setPage(1);
+    _getUserById(page);
+  }, [id, page]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const handleScroll = () => {
       console.log("ffffscroDDl");
       if (
@@ -104,7 +107,7 @@ export const Profil = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [page]);
+  }, [page]);*/
 
   const _deletePost = async () => {
     setNotification(null);
@@ -135,9 +138,6 @@ export const Profil = () => {
       { sugName: "Soufiane Boukir", sugHead: "Devloper Back-End" },
     ],
   };
-  console.log("state post", postsList);
-  console.log("userInfopost", userInfo);
-  console.log("userData", userData);
   return (
     <div>
       <div className={`w-full flex flex-col gap-y-2 lg:flex-row justify-start`}>
@@ -159,7 +159,7 @@ export const Profil = () => {
               content={userData._id === id ? userData.about : userInfo.about}
             />
           }
-          {userInfo.education && (
+          {userInfo.role === "candidate" && userInfo.education && (
             <EducationsModal
               notification={setNotification}
               idEduSelected={setSelectedId}
@@ -173,7 +173,7 @@ export const Profil = () => {
               }
             />
           )}
-          {userInfo.experience && (
+          {userInfo.role === "candidate" && userInfo.experience && (
             <ExperiencesModal
               notification={setNotification}
               idEduSelected={setSelectedId}
@@ -187,7 +187,7 @@ export const Profil = () => {
               }
             />
           )}
-          {userInfo.skills && (
+          {userInfo.role === "candidate" && userInfo.skills && (
             <SkillsModal
               notification={setNotification}
               setShowModalAdd={setShowAddModal}
@@ -223,12 +223,15 @@ export const Profil = () => {
                   );
                 })
               : null}
-            {!loading && postsList.length === 0 && (
-              <span className="text-xl font-semibold">
-                Try to post new posts on diff accounts
-              </span>
-            )}
           </div>
+          {!loading && totalPages !== page && totalPosts !== 0 && (
+            <div className="w-full lg:w-[89%] lg:ml-[15%]">
+              <ArrowDownCircleIcon
+                onClick={() => setPage((prev) => prev + 1)}
+                className="mx-auto cursor-pointer my-3 text-blue-700 hover:text-blue-600 duration-200 w-12 h-12"
+              />
+            </div>
+          )}
         </div>
         <div className="lg:w-[20%] flex flex-col gap-2 lg:pt-[80px] lg:ml-[4%]">
           {<UrlProfilModal />}
@@ -241,6 +244,7 @@ export const Profil = () => {
             setOpen={setShowUpdateModal}
           />
         )}
+
         {showAddModal && <AddModal toAdd={toAdd} setOpen={setShowAddModal} />}
         {openDelete && (
           <DeleteModal

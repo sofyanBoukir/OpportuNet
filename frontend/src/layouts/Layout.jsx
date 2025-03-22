@@ -69,6 +69,23 @@ export const Layout = () => {
     };
   }, []);
 
+  // useEffect(() => {
+  //   const reconnectIfNeeded = () => {
+  //     if (!socket.connected) {
+  //       socket.connect();
+  //       socket.emit('registerUser',localStorage.getItem('token'))
+  //     }
+  //   };
+
+  //   window.addEventListener("focus", reconnectIfNeeded);
+  //   window.addEventListener("click", reconnectIfNeeded);
+
+  //   return () => {
+  //     window.removeEventListener("focus", reconnectIfNeeded);
+  //     window.removeEventListener("click", reconnectIfNeeded);
+  //   };
+  // }, []);
+
   const notificationSound = new Audio("/public/audios/notificationSound.wav");
   useEffect(() => {
     if (!socket.connected) {
@@ -179,7 +196,7 @@ export const Layout = () => {
               onClick={showProfil_FUNCTION}
             >
               <img
-                src={`${serverURL}` + userData.profile_picture}
+                src={userData.profilePictureUrl}
                 className="w-7 h-7 rounded-full mt-0.5"
               />
               <div className="text-xs font-normal hidden lg:block text-gray-600 2xl:block">
@@ -191,7 +208,7 @@ export const Layout = () => {
         <div
           className={`${
             showProfil ? "block" : "hidden"
-          } w-[400px] py-2 px-3 rounded-xl shadow-lg flex flex-col bg-white absolute) fixed md:left-[65%] rounded-tr-none md:top-[75px] z-40`}
+          } w-[400px] py-2 px-3 rounded-xl shadow-lg flex flex-col bg-white fixed md:left-[65%] rounded-tr-none md:top-[75px] z-40`}
         >
           <div className="flex items-center gap-2">
             <div>
@@ -209,7 +226,7 @@ export const Layout = () => {
             <button
               onClick={() => {
                 setShowProfil(false);
-                navigate(`/user/profil/${userData._id}`);
+                navigate(`/user/profile/${userData._id}`);
               }}
               className="rounded-2xl font-semibold w-[100%] cursor-pointer border-2 border-blue-600 text-[#0A66C2] bg-gray-100 hover:bg-blue-50 duration-200"
             >

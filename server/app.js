@@ -31,11 +31,13 @@ app.use("/auth", require("./routes/auth"));
 app.use("/home", require("./routes/home"));
 app.use("/interest", require("./routes/interest"));
 app.use("/profile", require("./routes/profile"));
-app.use("/post", require("./routes/post"));
-app.use("/comment", require("./routes/comment"));
-app.use("/notification", require("./routes/notification"));
-app.use("/saved", require("./routes/saved"));
+app.use("/post",require("./routes/post"));
+app.use("/comment",require("./routes/comment"));
+app.use("/notification",require("./routes/notification"))
+app.use("/saved",require("./routes/saved"));
+app.use("/follow",require("./routes/follow"));
 app.use("/search", require("./routes/search"));
+
 
 server.listen(process.env.PORT, () => {
   console.log(`User service is running on port ${process.env.PORT}`);

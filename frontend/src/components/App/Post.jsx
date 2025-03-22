@@ -96,7 +96,7 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
           <div>
             {" "}
             <img
-              src={serverUrl + post.user?.profile_picture}
+              src={post.user?.profilePictureUrl}
               className="w-12 h-12 rounded-full"
               alt=""
             />

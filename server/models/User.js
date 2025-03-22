@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+require("dotenv").config()
 const userShema = new mongoose.Schema({
     name : {type:String, required:true},
     email : {type:String, required: true, unique:true},
@@ -36,6 +37,14 @@ const userShema = new mongoose.Schema({
             description: { type: String }
         }
     ]
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+});
+
+
+userShema.virtual("profilePictureUrl").get(function () {
+    return `${process.env.SERVER_URL}${this.profile_picture}`;
 });
 
 module.exports = mongoose.model('User',userShema);
