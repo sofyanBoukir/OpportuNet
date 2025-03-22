@@ -97,7 +97,7 @@ export const PostModal = ({setOpenModalPost,post}) => {
         <hr className="mt-5 text-gray-200"/>
         <div className="flex-1 overflow-auto">
           <div className="w-full px-4 py-4 flex items-center">
-            <img src={serverUrl+post.user.profile_picture} className="w-12 h-12 rounded-full" alt="" />
+            <img src={post.user.profilePictureUrl} className="w-12 h-12 rounded-full" alt="" />
             <div className="px-3">
               <h1 className="text-xl font-semibold">{post.user.name}</h1>
               <h3 className="text-gray-400 font-semibold text-sm">
@@ -155,7 +155,7 @@ export const PostModal = ({setOpenModalPost,post}) => {
         <div className="sticky bottom-0 left-0 flex items-center w-full py-2 gap-2 bg-white">
           <img
             src={serverUrl+userData.profile_picture}
-            className="w-10 h-10 rounded-full border-2"
+            className="w-10 h-10 rounded-full object-cover"
           />
           <Input
             type="text"

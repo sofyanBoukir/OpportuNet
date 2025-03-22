@@ -3,7 +3,7 @@ const appState = {
   // isMessaged: false,
   // isNotified: false,
   notifiedTimes : 0,
-  istheme: "light",
+  theme:localStorage.getItem('theme'),
   skills: [],
   interests: [],
 };

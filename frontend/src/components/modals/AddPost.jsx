@@ -177,7 +177,7 @@ export const AddPost = ({setAddPost}) => {
         <div className="bg-white w-[90%] lg:w-[50%] px-8 py-6 rounded-lg shadow-xl">
             <div className='flex justify-between items-center'>
                 <div className='flex gap-2 items-center'>
-                    <img src={`${authService}` + userData.profile_picture} className="rounded-full w-12 h-12"/>
+                    <img src={`${authService}` + userData.profile_picture} className="rounded-full w-12 h-12 object-cover"/>
                     <div>
                         <p className='text-xl font-semibold'>{userData.name}</p>
                         <span>This post will be visible to anyone</span>

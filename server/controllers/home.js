@@ -47,17 +47,18 @@ const getSuggesstedUsers = async (request,response) =>{
             })
         }
 
-        const suggesstedUsers = await User.find({
-            _id : {$ne:userId},
-            _id : {$nin:user.following},
-            $or:[
+        const suggesstedUsers = await User.find({$and:[
+            {_id : {$ne : userId}},
+            {_id : {$nin : user.following}},
+            {$or:[
                 {interests : {$in:user.interests}},
                 {followers : {$in:user.followers}},
                 {following : {$in:user.following}},
-            ]
-        })
-        .select('name headLine profilePictureUrl');
-        
+            ]}
+        ]})
+        .select('name headLine profile_picture profilePictureUrl')
+        .limit(6)
+
         if(suggesstedUsers){
             return response.json({
                 'suggesstedUsers' : suggesstedUsers
