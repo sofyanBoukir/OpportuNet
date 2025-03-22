@@ -74,7 +74,7 @@ export const SavedPosts = () => {
             ? dataSavedPost.map((saved, index) => {
                 const contentPreview = saved.content?.slice(
                   0,
-                  Math.ceil(saved.content.length * 0.3)
+                  Math.ceil(saved.content.length * 0.8)
                 );
                 return (
                   <div
@@ -86,9 +86,12 @@ export const SavedPosts = () => {
                         src={serverURL + saved.user.profile_picture}
                         className="w-[10%] rounded-full"
                       />
-                      <h1 className="text-lg font-semibold">
-                        {saved.user.name}
-                      </h1>
+                      <div>
+                        <h1 className="text-lg font-semibold">
+                          {saved.user.name}
+                        </h1>
+                        <span className="text-sm text-gray-700 font-semibold">{saved.user.headLine}</span>
+                      </div>
                     </div>
                     <div className="mt-4 w-full flex flex-row gap-3">
                       {saved.image && (

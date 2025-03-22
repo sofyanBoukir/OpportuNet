@@ -220,11 +220,6 @@ export const Profil = () => {
                   );
                 })
               : null}
-            {!loading && postsList.length === 0 && (
-              <span className="text-xl font-semibold">
-                Try to post new posts on diff accounts
-              </span>
-            )}
           </div>
         </div>
         <div className="lg:w-[20%] flex flex-col gap-2 lg:pt-[80px] lg:ml-[4%]">

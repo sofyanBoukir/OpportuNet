@@ -11,11 +11,12 @@ const getSavedPosts = async (request, response) => {
         .populate({
           path: "savedPosts",
           select: 'content image',
+          options: { sort: { createdAt: -1 } },
           populate: {
             path: "user",
             select: "name headLine profile_picture"
           }
-        });
+        })
   
       if (!userSavedPosts) {
         return response.status(404).json({
