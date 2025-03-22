@@ -13,15 +13,6 @@ export const AppReducer = (state = appState, action) => {
 
     case "UPDATE_USERDATA":
       return { ...state, userData: action.payload };
-    
-    
-    case "UPDATE_THEME":
-      if (state.istheme === "light") {
-        return { ...state, istheme: action.payload };
-      } else {
-        return { ...state, istheme: "light" };
-      }
-      
       
     case "Add_SKILLS":
       return { ...state, skills: action.payload };
@@ -29,9 +20,12 @@ export const AppReducer = (state = appState, action) => {
     case "Add_INTERESTS":
       return { ...state, interests: action.payload };
     
-    
     case "UPDATE_NOTIFIED_TIMES":
       return {...state,notifiedTimes:action.payload}
+
+    case "UPDATE_THEME":
+      return {...state, theme:action.payload}
+
     default:
       return state;
   }

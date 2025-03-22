@@ -160,7 +160,7 @@ export const Layout = () => {
             >
               <img
                 src={userData.profilePictureUrl}
-                className="w-7 h-7 rounded-full mt-0.5 object-cover"
+                className="w-7 h-7 rounded-full mt-0.5"
               />
               <div className="text-xs font-normal hidden lg:block text-gray-600 2xl:block">
                 Profile
@@ -175,7 +175,7 @@ export const Layout = () => {
         >
           <div className="flex items-center gap-2">
             <div>
-              <img src={userData.profilePictureUrl} className="rounded-full w-16 h-16 object-cover" />
+              <img src={userData.profilePictureUrl} className="rounded-full w-16 h-16" />
             </div>
             <div>
               <p className="text-lg font-semibold">{userData.name}</p>
