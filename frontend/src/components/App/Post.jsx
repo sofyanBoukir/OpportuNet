@@ -22,6 +22,7 @@ import { BookmarkIcon as OutlineBookMark } from "@heroicons/react/24/outline";
 import { Skeleton } from "@mui/material";
 import { isAlreadyLiked, toggleLike, toggleSave } from "../../services/post";
 import { AppSelector } from "../../selectors/AppSelector";
+import { Link } from "react-router-dom";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const Post = ({ post, showIcon, postSelected, openDelete }) => {
@@ -103,7 +104,7 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
           </div>
           <div className="px-3">
             <div className="flex flex-row items-center">
-              <h1 className="text-xl font-semibold">{post.user?.name}</h1>
+              <Link className="text-xl font-semibold" to={`/user/profile/${post.user?._id}`}>{post.user?.name}</Link>
               <h3 className="text-gray-400 text-sm font-semibold px-2">
                 {moment(post.createdAt).fromNow()}
               </h3>
