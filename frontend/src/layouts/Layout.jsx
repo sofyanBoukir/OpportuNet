@@ -13,10 +13,12 @@ import { Outlet, useNavigate } from "react-router-dom";
 import socket from "../functions/socket";
 import { useDispatch } from "react-redux";
 import ExtraLoader from "../components/UI/ExtraLoader";
+import { SearchModal } from "../components/modals/SearchModal";
 const serverURL = import.meta.env.VITE_SERVER_URL;
 
 export const Layout = () => {
   const [showProfil, setShowProfil] = useState(false);
+  const [openSearchModal, setOpenSearchModal] = useState(false);
   const { isMessaged, isNotified, userData } = AppSelector();
   const navigate = useNavigate();
 
@@ -24,14 +26,14 @@ export const Layout = () => {
     localStorage.getItem("theme") === "dark"
   );
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { notifiedTimes } = AppSelector();
 
   const notifiedTimesRef = useRef(notifiedTimes);
 
-  useEffect(() =>{
-    notifiedTimesRef.current = notifiedTimes
-  },[notifiedTimes])
+  useEffect(() => {
+    notifiedTimesRef.current = notifiedTimes;
+  }, [notifiedTimes]);
 
   useEffect(() => {
     if (darkMode) {
@@ -49,47 +51,51 @@ export const Layout = () => {
   };
 
   console.log(notifiedTimes);
-  
 
   useEffect(() => {
     const reconnectIfNeeded = () => {
       if (!socket.connected) {
         socket.connect();
-        socket.emit('registerUser',localStorage.getItem('token'))
+        socket.emit("registerUser", localStorage.getItem("token"));
       }
     };
-  
+
     window.addEventListener("focus", reconnectIfNeeded);
     window.addEventListener("click", reconnectIfNeeded);
-  
+
     return () => {
       window.removeEventListener("focus", reconnectIfNeeded);
       window.removeEventListener("click", reconnectIfNeeded);
     };
   }, []);
 
-  const notificationSound = new Audio('/public/audios/notificationSound.wav')
-  useEffect(() =>{
-    if(!socket.connected){
+  const notificationSound = new Audio("/public/audios/notificationSound.wav");
+  useEffect(() => {
+    if (!socket.connected) {
       socket.connect();
 
-      socket.on('connect',() =>{
-        console.log('connected to the server');
-      })
-      socket.emit('registerUser',localStorage.getItem('token'))
+      socket.on("connect", () => {
+        console.log("connected to the server");
+      });
+      socket.emit("registerUser", localStorage.getItem("token"));
 
-      socket.on('missedNotifications',(missedNotifications) =>{
-        dispatch({type:"UPDATE_NOTIFIED_TIMES",payload:missedNotifications.length})
-      })
+      socket.on("missedNotifications", (missedNotifications) => {
+        dispatch({
+          type: "UPDATE_NOTIFIED_TIMES",
+          payload: missedNotifications.length,
+        });
+      });
 
-      socket.on('newNotification',(newNotification) =>{
-        dispatch({type:"UPDATE_NOTIFIED_TIMES",payload:notifiedTimesRef.current+1})
-        notificationSound.play()
+      socket.on("newNotification", (newNotification) => {
+        dispatch({
+          type: "UPDATE_NOTIFIED_TIMES",
+          payload: notifiedTimesRef.current + 1,
+        });
+        notificationSound.play();
         console.log(notifiedTimes);
-        console.log('notified');
-      })
+        console.log("notified");
+      });
     }
-
 
     const handleBeforeUnload = () => {
       socket.disconnect();
@@ -101,16 +107,23 @@ export const Layout = () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
       socket.disconnect();
     };
-  },[dispatch])
+  }, [dispatch]);
 
   return (
     <div>
       <div>
         <div
           className="bg-white py-1 lg:px-[10%] flex w-[100%] justify-between fixed z-20"
-          onClick={() => setShowProfil(false)}
+          onClick={() => {
+            setShowProfil(false);
+            setOpenSearchModal(false);
+          }}
         >
-          <div className="w-full lg:w-[40%] relative">
+          <div
+            className={`w-full lg:w-[40%] ${
+              openSearchModal && "lg:w-[45%] duration-500"
+            } relative`}
+          >
             <div
               className={`w-[60px] flex justify-center mt-[3px] absolute left-[48px] top-[12px]`}
             >
@@ -126,8 +139,14 @@ export const Layout = () => {
                 className="w-[50px] h-[40px]"
               />
               <Input
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenSearchModal(true);
+                }}
                 placeholder="Search"
-                className={`sm:block) pl-[32px] py-2 w-[90%] sm:w-[640px]) my-auto outline-none rounded-md bg-[#F2F2F2]`}
+                className={` pl-[32px] py-2 w-[90%] ${
+                  openSearchModal && "!w-full duration-500 border-2"
+                } my-auto outline-none rounded-md bg-[#F2F2F2]`}
               />
             </div>
           </div>
@@ -176,7 +195,10 @@ export const Layout = () => {
         >
           <div className="flex items-center gap-2">
             <div>
-              <img src={`${serverURL}` + userData.profile_picture} className="rounded-full w-16 h-16" />
+              <img
+                src={`${serverURL}` + userData.profile_picture}
+                className="rounded-full w-16 h-16"
+              />
             </div>
             <div>
               <p className="text-lg font-semibold">{userData.name}</p>
@@ -221,6 +243,7 @@ export const Layout = () => {
                 : "hidden"
             }
           ></span> */}
+        {openSearchModal && <SearchModal />}
       </div>
       <Outlet />
     </div>
