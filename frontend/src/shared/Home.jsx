@@ -77,14 +77,14 @@ export const Home = () => {
   ];
   const { userData } = AppSelector();
   return (
-    <div className="px-[10%] relative top-16">
+    <div className="md:px-[8%] relative top-16">
       <div className="flex justify-center gap-[1%]">
         <ProfileStatus />
         <div className="flex flex-col gap-2 w-[100%] lg:w-[43%] left-[13%] lg:relative">
           <div className="bg-white px-4 py-2 rounded-xl flex gap-2">
             <img
-              src={`${authService}` + userData.profile_picture}
-              className="rounded-full w-12 h-12"
+              src={userData.profilePictureUrl}
+              className="rounded-full w-12 h-12 object-cover"
             />
 
             <Input
@@ -109,7 +109,7 @@ export const Home = () => {
           )}
         </div>
 
-        <div className="hidden lg:block left-[13%] lg:relative lg:w-[25%]">
+        <div className="hidden lg:block left-[14%] lg:relative lg:w-[26%]">
           <div></div>
           <SuggestionsModal suggestionList={suggestions} />
         </div>

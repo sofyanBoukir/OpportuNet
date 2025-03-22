@@ -10,3 +10,12 @@ export const getFeed = async (token,page) =>{
     });
     return response;
 }
+
+export const getSuggesstedUsers = async (token) =>{
+    const response = await axios.get(`${serverURL}/home/getSuggesstedUsers`,{
+        headers : {
+            Authorization : `Bearer ${token}`
+        }
+    })
+    return response;
+}

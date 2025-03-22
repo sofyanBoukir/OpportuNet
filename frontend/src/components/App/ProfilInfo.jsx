@@ -31,7 +31,7 @@ export const ProfilInfoModal = ({
         <img
           src={userData.profilePictureUrl}
           alt="photo profil"
-          className="w-[95px] h-[95px] 2xl:w-[150px] 2xl:h-[150px] rounded-[50%]"
+          className="w-[95px] h-[95px] 2xl:w-[150px] 2xl:h-[150px] rounded-[50%] object-cover"
         />
       </div>
 

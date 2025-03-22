@@ -83,8 +83,8 @@ export const SavedPosts = () => {
                   >
                     <div className="flex flex-row items-center gap-3">
                       <img
-                        src={serverURL + saved.user.profile_picture}
-                        className="w-[10%] rounded-full"
+                        src={saved.user.profilePictureUrl}
+                        className="w-[10%] rounded-full object-cover"
                       />
                       <div>
                         <h1 className="text-lg font-semibold">

@@ -1,41 +1,64 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Follow } from "../UI/Follow";
 import { SuggesstionsSkeleton } from "../skeletons/SuggesstionsSkeleton";
+import { getSuggesstedUsers } from "../../services/home";
+import { Link } from "react-router-dom";
 
 export const SuggestionsModal = ({ suggestionList }) => {
   const [loading, setLoading] = useState(true);
-  setTimeout(() => {
-    setLoading(false);
-  }, 3000);
+  const [suggesstedUsers,setSuggesstedUsers] = useState([])
+  const [itemsToView,setItemsToView] = useState(3)
+
+  const _getSuggesstedUsers = async () =>{
+    const response = await getSuggesstedUsers(localStorage.getItem('token'));
+    
+    if(response.status === 200){
+      if(response.data.suggesstedUsers){
+        setSuggesstedUsers(response.data.suggesstedUsers);
+        setTimeout(() => {
+          setLoading(false);
+        }, 3000);
+      }
+    }
+  }
+
+  useEffect(() =>{
+    _getSuggesstedUsers()
+  },[])
   return (
     <div>
       {!loading && (
         <div className="p-3 bg-white w-full lg:w-full lg:rounded-lg">
           <h1 className="text-xl font-semibold">People you may know</h1>
           <span className="text-gray-500">Based on your interests</span>
-          {suggestionList.map((item) => (
-            <div
-              key={item._id}
+          { !loading && suggesstedUsers && suggesstedUsers.length ?
+          suggesstedUsers.slice(0,itemsToView).map((user,index) => {
+            return <div
+              key={user._id}
               className="p-2 w-full flex gap-2 items-center mt-2 relative border-b border-b-gray-300"
             >
-              <div>
+              <div className="w-[25%]">
                 <img
-                  src="../../public/images/profilDefault.png"
-                  className="w-16 h-16 rounded-full m-auto"
+                  src={user.profilePictureUrl}
+                  className="w-16 h-16 rounded-full m-auto object-cover"
                 />
               </div>
-              <div>
-                <p className="text-lg font-semibold">{item.sugName}</p>
-                <span className="text-gray-900">{item.sugHead}</span>
+              <div className="w-[80%]">
+                <p><Link className="text-lg font-semibold hover:text-blue-800 duration-200" to={`/user/profile/${user._id}`}>{user.name}</Link></p>
+                <span className="text-gray-900">{user.headLine}</span>
                 <Follow
                   type={"text"}
+                  userId={user._id}
                   className={
-                    "bg-inherit hover:bg-gray-100 w-[90%] h-7 duration-200 rounded-full font-semibold border-2 border-gray-500 text-gray-600"
+                    "hover:bg-gray-200 w-[50%] mt-1 h-7 duration-200 rounded-full font-semibold bg-gray-100 border-2 text-gray-500"
                   }
                 />
               </div>
             </div>
-          ))}
+          }):null}
+          <div className={`${suggesstedUsers.length < 3 && 'hidden'} text-center mt-2 hover:bg-gray-50 duration-200 cursor-pointer ${itemsToView === 6 ? 'hidden' : null}`}>
+            <p className="py-1.5 font-semibold text-center text-gray-600" onClick={() => setItemsToView(6)}>View more</p>
+          </div>
         </div>
       )}
       {loading && <SuggesstionsSkeleton />}

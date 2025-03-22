@@ -83,7 +83,7 @@ export const Notifications = () => {
   ];
   
   return (
-    <div className="md:px-[10%] px-3 relative top-16">
+    <div className="md:px-[8%] px-3 relative top-16">
       <div className="flex justify-center gap-[1%]">
         <ProfileStatus />
         <div className="flex flex-col w-[100%] lg:w-[43%] h-max left-[13%] lg:relative bg-white rounded-2xl ">
@@ -107,7 +107,7 @@ export const Notifications = () => {
           }
         </div>
 
-        <div className="hidden sticky  lg:block left-[13%] lg:relative lg:w-[25%]">
+        <div className="hidden sticky  lg:block left-[14%] lg:relative lg:w-[26%]">
           <div className="sticky top-16">
             <SuggestionsModal suggestionList={suggestions} />
           </div>
