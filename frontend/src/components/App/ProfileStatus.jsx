@@ -5,7 +5,7 @@ import { AppSelector } from '../../selectors/AppSelector'
 export const ProfileStatus = () => {
   const {userData} = AppSelector()
   return (
-    <div className="w-[20%] hidden flex-col left-[12%] fixed lg:flex">
+    <div className="w-[22%] hidden flex-col left-[8%] fixed lg:flex">
         <div>
         <Profile />
         </div>

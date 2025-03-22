@@ -10,7 +10,7 @@ export const Profile = () => {
     <div className='w-[100%] bg-white rounded-2xl'>
         <div className='relative'>
             <img src={coverProfile} className='h-[70px] rounded-t-2xl w-[100%]'/>
-            <img src={userData.profilePictureUrl} className='rounded-full w-16 h-16 border-3 border-white absolute top-5 left-5'/>
+            <img src={userData.profilePictureUrl} className='rounded-full w-16 h-16 border-3 border-white absolute top-5 left-5 object-cover'/>
         </div>
 
         <div className='mt-7 px-4 pb-4'>
