@@ -18,6 +18,7 @@ import React from "react";
 import { PostId } from "./shared/PostId";
 import { Notifications } from "./shared/Notifications";
 import { SavedPosts } from "./shared/SavedPosts";
+import { Jobs } from "./shared/Jobs";
 
 function App() {
   return (
@@ -43,7 +44,7 @@ function App() {
             <Route path="/user/profile/:id" element={<Profil />} />
             <Route path="/post/:postId" element={<PostId />} />
             <Route path="/saved" element={<SavedPosts />} />
-
+            <Route path="/candidate/jobs" element={<Jobs />} /> 
           </Route>
         </Route>
       </Routes>
