@@ -49,6 +49,7 @@ export const ProfilInfoModal = ({
 
       <div className="mt-[70px] ml-[30px]">
         <h1 className="font-semibold text-3xl">{userData.name}</h1>
+        <span className="text-xl font-semibold">{userData.companyName}</span>
         <h6 className="font-normal text-xl text-gray-800">
           {userData.headLine}
         </h6>
@@ -73,7 +74,7 @@ export const ProfilInfoModal = ({
           {!showIcon && (
             <Follow
               userId={userData._id}
-              className="bg-[#0A66C2] text-white w-[15%] py-0.5 hover:bg-blue-900 px-7 rounded-full mb-2 mt-3"
+              className="bg-[#0A66C2] text-white w-[30%] sm:w-[15%] py-0.5 hover:bg-blue-900 px-7 rounded-full mb-2 mt-3"
             />
           )}
           {
