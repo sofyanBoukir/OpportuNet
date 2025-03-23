@@ -30,6 +30,7 @@ export const Layout = () => {
   const { notifiedTimes } = AppSelector();
 
   const notifiedTimesRef = useRef(notifiedTimes);
+  const [searchInput, setSearchInput] = useState("rrr");
 
   useEffect(() => {
     notifiedTimesRef.current = notifiedTimes;
@@ -126,6 +127,10 @@ export const Layout = () => {
     };
   }, [dispatch]);
 
+  const handleSearchInput = (e) => {
+    dispatch({ type: "UPDATE_SEARCH", payload: { query: e.target.value } });
+  };
+
   return (
     <div>
       <div>
@@ -160,6 +165,7 @@ export const Layout = () => {
                   e.stopPropagation();
                   setOpenSearchModal(true);
                 }}
+                onChange={handleSearchInput}
                 placeholder="Search"
                 className={` pl-[32px] py-2 w-[90%] ${
                   openSearchModal && "!w-full duration-500 border-2"
