@@ -5,6 +5,8 @@ import { Follow } from "../UI/Follow";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { Follows } from "../modals/Follows";
+import { Avatar, AvatarGroup } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const serverURL = import.meta.env.VITE_SERVER_URL;
 
@@ -13,6 +15,7 @@ export const ProfilInfoModal = ({
   valuetoUpdate,
   showIcon,
   userData,
+  multualFollowing,
 }) => {
   const styleCover = {
     backgroundImage: `url(${coverProfil})`,
@@ -21,6 +24,8 @@ export const ProfilInfoModal = ({
   };  
   
   const [toView,setToView] = useState(null)
+  // const [viewMultual,setViewMultual] = useState(false)
+
   return (
     <div className="bg-white w-full lg:w-[89%] pb-[1px] lg:ml-[15%] relative lg:rounded-md z-10">
       <div
@@ -53,22 +58,65 @@ export const ProfilInfoModal = ({
         <h6 className="font-normal text-xl text-gray-800">
           {userData.headLine}
         </h6>
+
+        
         <div className="text-gray-600">{userData.location}</div>
+
+        {
+          !showIcon && (
+            <div className="my-2 flex items-center">
+              {multualFollowing.length ? <span>Followed by</span> :null}
+              <div className="flex items-center ml-2">
+                
+                <AvatarGroup>
+                  {
+                    multualFollowing && multualFollowing.length ?
+                      multualFollowing.slice(0,3).map((user) =>{
+                        return <Avatar sx={{width:30, height:30}} alt="Remy Sharp" src={user.profilePictureUrl} />
+                      })
+                    :null
+                  }
+                  {
+                    multualFollowing.length > 3 && <Avatar sx={{width:30, height:30, fontSize:"16px"}}>+{multualFollowing.length - 3}</Avatar>
+                  }
+                </AvatarGroup>
+              </div>
+
+
+              <div>
+                {
+                  multualFollowing && multualFollowing.length ?
+                    multualFollowing.slice(0,3).map((user) =>{
+                      return <Link className="font-semibold hover:text-blue-700 duration-200" to={`/user/profile/${user._id}`}>{user.name},</Link>
+                    })
+                  :null
+                }
+                {
+                    multualFollowing.length > 3 && <span className="font-semibold cursor-pointer" onClick={() => setToView('MutualFollowing')}> and {multualFollowing.length - 3} more</span>
+                }
+              </div>
+            </div>
+          )
+        }
+        {
+          toView === 'MutualFollowing' && <Follows toView={'Mutual following'} setToView={setToView} mutualFollowing={multualFollowing}/>
+        }
         <a
           href={userData.webSite}
           className="font-semibold text-sm cursor-pointer text-[#0A66C2] hover:underline"
         >
           {userData.webSite}
         </a>
+       
         <div className="flex gap-2">
           <div className="border-2 border-[#0A66C2] px-2 py-0.5 rounded-full mb-2 mt-3">
             <span className="text-[#0A66C2] font-semibold cursor-pointer" onClick={() => setToView('followers')}>
-              {userData.followers ? userData.followers?.length : "103"} followers
+              {userData.followers ? userData.followers?.length : "0"} followers
             </span>
           </div>
           <div className="border-2 border-[#0A66C2] px-2 py-0.5 rounded-full mb-2 mt-3">
             <span className="text-[#0A66C2] font-semibold cursor-pointer" onClick={() => setToView('following')}>
-              {userData.followers ? userData.following?.length : "22"} following
+              {userData.followers ? userData.following?.length : "0"} following
             </span>
           </div>
           {!showIcon && (
