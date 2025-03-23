@@ -39,3 +39,13 @@ export const removeFollower = async(token,followerId) =>{
     });
     return response;
 }
+
+
+export const getMultualFollowing = async (token,profileId) =>{
+    const response = await axios.get(`${serverURL}/follow/getMultualFollowing/${profileId}`,{
+        headers : {
+            Authorization : `Bearer ${token}`
+        }
+    })
+    return response;
+  }

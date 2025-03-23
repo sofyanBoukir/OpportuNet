@@ -20,6 +20,7 @@ import { deletePost } from "../services/post";
 import { Notification } from "../components/UI/Notification";
 import { DeleteModal } from "../components/modals/DeleteModal";
 import { ArrowDownCircleIcon } from "@heroicons/react/24/solid";
+import { getMultualFollowing } from "../services/follow";
 
 export const Profil = () => {
   const { userData } = AppSelector();
@@ -40,7 +41,7 @@ export const Profil = () => {
   const [postId, setPostId] = useState(null);
   const [openDelete, setOpenDelete] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
-
+  const [multualFollowing,setMultualFollowing] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const loadingRef = useRef(false);
 
@@ -83,10 +84,20 @@ export const Profil = () => {
     }
   };
 
+  const _getMultualFollowing = async () =>{
+    const response = await getMultualFollowing(localStorage.getItem('token'),id);
+    if(response.status === 200){
+      if(response.data.multualFollowing){
+        setMultualFollowing(response.data.multualFollowing);
+      }
+    }
+  }
+
   useEffect(() => {
     console.log("useEffect");
     userInfo._id !== id && setPage(1);
     _getUserById(page);
+    userData._id !== id && _getMultualFollowing();
   }, [id, page]);
 
   /*useEffect(() => {
@@ -132,12 +143,6 @@ export const Profil = () => {
     }
   };
 
-  const dataInfo = {
-    suggestions: [
-      { sugName: "Ayoub Mhainid", sugHead: "Devloper Front-end" },
-      { sugName: "Soufiane Boukir", sugHead: "Devloper Back-End" },
-    ],
-  };
   return (
     <div>
       <div className={`w-full flex flex-col gap-y-2 lg:flex-row justify-start`}>
@@ -147,6 +152,7 @@ export const Profil = () => {
               setShowModalUpdate={setShowUpdateModal}
               valuetoUpdate={setToUpdate}
               showIcon={showIcon}
+              multualFollowing={multualFollowing}
               userData={userData._id === id ? userData : userInfo}
             />
           }
@@ -235,7 +241,7 @@ export const Profil = () => {
         </div>
         <div className="lg:w-[20%] flex flex-col gap-2 lg:pt-[80px] lg:ml-[4%]">
           {<UrlProfilModal />}
-          {<SuggestionsModal suggestionList={dataInfo.suggestions} />}
+          {<SuggestionsModal />}
         </div>
         {showUpdateModal && (
           <UpdateModal

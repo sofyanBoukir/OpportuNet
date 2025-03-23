@@ -162,4 +162,43 @@ const removeFollower = async (request,response) =>{
         })
     }
 }
-module.exports = { toggleFollow, getFollowers, getFollowing ,removeFollower}
+
+
+const getMultualFollows = async (request,response) =>{
+    try{
+        const userId = request.user.id;
+        const { profileId } = request.params;
+
+        const user = await User.findById(userId);
+        if(!user){
+            return response.status(404).json({
+                'message' : 'User not found'
+            })
+        }
+
+        const userFollowing = await User.find({_id:userId})
+                                .select('following')
+                                .populate('following', 'name headLine profile_picture profilePictureUrl')
+
+        const profileFollowers = await User.find({_id:profileId})
+                                    .select('followers')
+                                    .populate('followers', 'name headLine profile_picture profilePictureUrl')
+
+
+        const mutualFollowing = userFollowing[0].following.filter(following =>
+            profileFollowers[0].followers.some(follower => follower._id.toString() === following._id.toString())
+        );
+
+        return response.json({
+            'multualFollowing' : mutualFollowing
+        })
+        
+
+
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+}
+module.exports = { toggleFollow, getFollowers, getFollowing ,removeFollower, getMultualFollows}

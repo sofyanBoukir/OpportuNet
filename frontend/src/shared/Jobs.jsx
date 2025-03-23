@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Input } from '../components/UI/Input'
 import { Button } from '../components/UI/Button'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
@@ -6,19 +6,41 @@ import { Job } from '../components/App/Job'
 import { JobDetails } from '../components/App/JobDetails'
 import { JobSkeleton } from '../components/skeletons/JobSkeleton'
 import { JobDetailsSkeleton } from '../components/skeletons/JobDetailsSkeleton'
+import { JobSearch } from '../components/modals/JobSearch'
 
 export const Jobs = () => {
+
+    const [showSearchList,setShowSearchList] = useState(false)
+
+    const searchRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (searchRef.current && !searchRef.current.contains(event.target)) {
+                setShowSearchList(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
   return (
     <div className='relative top-26'>
         <div className='w-[70%] lg:w-[45%] mx-auto'>
-            <div className='flex gap-2 relative'>
+            <div className='flex gap-2 relative' ref={searchRef}>
                 <MagnifyingGlassIcon className='absolute text-gray-600 top-4 left-3 w-6 h-6'/>
                 <div className='w-[100%] flex relative'>
-                    <Input type={'text'} placeholder={'Search for jobs, software developer ...'} className={'border rounded-md text-xl pl-12 border-gray-600 shadow-xl w-[100%] py-4 px-2 outline-none'} />
+                    <Input onClick={() => setShowSearchList(true)} type={'text'} placeholder={'Search for jobs, software developer ...'} className={'border rounded-md text-xl pl-12 border-gray-600 shadow-xl w-[100%] py-4 px-2 outline-none'} />
                     <button className='bg-[#1c51a1] text-lg text-white absolute right-2 rounded-md my-2 font-semibold cursor-pointer px-5 py-2 hover:bg-[#164081] duration-200'>
                         Find jobs
                     </button>
                 </div>
+                {
+                    showSearchList && <div className='absolute w-[100%] top-16 z-20'>
+                            <JobSearch />
+                        </div>
+                }
             </div>
         </div>
 

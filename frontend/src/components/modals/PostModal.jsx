@@ -48,12 +48,11 @@ export const PostModal = ({setOpenModalPost,post}) => {
         post.comments.length += 1
         setComments((prevComments) => [{user:{
           name:userData.name,
-          profile_picture:userData.profile_picture,
+          profilePictureUrl:userData.profilePictureUrl,
           _id:userData._id
         },
           comment:comment,
           createdAt:new Date()},...prevComments])
-          console.log(comments);
           setCommentMessage('')
         setComment('')
       }
