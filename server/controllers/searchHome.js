@@ -4,7 +4,7 @@ const User = require("../models/User");
 const searchUsersPosts = async (request, response) => {
   try {
     const userId = request.user.id;
-    const { query } = request.body;
+    const { query } = request.query;
 
     const user = await User.findById(userId);
     if (!user) {

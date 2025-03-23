@@ -19,13 +19,15 @@ export const SearchModal = () => {
         const response = await getSuggesstedUsers(
           localStorage.getItem("token")
         );
+        console.log(response);
+        
         response.data.suggesstedUsers.length
           ? setSuggesstedUsers(response.data.suggesstedUsers)
           : setError(ERROR_MESSAGES.NOT_FOUND);
       } catch (err) {
         console.log(err);
         err.response
-          ? setError(response.data.message)
+          ? setError(err.response.data.message)
           : setError(ERROR_MESSAGES.TRY_AGAIN);
       }
     };
