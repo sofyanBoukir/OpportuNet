@@ -1,3 +1,4 @@
+const Job = require("../models/Job");
 const Post = require("../models/Post");
 const User = require("../models/User");
 
@@ -48,4 +49,35 @@ const searchUsersPosts = async (request, response) => {
   }
 };
 
-module.exports = searchUsersPosts;
+
+const searchForJob = async (request,response) =>{
+  try {
+    const userId = request.user.id;
+    const { query } = request.query;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return response.status(404).json({
+        message: "user Invalid",
+      });
+    }
+
+    const jobs = await Job.find({ title: { $regex: `^${query}`, $options: "i" } });
+    if(jobs.length){
+      return response.json({
+        'jobs' : jobs
+      })
+    }else{
+      return response.status(404).json({
+        'message' : 'No jobs starts with this query'
+      })
+    }
+
+  } catch (error) {
+    return response.status(500).json({
+      message: error.message,
+    });
+  }
+}
+
+module.exports = {searchUsersPosts, searchForJob};

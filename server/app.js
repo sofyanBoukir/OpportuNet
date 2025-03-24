@@ -14,7 +14,7 @@ const server = http.createServer(app);
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
@@ -37,6 +37,9 @@ app.use("/notification", require("./routes/notification"));
 app.use("/saved", require("./routes/saved"));
 app.use("/follow", require("./routes/follow"));
 app.use("/search", require("./routes/search"));
+app.use("/job",require("./routes/job"))
+
+
 
 server.listen(process.env.PORT, () => {
   console.log(`User service is running on port ${process.env.PORT}`);
