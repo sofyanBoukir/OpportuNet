@@ -75,16 +75,21 @@ const getJobs = async (request,response) =>{
         }
 
         const page = parseInt(request.query.page) || 1;
-        const pageSize = 2;
+        const pageSize = 8;
         const skip = (page - 1) * pageSize; 
         const jobs = await Job.find()
                             .limit(pageSize)
                             .skip(skip)
                             .sort({createdAt:-1})
 
+        const totalJobs = await Job.countDocuments();
+        const totalPages = Math.ceil(totalJobs / pageSize);
+        const lastPage = totalPages;
 
         return response.json({
-            'postedJobs' : jobs
+            'postedJobs' : jobs,
+            'totalJobs' : totalJobs,
+            'lastPage' : lastPage
         })
     }catch(err){
         return response.status(500).json({

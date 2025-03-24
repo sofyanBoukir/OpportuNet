@@ -23,6 +23,8 @@ import { Skeleton } from "@mui/material";
 import { isAlreadyLiked, toggleLike, toggleSave } from "../../services/post";
 import { AppSelector } from "../../selectors/AppSelector";
 import { Link } from "react-router-dom";
+import { copyText } from "../../functions/copyText";
+import { Notification } from "../UI/Notification";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const Post = ({ post, showIcon, postSelected, openDelete }) => {
@@ -48,6 +50,7 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
   const [alreadySaved, setAlreadySaved] = useState(
     userData.savedPosts.includes(post._id)
   );
+  const [notification,setNotification] = useState()
 
   console.log(userData.likedPosts);
 
@@ -157,7 +160,7 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
               </MenuItem>
             )}
             <MenuItem onClick={handleClose}>
-              <div className="flex flex-row items-center gap-2">
+              <div className="flex flex-row items-center gap-2" onClick={() => copyText(window.location.href+"/"+post._id,setNotification)}>
                 <LinkIcon className="text-black w-6 h-6" strokeWidth={1.2} />
                 <h1>Coppy Link</h1>
               </div>
@@ -232,6 +235,9 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
       {openModalPost && (
         <PostModal setOpenModalPost={setOpenModalPost} post={post} />
       )}
+      {
+        notification && <Notification type={notification.type} message={notification.message} />
+      }
     </div>
   );
 };

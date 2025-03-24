@@ -1,21 +1,24 @@
 import React from 'react'
 import { Button } from '../UI/Button'
-import { MapPinIcon } from '@heroicons/react/24/outline'
+import { LinkIcon, MapPinIcon } from '@heroicons/react/24/outline'
 
-export const JobDetails = () => {
+export const JobDetails = ({job,copyLink}) => {
   return (
     <div className='bg-white px-6 py-5 border border-gray-300 shadow-md w-[100%] rounded-md'>
         <div>
-            <h1 className='text-3xl font-semibold'>Server-side developer</h1>
+            <h1 className='text-3xl font-semibold'>{job.title}</h1>
             <div className='flex gap-2 text-gray-700'>
-                <span className='text-lg'>Capegemeni - </span>
-                <span className='text-lg'>Rabat, Morocco</span>
+                <span className='text-lg'>{job.company} - </span>
+                <span className='text-lg'>{job.location}</span>
             </div>
             <div className='mt-1'>
-                <span className='px-3 font-semibold py-1 rounded-md bg-[#ede9e6]'>Full-time</span>
+                <span className='px-3 font-semibold py-1 rounded-md bg-[#ede9e6]'>{job.empType}</span>
             </div>
-            <div className='mt-3'>
+            <div className='mt-3 flex gap-1'>
                 <Button text={'Aplly now'} className={'bg-[#164081] text-white'}/>
+                <button className='bg-[#e0d6ce] px-2 py-1 rounded-md cursor-pointer' onClick={copyLink}>
+                    <LinkIcon className='w-6 h-6'/>
+                </button>
             </div>
         </div>
         <div className='my-4'>
@@ -25,7 +28,7 @@ export const JobDetails = () => {
             <h1 className='text-2xl font-semibold'>Location</h1>
             <div className='flex gap-1 text-gray-700 mt-2'>
                 <MapPinIcon className='w-5 h-5'/>
-                <span>Rabat, morocco</span>
+                <span>{job.location}</span>
             </div>
         </div>
 
@@ -35,34 +38,42 @@ export const JobDetails = () => {
         <div>
             <h1 className='text-2xl font-semibold'>Job description</h1>
             <div className='flex gap-1 text-gray-700 mt-2'>
-                <span>Crouzet, acteur majeur dans le secteur industriel, propose un stage en développement informatique au sein de son équipe technique.<br></br><br></br>
-                En tant que stagiaire IT, le candidat contribuera au développement et à l’optimisation des plateformes d’agents IA et des systèmes RAG. Il bénéficiera d’une expérience pratique sur les grands modèles de langage (LLMs), les systèmes de récupération de connaissances et les outils d’automatisation.
-                </span>
+                <span>{job.description}</span>
             </div>
 
             <div className='mt-4'>
                 <h1 className='text-xl font-semibold text-gray-500'>Responsibilities</h1>
                 <ul className='ml-10 list-disc text-gray-700 flex flex-col gap-2 mt-1'>
-                    <li>Co-développer des agents IA permettant d’automatiser les flux de travail, de traiter des documents et d’améliorer la prise de décision.</li>
+                    {/* <li>Co-développer des agents IA permettant d’automatiser les flux de travail, de traiter des documents et d’améliorer la prise de décision.</li>
                     <li>Implémenter des systèmes RAG pour améliorer la récupération des connaissances et la qualité des réponses générées par l’IA.</li>
                     <li>Intégrer des systèmes IA aux outils métiers existants (CRM, ERP, Google Workspace, WhatsApp, etc.).</li>
-                    <li>Participer à l’élaboration de solutions low-code/no-code pour faciliter l’adoption de l’IA.</li>
+                    <li>Participer à l’élaboration de solutions low-code/no-code pour faciliter l’adoption de l’IA.</li> */}
+                    {
+                        job.responsibilities && job.responsibilities.length ?
+                            job.responsibilities.map((responsibility) =>{
+                                return <li>{responsibility}</li>
+                            })
+                        : 'No setted'
+                    }
                 </ul>
             </div>
 
             <div className='mt-4'>
                 <h1 className='text-xl font-semibold text-gray-500'>Skills</h1>
                 <ul className='ml-10 list-disc text-gray-700 flex flex-col gap-2 mt-1'>
-                    <li>Javascript</li>
-                    <li>Python</li>
-                    <li>PHP</li>
-                    <li>Laravel</li>
+                    {
+                        job.skills && job.skills.length ?
+                            job.skills.map((skill) =>{
+                                return <li>{skill}</li>
+                            })
+                        : 'No setted'
+                    }
                 </ul>
             </div>
 
             <div className='mt-4'>
                 <h1 className='text-xl font-semibold text-gray-500'>Salary range</h1>
-                <p className='text-gray-700 ml-10 mt-1'>From 7000dhs/mois to 10000dhs/mois</p>
+                <p className='text-gray-700 ml-10 mt-1'>{job.salaryRange}</p>
             </div>
         <div className='my-4'>
             <hr className='border-gray-400 shadow-xl'></hr>

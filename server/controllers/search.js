@@ -62,7 +62,7 @@ const searchForJob = async (request,response) =>{
       });
     }
 
-    const jobs = await Job.find({ title: { $regex: `^${query}`, $options: "i" } });
+    const jobs = await Job.find({ title: { $regex: `^${query}`, $options: "i" } }).limit(8);
     if(jobs.length){
       return response.json({
         'jobs' : jobs

@@ -18,7 +18,7 @@ import React from "react";
 import { PostId } from "./shared/PostId";
 import { Notifications } from "./shared/Notifications";
 import { SavedPosts } from "./shared/SavedPosts";
-import { Jobs } from "./shared/Jobs";
+import { Jobs } from "./pages/user/Jobs";
 
 function App() {
   return (
