@@ -266,7 +266,9 @@ export const Layout = () => {
                 : "hidden"
             }
           ></span> */}
-        {openSearchModal && <SearchModal />}
+        {openSearchModal && (
+          <SearchModal OpenSearchModal={setOpenSearchModal} />
+        )}
       </div>
       <Outlet />
     </div>

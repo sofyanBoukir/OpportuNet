@@ -5,7 +5,7 @@ const appState = {
   notifiedTimes: 0,
   theme: localStorage.getItem("theme"),
   querySearch: "",
-  resultSearch: {},
+  resultSearch: { users: [], posts: [] },
 };
 
 export const AppReducer = (state = appState, action) => {
