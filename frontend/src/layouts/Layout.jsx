@@ -128,7 +128,7 @@ export const Layout = () => {
   }, [dispatch]);
 
   const handleSearchInput = (e) => {
-    dispatch({ type: "UPDATE_SEARCH", payload: { query: e.target.value } });
+    dispatch({ type: "UPDATE_SEARCH", payload: e.target.value });
   };
 
   return (
@@ -266,7 +266,9 @@ export const Layout = () => {
                 : "hidden"
             }
           ></span> */}
-        {openSearchModal && <SearchModal />}
+        {openSearchModal && (
+          <SearchModal OpenSearchModal={setOpenSearchModal} />
+        )}
       </div>
       <Outlet />
     </div>

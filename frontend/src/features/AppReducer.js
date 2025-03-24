@@ -4,7 +4,8 @@ const appState = {
   // isNotified: false,
   notifiedTimes: 0,
   theme: localStorage.getItem("theme"),
-  querySearch: {},
+  querySearch: "",
+  resultSearch: { users: [], posts: [] },
 };
 
 export const AppReducer = (state = appState, action) => {
@@ -14,6 +15,9 @@ export const AppReducer = (state = appState, action) => {
 
     case "UPDATE_SEARCH":
       return { ...state, querySearch: action.payload };
+
+    case "UPDATE_RESULTSEARCH":
+      return { ...state, resultSearch: action.payload };
 
     case "UPDATE_NOTIFIED_TIMES":
       return { ...state, notifiedTimes: action.payload };
