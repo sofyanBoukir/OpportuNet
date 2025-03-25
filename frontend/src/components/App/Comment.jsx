@@ -3,6 +3,7 @@ import { Button, Menu, MenuItem } from '@mui/material';
 import moment from 'moment';
 import React from 'react'
 import { AppSelector } from '../../selectors/AppSelector';
+import { Link } from 'react-router-dom';
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const Comment = ({comment,deleteComment}) => {
@@ -26,7 +27,7 @@ export const Comment = ({comment,deleteComment}) => {
             />
         </div>
         <div className="w-auto rounded-tl-none bg-gray-200 rounded-2xl px-3 py-2">
-            <span className="text-xl font-semibold">{comment.user.name} <span className="text-gray-500 text-sm">{moment(comment.createdAt).fromNow()}</span></span>
+            <Link className="text-xl font-semibold hover:text-blue-700 duration-200" to={`/user/profile/${comment.user._id}`}>{comment.user.name}</Link> <span className="text-gray-500 text-sm">{moment(comment.createdAt).fromNow()}</span>
             <p>{comment.comment}</p>
         </div>
         {

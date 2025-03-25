@@ -26,7 +26,7 @@ import { Link } from "react-router-dom";
 import { copyText } from "../../functions/copyText";
 import { Notification } from "../UI/Notification";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
-
+const frontendUrl = import.meta.env.VITE_FRONTEND_URL
 export const Post = ({ post, showIcon, postSelected, openDelete }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -160,7 +160,7 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
               </MenuItem>
             )}
             <MenuItem onClick={handleClose}>
-              <div className="flex flex-row items-center gap-2" onClick={() => copyText(window.location.href+"/"+post._id,setNotification)}>
+              <div className="flex flex-row items-center gap-2" onClick={() => copyText(frontendUrl+"/post/"+post._id,setNotification)}>
                 <LinkIcon className="text-black w-6 h-6" strokeWidth={1.2} />
                 <h1>Coppy Link</h1>
               </div>
