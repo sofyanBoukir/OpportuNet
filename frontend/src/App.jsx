@@ -19,6 +19,7 @@ import { PostId } from "./shared/PostId";
 import { Notifications } from "./shared/Notifications";
 import { SavedPosts } from "./shared/SavedPosts";
 import { Jobs } from "./pages/user/Jobs";
+import { Searchs } from "./pages/user/Searchs";
 
 function App() {
   return (
@@ -44,7 +45,8 @@ function App() {
             <Route path="/user/profile/:id" element={<Profil />} />
             <Route path="/post/:postId" element={<PostId />} />
             <Route path="/saved" element={<SavedPosts />} />
-            <Route path="/candidate/jobs" element={<Jobs />} /> 
+            <Route path="/candidate/jobs" element={<Jobs />} />
+            <Route path="/search/results/all" element={<Searchs />} />
           </Route>
         </Route>
       </Routes>
