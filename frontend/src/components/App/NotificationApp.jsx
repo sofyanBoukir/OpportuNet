@@ -25,7 +25,7 @@ export const NotificationApp = ({notification,deleteNotification,close}) => {
   const navigate = useNavigate();
   return (
     <div>
-      <div className={`p-4 flex justify-between cursor-pointer ${notification.status === 'delivred' ? 'bg-blue-100 hover:bg-blue-200 duration-200' : 'hover:bg-gray-100 duration-200'}`}
+      <div className={`p-4 flex justify-between cursor-pointer ${notification.status === 'delivred' ? 'bg-blue-100 hover:bg-blue-200 duration-200' : 'hover:bg-gray-100 dark:hover:bg-gray-950 duration-200'}`}
        onClick={() => notification.message === 'Started following you'? navigate(`/user/profile/${notification?.from_user?._id}`) : navigate(`/post/${notification?.post?._id}`)}>
         <div className="flex gap-2">
           {
@@ -81,7 +81,7 @@ export const NotificationApp = ({notification,deleteNotification,close}) => {
           </Menu>
         </div>
       </div>
-      <hr className="text-gray-300"></hr>
+      <hr className="text-gray-300 dark:text-gray-800"></hr>
     </div>
   );
 };

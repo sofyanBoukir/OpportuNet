@@ -17,5 +17,5 @@ export default defineConfig({
   theme: {
     extend: {},
   },
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(),require('tailwind-scrollbar-hide')],
 });
