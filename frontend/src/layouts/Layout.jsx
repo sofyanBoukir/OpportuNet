@@ -267,7 +267,7 @@ export const Layout = () => {
             }
           ></span> */}
         {openSearchModal && (
-          <SearchModal OpenSearchModal={setOpenSearchModal} />
+          <SearchModal openSearchModal={setOpenSearchModal} />
         )}
       </div>
       <Outlet />
