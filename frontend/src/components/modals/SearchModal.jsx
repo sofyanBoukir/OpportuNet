@@ -3,8 +3,8 @@ import profilDefault from "../../../public/images/profilDefault.png";
 import { useEffect, useState } from "react";
 import { getSuggesstedUsers } from "../../services/home";
 import { ERROR_MESSAGES } from "../../constants/Errors";
-import { AppSelector } from "../../selectors/AppSelector";
-import { getserachUsersPosts } from "../../services/search";
+
+import { getserachUsers } from "../../services/search";
 import { useDispatch } from "react-redux";
 // import Cookie from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -44,10 +44,10 @@ export const SearchModal = ({ query, openSearchModal }) => {
   }, []);
 
   useEffect(() => {
-    const _getserachUsersPosts = async () => {
+    const _getserachUsers = async () => {
       setError(null);
       try {
-        const response = await getserachUsersPosts(
+        const response = await getserachUsers(
           localStorage.getItem("token"),
           query
         );
@@ -61,7 +61,7 @@ export const SearchModal = ({ query, openSearchModal }) => {
             });
       }
     };
-    query !== "" && _getserachUsersPosts();
+    query !== "" && _getserachUsers();
   }, [query]);
 
   const handleClickUser = (user) => {

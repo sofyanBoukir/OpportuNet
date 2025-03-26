@@ -5,7 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { Follow } from "../../components/UI/Follow";
 import { useEffect, useState } from "react";
 import { ERROR_MESSAGES } from "../../constants/Errors";
-import { getserachUsersPosts } from "../../services/search";
+import { getserachPosts, getserachUsers } from "../../services/search";
 import ExtraLoader from "../../components/UI/ExtraLoader";
 import { searchForJobs } from "../../services/job";
 import { Notification } from "../../components/UI/Notification";
@@ -13,41 +13,39 @@ import { Notification } from "../../components/UI/Notification";
 const serverURL = import.meta.env.VITE_SERVER_URL;
 
 export const Searchs = () => {
-  // const { resultSearch } = AppSelector();
   const { query } = useParams();
-  const [resultSearchUsers, setRresultSearchUsers] = useState([]);
-  const [resultSearchPosts, setRresultSearchPosts] = useState([]);
-  const [resultSearchJobs, setRresultSearchJobs] = useState([]);
+  const [resultSearchUsers, setResultSearchUsers] = useState([]);
+  const [resultSearchPosts, setResultSearchPosts] = useState([]);
+  const [resultSearchJobs, setResultSearchJobs] = useState([]);
   const [error, setError] = useState(null);
   const [notification, setNotification] = useState(null);
-  const [viewByUser, setViewByUser] = useState(false);
-  const [viewByPosts, setViewByPosts] = useState(false);
-  const [viewByJobs, setViewByJobs] = useState(false);
+  const [viewByUser, setViewByUser] = useState(true);
+  const [viewByPosts, setViewByPosts] = useState(true);
+  const [viewByJobs, setViewByJobs] = useState(true);
   const [loading, setLoading] = useState(false);
   const [heightUsers, setHeightUsers] = useState(3);
   const [heightPosts, setHeightPosts] = useState(3);
   const [heightJobs, setHeiJobs] = useState(3);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    const _getserachUsersPosts = async () => {
+    const _getserachUsers = async () => {
       setLoading(true);
-      setViewByUser(false);
-      setViewByPosts(false);
+      setViewByUser(true);
       try {
-        const response = await getserachUsersPosts(
+        const response = await getserachUsers(
           localStorage.getItem("token"),
           query
         );
+        console.log(response);
         setTimeout(() => {
           setLoading(false);
         }, 2000);
         response.data.users.length
-          ? setRresultSearchUsers(response.data.users)
-          : setViewByUser(true);
-        response.data.posts.length
-          ? setRresultSearchPosts(response.data.posts)
-          : setViewByPosts(true);
+          ? setResultSearchUsers(response.data.users)
+          : setViewByUser(false);
       } catch (err) {
+        setLoading(false);
         err.response
           ? setNotification({ type: "error", message: err.response.message })
           : setNotification({
@@ -56,7 +54,40 @@ export const Searchs = () => {
             });
       }
     };
+    _getserachUsers();
+  }, []);
 
+  useEffect(() => {
+    const _getserachPosts = async (page) => {
+      setLoading(true);
+      setViewByPosts(true);
+      try {
+        const response = await getserachPosts(
+          localStorage.getItem("token"),
+          query,
+          page
+        );
+        console.log(response);
+        setTimeout(() => {
+          setLoading(false);
+        }, 2000);
+        response.data.posts.length
+          ? setResultSearchPosts([...resultSearchPosts, ...response.data.posts])
+          : setViewByPosts(false);
+      } catch (err) {
+        setLoading(false);
+        err.response
+          ? setNotification({ type: "error", message: err.response.message })
+          : setNotification({
+              type: "error",
+              message: ERROR_MESSAGES.TRY_AGAIN,
+            });
+      }
+    };
+    _getserachPosts(page);
+  }, [page]);
+
+  useEffect(() => {
     const _getSearchJobs = async () => {
       setViewByJobs(false);
       setLoading(true);
@@ -69,9 +100,10 @@ export const Searchs = () => {
         setTimeout(() => {
           setLoading(false);
         }, 2000);
-        setRresultSearchJobs(response.data.jobs);
+        setResultSearchJobs(response.data.jobs);
       } catch (err) {
-        switch (response.status) {
+        setLoading(false);
+        switch (err.response.status) {
           case 404:
             setViewByJobs(true);
             setError(err.response.data.message);
@@ -91,7 +123,6 @@ export const Searchs = () => {
       }
     };
 
-    _getserachUsersPosts();
     _getSearchJobs();
   }, []);
 
@@ -117,68 +148,73 @@ export const Searchs = () => {
             </li>
           </ul>
         </div>
-        {loading && (
-          <div className="mt-20">
-            <ExtraLoader />
-          </div>
-        )}
 
-        {!loading && (
-          <div className="w-full mb-20 lg:mb-2 lg:w-[40%] flex flex-col gap-4 mt-5 lg:relative">
-            <div className="bg-white rounded-lg duration-500">
-              <h3 className="p-4 font-semibold text-xl">People</h3>
-              {resultSearchUsers.length ? (
-                resultSearchUsers.map((item, index) => {
-                  if (index < heightUsers) {
-                    return (
-                      <div className="mb-2">
-                        <div className="pl-4 p-2 pr-10 flex justify-between">
-                          <div className="flex gap-4">
-                            <div className="w-15 h-15 rounded-[50%]">
-                              <img
-                                src={`${serverURL}` + item.profile_picture}
-                                alt=""
-                                className="w-15 h-15 rounded-[50%]"
-                              />
-                            </div>
-                            <div>
-                              <h1>
-                                <Link
-                                  className="font-semibold text-lg hover:underline"
-                                  to={`/user/profile/${item._id}`}
-                                >
-                                  {item.name}
-                                </Link>
-                              </h1>
-                              <h6 className="font-normal text-md text-gray-900">
-                                {item.headLine}
-                              </h6>
-                              <div className="text-md text-gray-600">
-                                {item.location}
+        {/* {!loading && ( */}
+        <div className="w-full mb-20 lg:mb-2 lg:w-[40%] flex flex-col gap-4 mt-5 lg:relative">
+          <div className="bg-white rounded-lg duration-500">
+            <h3 className="p-4 font-semibold text-xl">People</h3>
+            {loading && (
+              <div className="mt-20">
+                <ExtraLoader />
+              </div>
+            )}
+            {!loading && (
+              <>
+                {resultSearchUsers.length ? (
+                  resultSearchUsers.map((item, index) => {
+                    if (index < heightUsers) {
+                      return (
+                        <div key={item._id} className="mb-2">
+                          <div className="pl-4 p-2 pr-10 flex justify-between">
+                            <div className="flex gap-4">
+                              <div className="w-15 h-15 rounded-[50%]">
+                                <img
+                                  src={`${serverURL}` + item.profile_picture}
+                                  alt=""
+                                  className="w-15 h-15 rounded-[50%]"
+                                />
+                              </div>
+                              <div>
+                                <h1>
+                                  <Link
+                                    className="font-semibold text-lg hover:underline"
+                                    to={`/user/profile/${item._id}`}
+                                  >
+                                    {item.name}
+                                  </Link>
+                                </h1>
+                                <h6 className="font-normal text-md text-gray-900">
+                                  {item.headLine}
+                                </h6>
+                                <div className="text-md text-gray-600">
+                                  {item.location}
+                                </div>
                               </div>
                             </div>
+                            <Follow
+                              userId={item._id}
+                              className="border-2 h-[40px] !px-5 text-[#0A66C2] border-[#0A66C2] !rounded-3xl cursor-pointer hover:bg-blue-100"
+                            />
                           </div>
-                          <Follow
-                            userId={item._id}
-                            className="border-2 h-[40px] !px-5 text-[#0A66C2] border-[#0A66C2] !rounded-3xl cursor-pointer hover:bg-blue-100"
+                          <hr
+                            className={
+                              index + 1 === heightUsers
+                                ? "hidden"
+                                : "ml-23 text-gray-300"
+                            }
                           />
                         </div>
-                        <hr
-                          className={
-                            index + 1 === heightUsers
-                              ? "hidden"
-                              : "ml-23 text-gray-300"
-                          }
-                        />
-                      </div>
-                    );
-                  }
-                })
-              ) : (
-                <span className="font-semibold text-md p-4">
-                  Users not found
-                </span>
-              )}
+                      );
+                    }
+                  })
+                ) : (
+                  <span className="font-semibold text-md p-4">
+                    No users starts with this query
+                  </span>
+                )}
+              </>
+            )}
+            {viewByUser && (
               <div
                 onClick={() => {
                   heightUsers === resultSearchUsers.length
@@ -191,103 +227,110 @@ export const Searchs = () => {
                   ? "Close all results"
                   : "See all results"}
               </div>
-            </div>
+            )}
+          </div>
 
-            <div className="rounded-lg">
-              <h3 className="bg-white rounded-t-lg p-4 font-semibold text-xl">
-                Posts
-              </h3>
-              <div className="flex flex-col gap-2">
-                {resultSearchPosts.length ? (
-                  resultSearchPosts.map((item, index) => {
-                    if (index < heightPosts) {
-                      return (
-                        <div className="bg-white">
-                          <Post post={item} />
-                        </div>
-                      );
-                    }
-                  })
-                ) : (
-                  <span className="font-semibold text-md p-4">
-                    Posts not found
-                  </span>
-                )}
-              </div>
-              <div
-                onClick={() => {
-                  heightPosts === resultSearchPosts.length
-                    ? setHeightPosts(3)
-                    : setHeightPosts(resultSearchPosts.length);
-                }}
-                className="bg-white text-center text-[#0A66C2] font-semibold p-2 mt-1 rounded-b-xl border-t-gray-500 hover:bg-gray-100 duration-200 cursor-pointer"
-              >
-                {heightPosts === resultSearchPosts.length
-                  ? "Close all results"
-                  : "See all results"}
-              </div>
-            </div>
+          <div className="rounded-lg">
+            <h3 className="bg-white rounded-t-lg p-4 font-semibold text-xl">
+              Posts
+            </h3>
+            <div className="flex flex-col gap-2">
+              {loading && (
+                <div className="!bg-white mt-50">
+                  <ExtraLoader />
+                </div>
+              )}
 
-            <div className="bg-white rounded-lg duration-500">
-              <h3 className="p-4 font-semibold text-xl">Jobs</h3>
-              {resultSearchJobs.length ? (
-                resultSearchJobs.map((item, index) => {
-                  if (index < heightJobs) {
-                    return (
-                      <div className="mb-2">
-                        <div className="pl-4 p-2 pr-10 flex justify-between">
-                          <div className="flex gap-4">
-                            <div className="w-15 h-15 rounded-[50%]">
-                              <img
-                                src={profilDefault}
-                                alt=""
-                                className="w-15 h-15 rounded-[50%]"
-                              />
-                            </div>
-                            <div>
-                              <h1 className="font-semibold text-lg hover:underline">
-                                <Link
-                                //  to={`/user/profile/${item._id}`}
-                                >
-                                  {resultSearchJobs.title}
-                                </Link>
-                              </h1>
-                              <h6 className="font-normal text-md text-gray-900">
-                                {resultSearchJobs.company}
-                              </h6>
-                              <div className="text-md text-gray-600">
-                                {resultSearchJobs.location}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <hr className={"ml-23 text-gray-300"} />
-                      </div>
-                    );
-                  }
+              {!loading && resultSearchPosts && resultSearchPosts.length ? (
+                resultSearchPosts.map((item) => {
+                  return (
+                    <div key={item._id} className="bg-white">
+                      <Post post={item} />
+                    </div>
+                  );
                 })
               ) : (
                 <span className="font-semibold text-md p-4">
-                  jobs not found
+                  No posts starts with this query
                 </span>
               )}
-              {viewByJobs && (
-                <div
-                  onClick={() => {
-                    heightJobs === resultSearchJobs.length
-                      ? setHeightUsers(3)
-                      : setHeightUsers(resultSearchJobs.length);
-                  }}
-                  className="bg-white text-center text-[#0A66C2] font-semibold p-2 border-t rounded-b-lg border-t-gray-300 hover:bg-gray-100 duration-200 cursor-pointer"
-                >
-                  {heightJobs === resultSearchJobs.length
-                    ? "Close all results"
-                    : "See all results"}
-                </div>
-              )}
             </div>
+            {viewByPosts && (
+              <div
+                onClick={() => {
+                  setPage((prev) => prev + 1);
+
+                  // heightPosts === resultSearchPosts.length
+                  //   ? setHeightPosts(3)
+                  //   : setHeightPosts(resultSearchPosts.length);
+                }}
+                className="bg-white text-center text-[#0A66C2] font-semibold p-2 mt-1 rounded-b-xl border-t-gray-500 hover:bg-gray-100 duration-200 cursor-pointer"
+              >
+                {/* {heightPosts === resultSearchPosts.length */}
+                {/* ? "Close all results" */}
+                See more results
+              </div>
+            )}
           </div>
-        )}
+
+          <div className="bg-white rounded-lg duration-500">
+            <h3 className="p-4 font-semibold text-xl">Jobs</h3>
+            {resultSearchJobs.length ? (
+              resultSearchJobs.map((item, index) => {
+                if (index < heightJobs) {
+                  return (
+                    <div key={item} className="mb-2">
+                      <div className="pl-4 p-2 pr-10 flex justify-between">
+                        <div className="flex gap-4">
+                          <div className="w-15 h-15 rounded-[50%]">
+                            <img
+                              src={profilDefault}
+                              alt=""
+                              className="w-15 h-15 rounded-[50%]"
+                            />
+                          </div>
+                          <div>
+                            <h1 className="font-semibold text-lg hover:underline">
+                              <Link
+                              //  to={`/user/profile/${item._id}`}
+                              >
+                                {resultSearchJobs.title}
+                              </Link>
+                            </h1>
+                            <h6 className="font-normal text-md text-gray-900">
+                              {resultSearchJobs.company}
+                            </h6>
+                            <div className="text-md text-gray-600">
+                              {resultSearchJobs.location}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr className={"ml-23 text-gray-300"} />
+                    </div>
+                  );
+                }
+              })
+            ) : (
+              <span className="font-semibold text-md p-4">jobs not found</span>
+            )}
+            {viewByJobs && (
+              <div
+                onClick={() => {
+                  heightJobs === resultSearchJobs.length
+                    ? setHeightUsers(3)
+                    : setHeightUsers(resultSearchJobs.length);
+                }}
+                className="bg-white text-center text-[#0A66C2] font-semibold p-2 border-t rounded-b-lg border-t-gray-300 hover:bg-gray-100 duration-200 cursor-pointer"
+              >
+                {heightJobs === resultSearchJobs.length
+                  ? "Close all results"
+                  : "See all results"}
+              </div>
+            )}
+          </div>
+        </div>
+        {/* )} */}
       </div>
       {notification && (
         <Notification type={notification.type} message={notification.message} />

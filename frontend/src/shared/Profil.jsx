@@ -41,7 +41,7 @@ export const Profil = () => {
   const [postId, setPostId] = useState(null);
   const [openDelete, setOpenDelete] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
-  const [multualFollowing,setMultualFollowing] = useState([]);
+  const [multualFollowing, setMultualFollowing] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const loadingRef = useRef(false);
 
@@ -57,7 +57,7 @@ export const Profil = () => {
         id,
         page
       );
-      console.log("us", response);
+
       loadingRef.current = false;
 
       setTimeout(() => {
@@ -84,17 +84,19 @@ export const Profil = () => {
     }
   };
 
-  const _getMultualFollowing = async () =>{
-    const response = await getMultualFollowing(localStorage.getItem('token'),id);
-    if(response.status === 200){
-      if(response.data.multualFollowing){
+  const _getMultualFollowing = async () => {
+    const response = await getMultualFollowing(
+      localStorage.getItem("token"),
+      id
+    );
+    if (response.status === 200) {
+      if (response.data.multualFollowing) {
         setMultualFollowing(response.data.multualFollowing);
       }
     }
-  }
+  };
 
   useEffect(() => {
-    console.log("useEffect");
     userInfo._id !== id && setPage(1);
     _getUserById(page);
     userData._id !== id && _getMultualFollowing();
