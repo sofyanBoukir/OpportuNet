@@ -47,7 +47,7 @@ function App() {
             <Route path="/post/:postId" element={<PostId />} />
             <Route path="/saved" element={<SavedPosts />} />
             <Route path="/candidate/jobs" element={<Jobs />} />
-            <Route path="/search/results/all" element={<Searchs />} />
+            <Route path="/search/results/all/:query" element={<Searchs />} />
             <Route path="/messaging" element={<Messaging />} />
           </Route>
         </Route>
