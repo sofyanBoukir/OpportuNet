@@ -23,26 +23,26 @@ export const SingleLink = ({ link, svg, text }) => {
         console.log(link);
       }}
       className={`${
-        link === currentPath ? "text-black sm:border-b-2" : null
-      } w-[60px] flex flex-col items-center justify-center cursor-pointer hover:text-gray-200 duration-200`}
+        link === currentPath ? "text-black dark:text-white sm:border-b-2" : null
+      } w-[60px] flex flex-col items-center justify-center cursor-pointer hover:text-gray-200 dark:hover:text-gray-800 duration-200`}
     >
       <div
         className={`mt-[3px] duration-200 relative ${
-          link === currentPath ? "text-black" : " text-[#666666]"
+          link === currentPath ? "text-black dark:text-white" : "dark:text-gray-400 text-[#666666]"
         }`}
       >
         {
           // text === 'Messaging' && <div className="w-5 h-5 text-center text-white bg-red-600 absolute rounded-full top-[-7px] right-[-10px] text-sm">1</div>
         }
         {
-          text === 'Notifications' &&  notifiedTimes !== 0 && <div className="w-5 h-5 text-center text-white bg-red-600 absolute flex items-center justify-center rounded-full top-[-7px] right-[-10px] text-[13px]">{notifiedTimes > 9 ? "+9" : notifiedTimes }</div>
+          text === 'Notifications' &&  notifiedTimes !== 0 && <div className="w-5 h-5 text-center text-white dark:text-black bg-red-600 absolute flex items-center justify-center rounded-full top-[-7px] right-[-10px] text-[13px]">{notifiedTimes > 9 ? "+9" : notifiedTimes }</div>
         }
         {svg}
       </div>
       <div>
         <span
           className={`text-xs duration-200 font-normal hidden lg:block ${
-            link === currentPath ? "text-black" : "text-gray-600"
+            link === currentPath ? "text-black dark:text-white" : "text-gray-600 dark:text-gray-100"
           }`}
         >
           {text}

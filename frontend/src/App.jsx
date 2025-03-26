@@ -20,6 +20,7 @@ import { Notifications } from "./shared/Notifications";
 import { SavedPosts } from "./shared/SavedPosts";
 import { Jobs } from "./pages/user/Jobs";
 import { Searchs } from "./pages/user/Searchs";
+import { Messaging } from "./shared/Messaging";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
             <Route path="/saved" element={<SavedPosts />} />
             <Route path="/candidate/jobs" element={<Jobs />} />
             <Route path="/search/results/all/:query" element={<Searchs />} />
+            <Route path="/messaging" element={<Messaging />} />
           </Route>
         </Route>
       </Routes>

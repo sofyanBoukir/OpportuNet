@@ -13,7 +13,6 @@ import { copyText } from '../../functions/copyText'
 
 export const Jobs = () => {
 
-    const [showSearchList,setShowSearchList] = useState(false)
     const [postedJobs,setPostedJobs] = useState([]);
     const [loading,setLoading] = useState(true);
     const [errMessage,setErrMessage] = useState('');
@@ -27,6 +26,8 @@ export const Jobs = () => {
     const [notification,setNotification] = useState()
     const [query,setQuery] = useState('');
     const [searchResults,setSearchResults] = useState([])
+    const [selectedResult,setSelectedResult] = useState('')
+
 
     const _getPostedJobs = async () => {
         try{    
@@ -57,8 +58,20 @@ export const Jobs = () => {
 
 
     const _searchForJobs = async () =>{
+        if(selectedResult !== ''){
+            setQuery('')
+            const response = await searchForJobs(localStorage.getItem('token'),selectedResult);
+            
+            if(response.data.jobs){
+                setPostedJobs(response.data.jobs)
+                setSelectedJob(response.data.jobs[0])
+                setSelectedResult('')
+            }
+            return
+        }
+
+
         const response = await searchForJobs(localStorage.getItem('token'),query)
-        
         if(response.data.jobs){
             setSearchResults(response.data.jobs);
         }
@@ -71,7 +84,7 @@ export const Jobs = () => {
     useEffect(() =>{
         query !== '' && _searchForJobs();
         query === '' && setSearchResults([]);
-    },[query])
+    },[query,selectedResult])
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -97,13 +110,14 @@ export const Jobs = () => {
                     placeholder={'Search for jobs, software developer ...'} 
                     className={'border rounded-md text-xl pl-12 border-gray-600 shadow-xl w-[100%] py-4 px-2 outline-none'} />
                     
-                    <button className='bg-[#1c51a1] text-lg text-white absolute right-2 rounded-md my-2 font-semibold cursor-pointer px-5 py-2 hover:bg-[#164081] duration-200'>
+                    <button onClick={() => setSelectedResult(query)}
+                    className='bg-[#1c51a1] text-lg text-white absolute right-2 rounded-md my-2 font-semibold cursor-pointer px-5 py-2 hover:bg-[#164081] duration-200'>
                         Find jobs
                     </button>
                 </div>
                 {
                     searchResults && searchResults.length ? <div className='absolute w-[100%] top-16 z-20'>
-                            <JobSearch searchResults={searchResults}/>
+                            <JobSearch searchResults={searchResults} setSelectedResult={setSelectedResult}/>
                         </div>:null
                 }
             </div>

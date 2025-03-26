@@ -1,8 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '../UI/Button'
 import { LinkIcon, MapPinIcon } from '@heroicons/react/24/outline'
+import { applyForJob } from '../../services/job';
+import { ERROR_MESSAGES } from '../../constants/Errors';
+import { Notification } from '../UI/Notification';
 
 export const JobDetails = ({job,copyLink}) => {
+
+
+    const [loading,setLoading] = useState(false);
+    const [notification,setNotification] = useState()
+
+
+    const _applyForJob = async () =>{
+        setNotification(null)
+        try{
+            setLoading(true);
+            const response = await applyForJob(localStorage.getItem('token'),job._id);
+            
+            setLoading(false)
+            if(response.status === 200){
+                setNotification({type:'success',message:response.data.message})
+                job.applicants.length+=1
+            }
+        }catch(err){
+            setLoading(false)
+            if(err.response.data.message){
+                setNotification({type:'error',message:err.response.data.message})
+            }else{
+                setNotification({type:'error',message:ERROR_MESSAGES.SOMETHING_WENT_WRONG})
+            }
+        }
+    }
+
   return (
     <div className='bg-white px-6 py-5 border border-gray-300 shadow-md w-[100%] rounded-md'>
         <div>
@@ -15,7 +45,10 @@ export const JobDetails = ({job,copyLink}) => {
                 <span className='px-3 font-semibold py-1 rounded-md bg-[#ede9e6]'>{job.empType}</span>
             </div>
             <div className='mt-3 flex gap-1'>
-                <Button text={'Aplly now'} className={'bg-[#164081] text-white'}/>
+                <Button text={'Aplly now'} className={'bg-[#164081] text-white w-[15%]'} onClick={_applyForJob} loading={loading}/>
+                <span className='bg-[#e0d6ce] flex items-center font-semibold px-2 py-1 rounded-md cursor-pointer'>
+                    {job.applicants?.length + ' applicants'}
+                </span>
                 <button className='bg-[#e0d6ce] px-2 py-1 rounded-md cursor-pointer' onClick={copyLink}>
                     <LinkIcon className='w-6 h-6'/>
                 </button>
@@ -78,6 +111,9 @@ export const JobDetails = ({job,copyLink}) => {
         <div className='my-4'>
             <hr className='border-gray-400 shadow-xl'></hr>
         </div>
+        {
+            notification && <Notification type={notification.type} message={notification.message} />
+        }
         </div>
     </div>
   )

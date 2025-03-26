@@ -26,7 +26,7 @@ import { Link } from "react-router-dom";
 import { copyText } from "../../functions/copyText";
 import { Notification } from "../UI/Notification";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
-
+const frontendUrl = import.meta.env.VITE_FRONTEND_URL
 export const Post = ({ post, showIcon, postSelected, openDelete }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -94,7 +94,7 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
     }
   };
   return (
-    <div className="w-[100%] md:w-[100%] bg-white rounded-xl">
+    <div className="w-[100%] md:w-[100%] dark:bg-black bg-white rounded-xl">
       <div className="w-[100%] px-4 py-4 justify-between flex flex-row items-center">
         <div className=" flex flex-row items-center">
           <div>
@@ -107,7 +107,7 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
           </div>
           <div className="px-3">
             <div className="flex flex-row items-center">
-              <Link className="text-xl font-semibold" to={`/user/profile/${post.user?._id}`}>{post.user?.name}</Link>
+              <Link className="text-xl font-semibold dark:text-white" to={`/user/profile/${post.user?._id}`}>{post.user?.name}</Link>
               <h3 className="text-gray-400 text-sm font-semibold px-2">
                 {moment(post.createdAt).fromNow()}
               </h3>
@@ -127,7 +127,7 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
           >
-            <EllipsisHorizontalIcon className="text-black w-10" />
+            <EllipsisHorizontalIcon className="text-black w-10 dark:text-white" />
           </Button>
           <Menu
             id="basic-menu"
@@ -160,7 +160,7 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
               </MenuItem>
             )}
             <MenuItem onClick={handleClose}>
-              <div className="flex flex-row items-center gap-2" onClick={() => copyText(window.location.href+"/"+post._id,setNotification)}>
+              <div className="flex flex-row items-center gap-2" onClick={() => copyText(frontendUrl+"/post/"+post._id,setNotification)}>
                 <LinkIcon className="text-black w-6 h-6" strokeWidth={1.2} />
                 <h1>Coppy Link</h1>
               </div>
@@ -169,7 +169,7 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
         </div>
       </div>
       <div>
-        <div className="text-gray-800 px-4 py-2 text-xl lexend-deca">
+        <div className="text-gray-800 dark:text-white px-4 py-2 text-xl lexend-deca">
           {post.content.length > 100 ? (
             <>
               <span>
@@ -190,44 +190,44 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
           <img src={serverUrl + post.image} className="w-[100%]" alt="" />
         </div>
         <div className="px-4 py-3 flex flex-row justify-between">
-          <h1>{post.likes.length} Likes</h1>
-          <h1>{post.comments.length} comments</h1>
+          <h1 className="dark:text-white">{post.likes.length} Likes</h1>
+          <h1 className="dark:text-white">{post.comments.length} comments</h1>
         </div>
         <hr className="w-[95%] py-1 text-gray-200 mx-auto" />
         <div className="flex flex-row items-center py-2 px-5  justify-center">
           <button
             onClick={_toggleLike}
-            className="flex flex-row items-center w-[30%] hover:bg-gray-100 justify-center py-2 rounded-lg cursor-pointer duration-200"
+            className="flex flex-row items-center w-[30%] hover:bg-gray-100 dark:hover:bg-gray-900 justify-center py-2 rounded-lg cursor-pointer duration-200"
           >
             <div className="flex flex-row items-center gap-2">
               {alreadyLiked ? (
                 <SolidHeart className="w-6 h-6 text-red-600" />
               ) : (
-                <OutlineHeart className="w-6 h-6 text-black" />
+                <OutlineHeart className="w-6 h-6 text-black dark:text-white" />
               )}{" "}
-              <h1>Like</h1>
+              <h1 className="dark:text-white">Like</h1>
             </div>
           </button>
           <button
-            className="flex flex-row items-center w-[30%] hover:bg-gray-100 justify-center py-2 rounded-lg cursor-pointer duration-200"
+            className="flex flex-row items-center w-[30%] hover:bg-gray-100 dark:hover:bg-gray-900 justify-center py-2 rounded-lg cursor-pointer duration-200"
             onClick={() => setOpenModalPost(true)}
           >
             <div className="flex flex-row items-center gap-2">
-              <ChatBubbleBottomCenterIcon className="text-black w-6 h-6" />
-              <h1>Comment</h1>
+              <ChatBubbleBottomCenterIcon className="text-black w-6 h-6 dark:text-white" />
+              <h1 className="dark:text-white">Comment</h1>
             </div>
           </button>
           <button
             onClick={_toggleSave}
-            className="flex flex-row items-center w-[30%] hover:bg-gray-100 justify-center py-2 rounded-lg cursor-pointer duration-200"
+            className="flex flex-row items-center w-[30%] hover:bg-gray-100 dark:hover:bg-gray-900 justify-center py-2 rounded-lg cursor-pointer duration-200"
           >
             <div className="flex flex-row items-center gap-2">
               {alreadySaved ? (
-                <SolidBookMark className="text-black w-6 h-6" />
+                <SolidBookMark className="text-black w-6 h-6 dark:text-white" />
               ) : (
-                <OutlineBookMark className="text-black w-6 h-6" />
+                <OutlineBookMark className="text-black w-6 h-6 dark:text-white" />
               )}
-              <h1>Save</h1>
+              <h1 className="dark:text-white">Save</h1>
             </div>
           </button>
         </div>

@@ -81,7 +81,7 @@ export const Home = () => {
       <div className="flex justify-center gap-[1%]">
         <ProfileStatus />
         <div className="flex flex-col gap-2 w-[100%] lg:w-[43%] left-[13%] lg:relative">
-          <div className="bg-white px-4 py-2 rounded-xl flex gap-2">
+          <div className="bg-white dark:bg-black px-4 py-2 rounded-xl flex gap-2">
             <img
               src={userData.profilePictureUrl}
               className="rounded-full w-12 h-12 object-cover"
@@ -92,7 +92,7 @@ export const Home = () => {
               onClick={() => setAddPost(true)}
               placeholder={"Start a post"}
               className={
-                "font-semibold w-[100%] border-1 border-gray-400 outline-none cursor-pointer bg-[#F4F2EE] px-3 py-1 rounded-full"
+                "font-semibold w-[100%] border-1 border-gray-400 dark:text-white outline-none cursor-pointer dark:bg-[#0D1117] bg-[#F4F2EE] px-3 py-1 rounded-full"
               }
             />
           </div>
