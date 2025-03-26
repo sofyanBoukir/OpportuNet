@@ -4,7 +4,6 @@ const appState = {
   // isNotified: false,
   notifiedTimes: 0,
   theme: localStorage.getItem("theme"),
-  querySearch: "",
   resultSearch: { users: [], posts: [] },
 };
 

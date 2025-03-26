@@ -26,7 +26,7 @@ import { Link } from "react-router-dom";
 import { copyText } from "../../functions/copyText";
 import { Notification } from "../UI/Notification";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
-const frontendUrl = import.meta.env.VITE_FRONTEND_URL
+const frontendUrl = import.meta.env.VITE_FRONTEND_URL;
 export const Post = ({ post, showIcon, postSelected, openDelete }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -50,7 +50,7 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
   const [alreadySaved, setAlreadySaved] = useState(
     userData.savedPosts.includes(post._id)
   );
-  const [notification,setNotification] = useState()
+  const [notification, setNotification] = useState();
 
   console.log(userData.likedPosts);
 
@@ -107,7 +107,12 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
           </div>
           <div className="px-3">
             <div className="flex flex-row items-center">
-              <Link className="text-xl font-semibold dark:text-white" to={`/user/profile/${post.user?._id}`}>{post.user?.name}</Link>
+              <Link
+                className="text-xl font-semibold dark:text-white"
+                to={`/user/profile/${post.user?._id}`}
+              >
+                {post.user?.name}
+              </Link>
               <h3 className="text-gray-400 text-sm font-semibold px-2">
                 {moment(post.createdAt).fromNow()}
               </h3>
@@ -160,7 +165,12 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
               </MenuItem>
             )}
             <MenuItem onClick={handleClose}>
-              <div className="flex flex-row items-center gap-2" onClick={() => copyText(frontendUrl+"/post/"+post._id,setNotification)}>
+              <div
+                className="flex flex-row items-center gap-2"
+                onClick={() =>
+                  copyText(frontendUrl + "/post/" + post._id, setNotification)
+                }
+              >
                 <LinkIcon className="text-black w-6 h-6" strokeWidth={1.2} />
                 <h1>Coppy Link</h1>
               </div>
@@ -235,9 +245,9 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
       {openModalPost && (
         <PostModal setOpenModalPost={setOpenModalPost} post={post} />
       )}
-      {
-        notification && <Notification type={notification.type} message={notification.message} />
-      }
+      {notification && (
+        <Notification type={notification.type} message={notification.message} />
+      )}
     </div>
   );
 };
