@@ -19,4 +19,23 @@ export const getMessagesByConversation = async (token,conversationId) =>{
         }
     });
     return response
-} 
+}
+
+export const startNewConversation = async (token,otherUserId) =>{
+    const response = await axios.post(`${serverUrl}/conversation/startConversation/${otherUserId}`,null,{
+        headers : {
+            Authorization : `Bearer ${token}`
+        }
+    });
+    return response;
+}
+
+
+export const sendNewMessage = async (token,conversationId,message) =>{
+    const response = await axios.post(`${serverUrl}/conversation/sendNewMessage/${conversationId}`,{message},{
+        headers : {
+            Authorization : `Bearer ${token}`
+        }
+    });
+    return response;
+}

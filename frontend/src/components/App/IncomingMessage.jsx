@@ -1,13 +1,14 @@
+import moment from 'moment'
 import React from 'react'
 
-export const IncomingMessage = () => {
+export const IncomingMessage = ({message}) => {
   return (
-    <div className="bg-blue-500 w-[60%] max-w-[70%] float-right rounded-tl-none px-4 py-2 rounded-3xl break-words">
+    <div className="flex bg-blue-500 relative flex-col self-start max-w-[70%] rounded-tl-none px-6 py-2 rounded-3xl break-words">
         <span className="text-white font-semibold break-words">
-            Hello sofyansofyansofyansofyansofyansofyansofyansofyansofyansofyansofyansofyansofyan
+            {message.message}
         </span>
         <br></br>
-        <span className='text-gray-100 float-right'>12:30</span>
+        <span className='text-gray-100 flex justify-end'>{moment(message.createdAt).format('LT')}</span>
     </div>
     )
 }
