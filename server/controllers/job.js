@@ -1,4 +1,6 @@
+const Conversation = require("../models/Conversation");
 const Job = require("../models/Job");
+const Message = require("../models/Message");
 const User = require("../models/User");
 
 const getPostedJobs = async (request,response) =>{
@@ -204,4 +206,62 @@ const deleteJob = async (request,response) =>{
 }
 
 
-module.exports = {getPostedJobs, getPostedJob, getJobs, postNewJob, editJob, deleteJob}
+const applyForJob = async (request,response) =>{
+    try{
+        const userId = request.user.id;
+
+        const user = await User.findById(userId);
+        if(!user){
+            return response.status(404).json({
+                'message' : 'User not found'
+            })
+        }
+
+        const { jobId } = request.params;
+        const job = await Job.findById(jobId)
+
+        if(job){
+            if(job.applicants.includes(userId)){
+                return response.status(401).json({
+                    'message' : 'You are already applied for this job'
+                })
+            }
+
+
+            job.applicants.push(userId);
+            await job.save();
+            
+            const newConversation = new Conversation({
+                participants : [userId,job.recuiter],
+                lastMessage : "Hi! I’d like to apply for this job. Looking forward to your response!",
+                job : job._id,
+            })
+
+            await newConversation.save();
+
+            const newMessage = new Message({
+                conversation : newConversation._id,
+                sender : userId,
+                message : 'Hi! I’d like to apply for this job. Looking forward to your response!',
+            });
+            await newMessage.save();
+
+            return response.json({
+                'message' : 'Successfully apllied for this job'
+            })
+
+        }else{
+            return response.status(404).json({
+                'message' : 'Could not find this job'
+            });
+        }
+
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+}
+
+
+module.exports = {getPostedJobs, getPostedJob, getJobs, postNewJob, editJob, deleteJob, applyForJob}

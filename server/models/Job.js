@@ -11,6 +11,7 @@ const jobShema = new mongoose.Schema({
     description : {type: String},
     skills : [{type: String}],
     responsibilities : [{type: String}],
+    applicants : [{type:mongoose.Schema.Types.ObjectId, ref:"User"}]
 },{timestamps:true})
 
 
