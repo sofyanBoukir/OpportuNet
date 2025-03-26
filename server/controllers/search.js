@@ -49,8 +49,7 @@ const searchUsersPosts = async (request, response) => {
   }
 };
 
-
-const searchForJob = async (request,response) =>{
+const searchForJob = async (request, response) => {
   try {
     const userId = request.user.id;
     const { query } = request.query;
@@ -62,22 +61,23 @@ const searchForJob = async (request,response) =>{
       });
     }
 
-    const jobs = await Job.find({ title: { $regex: `^${query}`, $options: "i" } });
-    if(jobs.length){
+    const jobs = await Job.find({
+      title: { $regex: `^${query}`, $options: "i" },
+    });
+    if (jobs.length) {
       return response.json({
-        'jobs' : jobs
-      })
-    }else{
+        jobs: jobs,
+      });
+    } else {
       return response.status(404).json({
-        'message' : 'No jobs starts with this query'
-      })
+        message: "No jobs starts with this query",
+      });
     }
-
   } catch (error) {
     return response.status(500).json({
       message: error.message,
     });
   }
-}
+};
 
-module.exports = {searchUsersPosts, searchForJob};
+module.exports = { searchUsersPosts, searchForJob };

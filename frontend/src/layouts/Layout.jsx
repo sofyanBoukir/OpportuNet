@@ -30,7 +30,7 @@ export const Layout = () => {
   const { notifiedTimes } = AppSelector();
 
   const notifiedTimesRef = useRef(notifiedTimes);
-  const [searchInput, setSearchInput] = useState("rrr");
+  const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
     notifiedTimesRef.current = notifiedTimes;
@@ -128,7 +128,7 @@ export const Layout = () => {
   }, [dispatch]);
 
   const handleSearchInput = (e) => {
-    dispatch({ type: "UPDATE_SEARCH", payload: e.target.value });
+    setSearchInput(e.target.value);
   };
 
   return (
@@ -252,22 +252,12 @@ export const Layout = () => {
             </div>
           </div>
         </div>
-        {/* <span
-            className={
-              isNotified
-                ? "bg-red-500 rounded w-2 h-2 fixed bottom-7 right-[125px] sm:right-[239px] 2xl:absolute 2xl:top-[6px] 2xl:right-[183px]"
-                : "hidden"
-            }
-          ></span>
-          <span
-            className={
-              isMessaged
-                ? "bg-red-500 rounded w-2 h-2 fixed bottom-7 right-[201px] sm:right-[373px] 2xl:top-[6px] 2xl:right-[650px]"
-                : "hidden"
-            }
-          ></span> */}
+
         {openSearchModal && (
-          <SearchModal openSearchModal={setOpenSearchModal} />
+          <SearchModal
+            query={searchInput}
+            openSearchModal={setOpenSearchModal}
+          />
         )}
       </div>
       <Outlet />
