@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 
 const conversationShema = new mongoose.Schema({
     participants : [{type:mongoose.Schema.Types.ObjectId, ref:"User"}],
-    lastMessage : {type:mongoose.Schema.Types.ObjectId, ref:"Message"},
+    lastMessage : {type:String},
+    job : {type:mongoose.Schema.Types.ObjectId, ref:"Job"}
 },{timestamps:true})
 
 
