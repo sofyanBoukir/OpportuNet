@@ -22,6 +22,7 @@ export const NotificationsSkeleton = () => {
                                         <Skeleton animation="wave" height={20} width="100%"/>
                                         <Skeleton animation="wave" height={20} width="80%"/>
                                     </div>
+                                    
                                 </div>
                     })
                 }
