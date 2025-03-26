@@ -7,6 +7,10 @@ import { useState } from "react";
 import { Follows } from "../modals/Follows";
 import { Avatar, AvatarGroup } from "@mui/material";
 import { Link } from "react-router-dom";
+import { Button } from "../UI/Button";
+import { startNewConversation } from "../../services/conversation";
+import { ERROR_MESSAGES } from "../../constants/Errors";
+import { Notification } from "../UI/Notification";
 
 const serverURL = import.meta.env.VITE_SERVER_URL;
 
@@ -24,7 +28,29 @@ export const ProfilInfoModal = ({
   };  
   
   const [toView,setToView] = useState(null)
-  // const [viewMultual,setViewMultual] = useState(false)
+  const [loading,setLoading] = useState(false);
+  const [notification,setNotification] = useState()
+
+  const _startNewConversation = async () =>{
+    setNotification(null)
+    try{
+      setLoading(true)
+      const response = await startNewConversation(localStorage.getItem('token'),userData._id)
+      setLoading(false)
+
+      if(response.status === 200){
+        setNotification({type:'success',message:response.data.message});
+      }
+    }catch(err){
+      setLoading(false);
+      if(err.response.data.message){
+        setNotification({type:'error',message:err.response.data.message})
+      }else{
+        setNotification({type:'error',message:ERROR_MESSAGES.SOMETHING_WENT_WRONG})
+      }
+    }
+  }
+
 
   return (
     <div className="bg-white w-full lg:w-[89%] pb-[1px] lg:ml-[15%] relative lg:rounded-md z-10">
@@ -108,7 +134,7 @@ export const ProfilInfoModal = ({
           {userData.webSite}
         </a>
        
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           <div className="border-2 border-[#0A66C2] px-2 py-0.5 rounded-full mb-2 mt-3">
             <span className="text-[#0A66C2] font-semibold cursor-pointer" onClick={() => setToView('followers')}>
               {userData.followers ? userData.followers?.length : "0"} followers
@@ -126,7 +152,15 @@ export const ProfilInfoModal = ({
             />
           )}
           {
+            !showIcon && (
+              <Button text={'👋 Send hi'} className="bg-blue-900 text-white rounded-full cursor-pointer h-[45px] mt-1 py-1 px-3 flex justify-center items-center font-semibold" onClick={_startNewConversation} /> 
+            ) 
+          }
+          {
             toView && showIcon && <Follows toView={toView} setToView={setToView} />
+          }
+          {
+            notification && <Notification type={notification.type} message={notification.message} />
           }
         </div>
       </div>

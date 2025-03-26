@@ -7,7 +7,10 @@ import messageBg from '../../public/images/bgMessage.png'
 import { ChatBubbleOvalLeftEllipsisIcon, CheckIcon } from '@heroicons/react/24/outline'
 import { IncomingMessage } from '../components/App/IncomingMessage'
 import { OutgoingMessage } from '../components/App/OutgoingMessage'
-import { getConversations, getMessagesByConversation } from '../services/conversation'
+import { getConversations, getMessagesByConversation, sendNewMessage } from '../services/conversation'
+import { AppSelector } from '../selectors/AppSelector'
+import { Link } from 'react-router-dom'
+import { send } from 'vite'
 
 export const Messaging = () => {
 
@@ -19,6 +22,9 @@ export const Messaging = () => {
     const [selectedConversation,setSelectefConversation] = useState(null)
     const [loadMessages,setLoadMessages] = useState(false)
     const [messages,setMessages] = useState([])
+    const [otherParticipant,setOtherParticipiant] = useState(null)
+    const [message,setMessage] = useState('')
+    const {userData} = AppSelector()
 
     const _getUserConversations = async () =>{
         try{
@@ -53,6 +59,20 @@ export const Messaging = () => {
         }
     }
 
+    const _sendNewMessage = async () =>{
+        try{
+            const response = await sendNewMessage(localStorage.getItem('token'),selectedConversation,message);
+            if(response.status === 200){
+                setMessages([...messages,{
+                    createdAt : new Date(),
+                    message : message,
+                    sender: userData._id
+                }])
+            }
+        }catch(err){
+            //
+        }
+    }
     useEffect(() =>{
         _getUserConversations()
     },[page])
@@ -73,7 +93,7 @@ export const Messaging = () => {
                     {
                         !loadingConversation && conversations && conversations.length ?
                             conversations.map((conversation,index) =>{
-                                return <Conversation key={index} conversation={conversation} setSelectefConversation={setSelectefConversation}/>
+                                return <Conversation key={index} conversation={conversation} setOtherParticipiant={setOtherParticipiant} setSelectefConversation={setSelectefConversation}/>
                             })
                         :null
                     }
@@ -84,28 +104,34 @@ export const Messaging = () => {
                     {
                         selectedConversation !== null && <>
                             <div className='flex gap-3 items-center'>
-                                <img src={defaultImage} className='rounded-full w-12 h-12'/>
+                                <img src={otherParticipant.profilePictureUrl} className='rounded-full w-12 h-12'/>
                                 <div>
-                                    <p className='text-xl font-semibold cursor-pointer hover:text-blue-800 duration-200'>Soufian boukir</p>
-                                    <span className='text-gray-600'>Javascript engineer</span>
+                                    <Link className='text-xl font-semibold cursor-pointer hover:text-blue-800 duration-200' to={`/user/profile/${otherParticipant._id}`}>{otherParticipant.name}</Link>
+                                    <p className='text-gray-600'>{otherParticipant.headLine}</p>
                                 </div>
                             </div>
                             <hr className='text-gray-200 border mt-2 w-4/4'></hr>
                             <div className='relative lg:mt-2 w-[100%] h-[70vh] overflow-auto' style={{backgroundSize:"cover",backgroundImage: `url(${messageBg})`}}>
                                 <div className='px-3 py-2'>
                                     <div className="w-full flex flex-col gap-2 lg:mb-0 mb-20">
-                                        <IncomingMessage />
-                                        <IncomingMessage />
-                                        <OutgoingMessage />
-                                        <OutgoingMessage />
-                                        <IncomingMessage />
-                                        <OutgoingMessage />
+                                        {
+                                            !loadMessages && messages && messages.length ?
+                                                messages.map((message) =>{
+                                                    if(message.sender === userData._id){
+                                                        return <OutgoingMessage message={message}/>
+                                                    }else{
+                                                        return <IncomingMessage message={message}/>
+                                                    }
+                                                })
+                                            :null
+                                        }
                                     </div>
                                     <AlwaysScrollToBottom />
                                 </div>
                                 <div className='fixed bottom-14 lg:bottom-10 mt-2 w-[100%] flex gap-2 items-center'>
-                                    <Input type={'text'} placeholder={'Type somthing....'} className={'w-[60%] py-3 px-5 border border-gray-400 rounded-3xl outline-none'}/>
-                                    <Button text={'Send'} className={'text-white bg-blue-500'}/>
+                                    <Input type={'text'} placeholder={'Type somthing....'} value={message} 
+                                    onChange={(e) => setMessage(e.target.value)} className={'w-[60%] py-3 px-5 border border-gray-400 rounded-3xl outline-none'}/>
+                                    <Button text={'Send'} className={'text-white bg-blue-500'} onClick={_sendNewMessage}/>
                                 </div>
                             </div>
                         </>

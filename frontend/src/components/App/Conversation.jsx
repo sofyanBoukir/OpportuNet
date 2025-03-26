@@ -3,14 +3,14 @@ import defaultImage from '../../../public/images/profilDefault.png'
 import { AppSelector } from '../../selectors/AppSelector'
 import moment from 'moment/moment'
 
-export const Conversation = ({conversation,setSelectefConversation}) => {
+export const Conversation = ({conversation,setSelectefConversation,setOtherParticipiant}) => {
     const {userData} = AppSelector()
 
     const otherParticipant = conversation.participants.find((participant) => participant._id !== userData._id)
     
   return (
     <>
-        <div onClick={() => setSelectefConversation(conversation._id)} className='px-3 py-1 lg:flex items-center lg:text-start text-center lg:justify-between cursor-pointer duration-200 hover:bg-gray-100'>
+        <div onClick={() => {setSelectefConversation(conversation._id);setOtherParticipiant(otherParticipant)}} className='px-3 py-1 lg:flex items-center lg:text-start text-center lg:justify-between cursor-pointer duration-200 hover:bg-gray-100'>
             <div className='lg:flex gap-3 items-center'>
                 <img src={otherParticipant.profilePictureUrl} className='rounded-full w-12 h-12 mx-auto'/>
                 <div>

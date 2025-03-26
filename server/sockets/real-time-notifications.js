@@ -6,4 +6,9 @@ const notifyOnlineUser = (io,userId,notification) =>{
     }
 }
 
-module.exports = notifyOnlineUser;
+const notifyMessageToOnlineUser = (io,userId,message) =>{
+    if(users[userId]){
+        io.to(users[userId]).emit('newMessage',message)        
+    }}
+    
+module.exports = {notifyOnlineUser, notifyMessageToOnlineUser};
