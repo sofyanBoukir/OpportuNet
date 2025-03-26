@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+
 
 .roboto {
     font-family: "Roboto", sans-serif;
@@ -34,7 +37,3 @@
 .tagged-user{
     color: blue;
 }
-/* 
-.dark {
-    background-color: black;
-} */

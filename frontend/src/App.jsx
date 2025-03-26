@@ -21,6 +21,7 @@ import { SavedPosts } from "./shared/SavedPosts";
 import { Jobs } from "./pages/user/Jobs";
 import { Searchs } from "./pages/user/Searchs";
 import { RecuiterJobs } from "./pages/recuiter/RecuiterJobs";
+import { Messaging } from "./shared/Messaging";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
             <Route path="/candidate/jobs" element={<Jobs />} />
             <Route path="/search/results/all" element={<Searchs />} />
             <Route path="/recuiter/post" element={<RecuiterJobs />} />
+            <Route path="/messaging" element={<Messaging />} />
           </Route>
         </Route>
       </Routes>

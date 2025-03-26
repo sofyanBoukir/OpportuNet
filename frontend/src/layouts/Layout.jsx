@@ -135,7 +135,7 @@ export const Layout = () => {
     <div>
       <div>
         <div
-          className="bg-white py-1 lg:px-[10%] flex w-[100%] justify-between fixed z-20"
+          className="bg-white dark:bg-black py-1 lg:px-[10%] flex w-[100%] justify-between fixed z-20"
           onClick={() => {
             setShowProfil(false);
             setOpenSearchModal(false);
@@ -169,11 +169,11 @@ export const Layout = () => {
                 placeholder="Search"
                 className={` pl-[32px] py-2 w-[90%] ${
                   openSearchModal && "!w-full duration-500 border-2"
-                } my-auto outline-none rounded-md bg-[#F2F2F2]`}
+                } my-auto outline-none rounded-md bg-[#F2F2F2] dark:bg-[#0D1117] dark:text-gray-100`}
               />
             </div>
           </div>
-          <div className="bg-white w-full lg:w-[50%] h-[70px] lg:h-auto fixed lg:static bottom-0 flex sm:justify-center gap-8">
+          <div className="bg-white dark:bg-black w-full lg:w-[50%] h-[70px] lg:h-auto fixed lg:static bottom-0 flex sm:justify-center gap-8">
             {dataHeader
               .filter((item) => item.ROLE === userData.role)
               .map((element) => (
@@ -188,13 +188,13 @@ export const Layout = () => {
               className={`w-[60px] flex flex-col items-center justify-center mt-[3px] cursor-pointer`}
               onClick={() => setDarkMode(!darkMode)}
             >
-              {darkMode ? (
+              {!darkMode ? (
                 <MoonIcon className="w-7 h-7 text-[#666666]" />
               ) : (
-                <SunIcon className="w-7 h-7 text-[#666666]" />
+                <SunIcon className="w-7 h-7 text-gray-400" />
               )}
-              <div className="text-xs font-normal hidden lg:block text-gray-600">
-                {darkMode ? "Dark" : "Light"}
+              <div className="text-xs font-normal hidden lg:block text-gray-600 dark:text-gray-100">
+                {!darkMode ? "Dark" : "Light"}
               </div>
             </div>
             <div
@@ -205,7 +205,7 @@ export const Layout = () => {
                 src={userData.profilePictureUrl}
                 className="w-7 h-7 rounded-full mt-0.5"
               />
-              <div className="text-xs font-normal hidden lg:block text-gray-600 2xl:block">
+              <div className="text-xs font-normal hidden lg:block dark:text-gray-100 text-gray-600 2xl:block">
                 Profile
               </div>
             </div>

@@ -19,3 +19,12 @@ export const searchForJobs = async (token,query) =>{
     })
     return response
 }
+
+export const applyForJob = async (token,jobId) =>{
+    const response = await axios.post(`${serverUrl}/job/applyForJob/${jobId}`,null,{
+        headers : {
+            Authorization : `Bearer ${token}`
+        }
+    });
+    return response
+}
