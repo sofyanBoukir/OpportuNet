@@ -28,3 +28,11 @@ export const applyForJob = async (token,jobId) =>{
     });
     return response
 }
+export const addJob = async (token, jobData) => {
+  const response = await axios.post(`${serverUrl}/job/postNewJob`, jobData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
