@@ -11,8 +11,8 @@ export const JobsDetail = () => {
   }
 
   return (
-    <div>
-      <JobDetails job={job} />
+    <div className=" relative top-15 px-[20%]">
+      <JobDetails job={job}/>
     </div>
   );
 };

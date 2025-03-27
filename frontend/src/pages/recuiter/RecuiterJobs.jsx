@@ -10,10 +10,15 @@ import {
 } from "@heroicons/react/24/solid";
 import { JobsDetail } from "../../shared/JobsDetail";
 import { useNavigate } from "react-router-dom";
+import { DeleteModal } from "../../components/modals/DeleteModal";
 
 export const RecuiterJobs = () => {
   const [openAddJob, setOpenAddJob] = useState(false);
   const [jobs, setJobs] = useState([]);
+  const [notification, setNotification] = useState(null);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [loadingDelete, setLoadinDelete] = useState(false);
+  const [idDelete, setIdDelete] = useState("");
   const navigate = useNavigate();
 
   const handleViewJob = (job) => {
@@ -23,11 +28,17 @@ export const RecuiterJobs = () => {
     const response = await getPostedJobs(localStorage.getItem("token"));
     setJobs(response.data.postedJobs);
   };
-  const deleteJobById = async (id) => {
-    const response = await deleteJob(localStorage.getItem("token"), id);
+  const deleteJobById = async () => {
+    setLoadinDelete(true);
+    const response = await deleteJob(localStorage.getItem("token"), idDelete);
     if (response.status === 200) {
-      setJobs((prevJobs) => prevJobs.filter((job) => job._id !== id));
+      setJobs((prevJobs) => prevJobs.filter((job) => job._id !== idDelete));
     }
+    setTimeout(() => {
+      setLoadinDelete(false);
+
+      setOpenDelete(false);
+    }, 1000);
   };
   useEffect(() => {
     getJobs();
@@ -65,7 +76,10 @@ export const RecuiterJobs = () => {
                 <PencilSquareIcon className="text-blue-600 w-6 h-6 cursor-pointer" />
                 <TrashIcon
                   className="text-red-600 w-6 h-6 cursor-pointer"
-                  onClick={() => deleteJobById(job._id)}
+                  onClick={() => {
+                    setIdDelete(job._id);
+                    setOpenDelete(true);
+                  }}
                 />
               </div>
             </div>
@@ -83,6 +97,14 @@ export const RecuiterJobs = () => {
         </div>
       </div>
       {openAddJob && <AddJob setOpenAddJob={setOpenAddJob} />}
+      {openDelete && (
+        <DeleteModal
+          setOpen={setOpenDelete}
+          deleteItem={deleteJobById}
+          itemType={"job"}
+          loading={loadingDelete}
+        />
+      )}
     </div>
   );
 };
