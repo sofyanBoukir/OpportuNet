@@ -36,3 +36,23 @@ export const addJob = async (token, jobData) => {
   });
   return response;
 };
+export const getPostedJobs = async (token) =>{
+    const response = await axios.get(`${serverUrl}/job/getPostedJobs`,{
+        headers : {
+            Authorization : `Bearer ${token}`
+        }
+    })
+    return response;
+}
+
+export const deleteJob = async (token, jobId) => {
+  const response = await axios.delete(
+    `${serverUrl}/job/deleteJob/${jobId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response;
+};

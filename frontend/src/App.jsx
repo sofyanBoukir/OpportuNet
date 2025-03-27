@@ -22,6 +22,7 @@ import { Jobs } from "./pages/user/Jobs";
 import { Searchs } from "./pages/user/Searchs";
 import { RecuiterJobs } from "./pages/recuiter/RecuiterJobs";
 import { Messaging } from "./shared/Messaging";
+import { JobsDetail } from "./shared/JobsDetail";
 
 function App() {
   return (
@@ -51,6 +52,8 @@ function App() {
             <Route path="/recuiter/post" element={<RecuiterJobs />} />
             <Route path="/search/results/all/:query" element={<Searchs />} />
             <Route path="/messaging" element={<Messaging />} />
+            <Route path="/job-detail/:id" element={<JobsDetail />} />
+
           </Route>
         </Route>
       </Routes>
