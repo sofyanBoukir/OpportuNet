@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { deleteExperience } from "../../services/profile";
 import { ERROR_MESSAGES } from "../../constants/Errors";
 
-export const ExperiencesModal = ({
+export const Experiences = ({
   notification,
   valuetoUpdate,
   idEduSelected,

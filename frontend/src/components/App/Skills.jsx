@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { deleteSkill } from "../../services/profile";
 import { ERROR_MESSAGES } from "../../constants/Errors";
 
-export const SkillsModal = ({
+export const Skills = ({
   notification,
   valuetoAdd,
   setShowModalAdd,

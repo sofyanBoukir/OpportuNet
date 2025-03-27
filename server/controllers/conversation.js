@@ -1,6 +1,8 @@
 const Conversation = require("../models/Conversation");
 const Message = require("../models/Message");
 const User = require("../models/User");
+const notifyMessageToOnlineUser = require("../sockets/real-time-messages");
+const { getIO } = require("../sockets/socket");
 
 const getConversations = async (request,response) =>{
     try{
@@ -107,20 +109,27 @@ const sendNewMessage = async (request,response) =>{
         }
         
         const {conversationId} = request.params;
-        const { message } = request.body;
+        const { message,recipient } = request.body;
 
-        const participants = [userId,otherUserId];
-        const conversation = await Conversation.findOne({$and:[{participants:{$all:participants}},{_id:conversationId}]})
+        const conversation = await Conversation.findOne({$and:[{participants:userId},{_id:conversationId}]})
+        const io = getIO();
 
         if(conversation){
             const newMessage = new Message({
                 conversation : conversation._id,
                 sender : userId,
                 message : message,
+                recipient : recipient
             })
 
+            await Conversation.findByIdAndUpdate(conversationId, {
+                lastMessage: message,
+                lastMessageSender: userId,
+                lastMessageStatus: "sent",
+            });
+            
             await newMessage.save();
-
+            notifyMessageToOnlineUser(io,recipient,newMessage);
             return response.json({
                 'message' : 'New message sended successfully!'
             })
@@ -137,6 +146,32 @@ const sendNewMessage = async (request,response) =>{
     }
 }
 
+
+const updateConversationLastMessageStatus = async (request,response) =>{
+    try{
+        const userId = request.user.id;
+
+        const user = await User.findById(userId);
+        if(!user){
+            return response.status(404).json({
+                'message' : 'User not found'
+            })
+        }
+        
+        const {conversationId} = request.params;
+        await Conversation.findByIdAndUpdate(conversationId, {
+            lastMessageStatus: "seen",
+        });
+
+        return response.json({
+            'message' : 'Updated successfully!'
+        })
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+} 
 
 const getMessagesByConversation = async (request,response) =>{
     try{
@@ -171,4 +206,4 @@ const getMessagesByConversation = async (request,response) =>{
 }
 
 
-module.exports = {getConversations, getMessagesByConversation, startConversation, sendNewMessage}
+module.exports = {getConversations, getMessagesByConversation, startConversation, updateConversationLastMessageStatus, sendNewMessage}

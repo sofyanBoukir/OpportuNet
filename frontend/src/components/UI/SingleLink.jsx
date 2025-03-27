@@ -5,7 +5,7 @@ import { AppSelector } from "../../selectors/AppSelector";
 export const SingleLink = ({ link, svg, text }) => {
   const navigate = useNavigate();
   const currentPath = window.location.pathname;
-  const { notifiedTimes } = AppSelector()
+  const { notifiedTimes,messagedTimes } = AppSelector()
 
   
   //   const [showBorder, setShowBorder] = useState(false);
@@ -32,7 +32,7 @@ export const SingleLink = ({ link, svg, text }) => {
         }`}
       >
         {
-          // text === 'Messaging' && <div className="w-5 h-5 text-center text-white bg-red-600 absolute rounded-full top-[-7px] right-[-10px] text-sm">1</div>
+          text === 'Messaging' && messagedTimes !== 0 &&  <div className="w-5 h-5 text-center text-white dark:text-black bg-red-600 absolute flex items-center justify-center rounded-full top-[-7px] right-[-10px] text-[13px]">{messagedTimes > 9 ? "+9" : messagedTimes }</div>
         }
         {
           text === 'Notifications' &&  notifiedTimes !== 0 && <div className="w-5 h-5 text-center text-white dark:text-black bg-red-600 absolute flex items-center justify-center rounded-full top-[-7px] right-[-10px] text-[13px]">{notifiedTimes > 9 ? "+9" : notifiedTimes }</div>

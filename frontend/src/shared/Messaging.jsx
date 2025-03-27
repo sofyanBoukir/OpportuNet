@@ -7,10 +7,11 @@ import messageBg from '../../public/images/bgMessage.png'
 import { ChatBubbleOvalLeftEllipsisIcon, CheckIcon } from '@heroicons/react/24/outline'
 import { IncomingMessage } from '../components/App/IncomingMessage'
 import { OutgoingMessage } from '../components/App/OutgoingMessage'
-import { getConversations, getMessagesByConversation, sendNewMessage } from '../services/conversation'
+import { getConversations, getMessagesByConversation, sendNewMessage, updateConversationLastMessageStatus } from '../services/conversation'
 import { AppSelector } from '../selectors/AppSelector'
 import { Link } from 'react-router-dom'
-import { send } from 'vite'
+import socket from '../functions/socket'
+import { useDispatch } from 'react-redux'
 
 export const Messaging = () => {
 
@@ -24,6 +25,7 @@ export const Messaging = () => {
     const [messages,setMessages] = useState([])
     const [otherParticipant,setOtherParticipiant] = useState(null)
     const [message,setMessage] = useState('')
+    const dispatch = useDispatch()
     const {userData} = AppSelector()
 
     const _getUserConversations = async () =>{
@@ -59,34 +61,66 @@ export const Messaging = () => {
         }
     }
 
+    const _updateConversationLastMessageStatus = async () =>{
+        if(selectedConversation.lastMessageStatus === 'seen') return;
+        const response = await updateConversationLastMessageStatus(localStorage.getItem('token'),selectedConversation);
+        if(response.status === 200){
+            const updateConversations = conversations.map((conversation) => conversation._id === selectedConversation ? {...conversation,lastMessageStatus:'seen'} : conversation)
+            setConversations(updateConversations)
+            dispatch({type:'UPDATE_MESSAGED_TIMES',payload:0})
+        }
+    }
+
     const _sendNewMessage = async () =>{
         try{
-            const response = await sendNewMessage(localStorage.getItem('token'),selectedConversation,message);
+            const response = await sendNewMessage(localStorage.getItem('token'),selectedConversation,{message,recipient:otherParticipant._id});            
             if(response.status === 200){
                 setMessages([...messages,{
                     createdAt : new Date(),
                     message : message,
                     sender: userData._id
                 }])
+                setMessage('')
+                const updateConversations = conversations.map((conversation) => conversation._id === selectedConversation ? {...conversation,lastMessage:message} : conversation)
+                setConversations(updateConversations)
             }
         }catch(err){
             //
         }
     }
+    const notificationSound = new Audio("../../public/audios/notificationSound.wav");
+
+    useEffect(() => {
+        if (!socket.connected) {
+            socket.connect();
+        
+            socket.on("connect", () => {
+                console.log("connected to the server");
+            });
+                socket.emit("registerUser", localStorage.getItem("token"));
+                socket.on('newMessage',(newMessage) =>{
+                    setMessages((prevMessages) => [...prevMessages,newMessage])
+                    notificationSound.play()
+                    AlwaysScrollToBottom()
+                })
+            };
+    }, []);
+
     useEffect(() =>{
         _getUserConversations()
     },[page])
 
     useEffect(() =>{
         _getMessagesByConversation();
+        _updateConversationLastMessageStatus();
     },[selectedConversation])
   return (
     <div className="px-3 relative top-16">
-        <div className="bg-white rounded-xl shadow-md px-10 py-5 lg:flex">
+        <div className="bg-white dark:bg-black dark:text-white rounded-xl shadow-md px-10 py-5 lg:flex">
             <div className='lg:w-[30%] lg:border-r border-r-gray-500 lg:pr-10'>
                 <h1 className='text-2xl font-semibold'>Messaging</h1>
                 <div className='mt-5'>
-                    <Input type={'text'} placeholder={'Search people...'} className={'w-[100%] border-2 outline-none border-gray-400 rounded-sm px-3 py-2'}/>
+                    <Input type={'text'} placeholder={'Search people...'} className={'w-[100%] border-2 outline-none dark:text-white border-gray-400 rounded-sm px-3 py-2'}/>
                 </div>
 
                 <div className='mt-6 flex flex-nowrap lg:flex-col gap-3 lg:h-[70vh] overflow-auto'>
@@ -130,7 +164,7 @@ export const Messaging = () => {
                                 </div>
                                 <div className='fixed bottom-14 lg:bottom-10 mt-2 w-[100%] flex gap-2 items-center'>
                                     <Input type={'text'} placeholder={'Type somthing....'} value={message} 
-                                    onChange={(e) => setMessage(e.target.value)} className={'w-[60%] py-3 px-5 border border-gray-400 rounded-3xl outline-none'}/>
+                                    onChange={(e) => setMessage(e.target.value)} className={'w-[60%] py-3 px-5 border dark:text-white border-gray-400 rounded-3xl outline-none'}/>
                                     <Button text={'Send'} className={'text-white bg-blue-500'} onClick={_sendNewMessage}/>
                                 </div>
                             </div>

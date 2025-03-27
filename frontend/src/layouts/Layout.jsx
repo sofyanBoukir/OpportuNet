@@ -104,6 +104,17 @@ export const Layout = () => {
         });
       });
 
+      socket.on("missedMessages", (missedMessages) => {
+        dispatch({
+          type: "UPDATE_MESSAGED_TIMES",
+          payload: missedMessages.length,
+        });
+      });
+
+      socket.on('newMessage',(newMessage) =>{
+          notificationSound.play()
+      })
+
       socket.on("newNotification", (newNotification) => {
         dispatch({
           type: "UPDATE_NOTIFIED_TIMES",

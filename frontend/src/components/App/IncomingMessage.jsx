@@ -7,7 +7,6 @@ export const IncomingMessage = ({message}) => {
         <span className="text-white font-semibold break-words">
             {message.message}
         </span>
-        <br></br>
         <span className='text-gray-100 flex justify-end'>{moment(message.createdAt).format('LT')}</span>
     </div>
     )

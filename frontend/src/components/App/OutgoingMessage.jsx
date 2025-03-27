@@ -14,7 +14,7 @@ export const OutgoingMessage = ({message}) => {
                 <CheckIcon className='w-4 h-4 text-gray-500' strokeWidth={3}/>
                 <CheckIcon className='w-4 h-4 absolute left-2 text-gray-500' strokeWidth={3}/>
             </div>
-            <span className='text-gray-500 font-semibold'>delivred</span>
+            <span className='text-gray-500 font-semibold'>{message.status}</span>
             <span className='text-gray-800'>{moment(message.createdAt).format('LT')}</span>
         </div>
     </div>

@@ -39,10 +39,26 @@ export const startNewConversation = async (token, otherUserId) => {
   return response;
 };
 
-export const sendNewMessage = async (token, conversationId, message) => {
+export const sendNewMessage = async (token, conversationId, data) => {
   const response = await axios.post(
     `${serverUrl}/conversation/sendNewMessage/${conversationId}`,
-    { message },
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response;
+};
+
+export const updateConversationLastMessageStatus = async (
+  token,
+  conversationId
+) => {
+  const response = await axios.put(
+    `${serverUrl}/conversation/updateConversationLastMessageStatus/${conversationId}`,
+    null,
     {
       headers: {
         Authorization: `Bearer ${token}`,

@@ -13,6 +13,6 @@ const getMissedNotifications = async (userId) =>{
             'message' : err.message
         })
     }
-} 
+}
 
 module.exports = getMissedNotifications

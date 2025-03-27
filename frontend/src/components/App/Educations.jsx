@@ -7,7 +7,7 @@ import { AppSelector } from "../../selectors/AppSelector";
 import { useDispatch } from "react-redux";
 import { ERROR_MESSAGES } from "../../constants/Errors";
 
-export const EducationsModal = ({
+export const Educations = ({
   notification,
   valuetoAdd,
   setShowModalAdd,

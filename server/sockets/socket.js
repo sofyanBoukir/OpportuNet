@@ -1,6 +1,7 @@
 const { Server } = require("socket.io");
 const { registerUser, users } = require("./connected-users");
 const getMissedNotifications = require("./missed-notifications");
+const getUnseenConversations = require("./missed-messages");
 
 let io;
 
@@ -17,9 +18,14 @@ const initialSocket = (server) =>{
     socket.on('registerUser',async (token) =>{
         userId = registerUser(token,socket.id);
         missedNotifications = await getMissedNotifications(userId);
-    
+        unseenConversations = await getUnseenConversations(userId);
+
         if(missedNotifications.length > 0){
             io.to(users[userId]).emit('missedNotifications',missedNotifications);
+        }
+
+        if(unseenConversations.length > 0){
+            io.to(users[userId]).emit('missedMessages',unseenConversations);
         }
     })
     

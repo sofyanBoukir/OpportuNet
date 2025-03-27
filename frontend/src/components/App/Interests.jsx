@@ -2,7 +2,7 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import { useState } from "react";
 
-export const InterestsModal = ({
+export const Interests = ({
   setShowModalUpdate,
   valuetoUpdate,
   showIcon,
