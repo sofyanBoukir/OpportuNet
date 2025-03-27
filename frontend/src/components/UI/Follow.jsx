@@ -18,6 +18,7 @@ export const Follow = ({ type,disabled, userId,text, className }) => {
     try{
       setLoading(true)
       const response = await toggleFollow(localStorage.getItem('token'),userId);
+      console.log(response);
       
       setLoading(false)
       if(response.status === 200){
@@ -41,12 +42,10 @@ export const Follow = ({ type,disabled, userId,text, className }) => {
       onClick={_toggleFollow}
       className={`px-3 cursor-pointer ${
         loading ? "cursor-no-drop" : null
-      } font-semibold flex items-center relative duration-200 justify-center text-md ${className}`}
+      } font-semibold flex items-center h-[40px] relative duration-200 justify-center text-md ${className}`}
       disabled={loading ? loading : disabled}
     >
       <div>
-        {/* {svg ? svg : null}
-        {loading ? "...Loading" : text} */}
         {
           !isFollowed && !loading && <div className='flex gap-2 items-center'>
             <UserPlusIcon className="w-5 h-5" strokeWidth={'2'}/> <span>Follow {text}</span>

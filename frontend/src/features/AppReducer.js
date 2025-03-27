@@ -3,6 +3,7 @@ const appState = {
   // isMessaged: false,
   // isNotified: false,
   notifiedTimes: 0,
+  messagedTimes: 0,
   theme: localStorage.getItem("theme"),
   resultSearch: { users: [], posts: [] },
 };
@@ -20,6 +21,9 @@ export const AppReducer = (state = appState, action) => {
 
     case "UPDATE_NOTIFIED_TIMES":
       return { ...state, notifiedTimes: action.payload };
+
+    case "UPDATE_MESSAGED_TIMES":
+        return { ...state, messagedTimes: action.payload };
 
     case "UPDATE_THEME":
       return { ...state, theme: action.payload };

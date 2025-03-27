@@ -11,7 +11,6 @@ import { AddPost } from "../components/modals/AddPost";
 import { ERROR_MESSAGES } from "../constants/Errors";
 import { getFeed } from "../services/home";
 import { PostSkeleton } from "../components/skeletons/PostSkeleton";
-const authService = import.meta.env.VITE_SERVER_URL;
 
 export const Home = () => {
   const [addPost, setAddPost] = useState(false);
