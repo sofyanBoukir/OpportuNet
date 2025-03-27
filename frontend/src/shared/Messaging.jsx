@@ -174,9 +174,9 @@ export const Messaging = () => {
                         selectedConversation === null && <div>
                         <div className='flex mt-52'>
                                 <div className='mx-auto flex justify-center gap-2 flex-col'>
-                                    <ChatBubbleOvalLeftEllipsisIcon className='w-24 h-24 text-black mx-auto'/>
+                                    <ChatBubbleOvalLeftEllipsisIcon className='w-24 h-24 text-black dark:text-white mx-auto'/>
                                     <h1 className='text-4xl font-semibold'>Start new Conversation</h1>
-                                    <span className='text-lg text-gray-700 text-center'>Click on any conversation to show messages</span>
+                                    <span className='text-lg text-gray-600 text-center'>Click on any conversation to show messages</span>
                                 </div>
                             </div>
                         </div>
