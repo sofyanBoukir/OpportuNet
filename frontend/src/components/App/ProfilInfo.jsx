@@ -86,7 +86,7 @@ export const ProfilInfoModal = ({
       <div className="mt-[70px] ml-[30px]">
         <h1 className="font-semibold text-3xl">{userData.name}</h1>
         <span className="text-xl font-semibold">{userData.companyName}</span>
-        <h6 className="font-normal text-xl text-gray-800 dark:text-white">
+        <h6 className="font-normal text-xl text-gray-800 dark:text-gray-400">
           {userData.headLine}
         </h6>
 
@@ -151,7 +151,7 @@ export const ProfilInfoModal = ({
         <a
           href={userData.webSite}
           target="_blank"
-          className="font-semibold text-sm cursor-pointer text-[#0A66C2] hover:underline dark:text-gray-400"
+          className="font-semibold text-sm cursor-pointer text-[#0A66C2] hover:underline dark:text-gray-500"
         >
           {userData.webSite}
         </a>
