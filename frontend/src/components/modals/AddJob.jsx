@@ -26,10 +26,13 @@ export const AddJob = ({ setOpenAddJob }) => {
   const [notification, setNotification] = useState(null);
 
   const handlePostJob = async () => {
+    setNotification(null)
     try {
-      const response = await addJob(localStorage.getItem("token"), jobData);
+      const response = await addJob(localStorage.getItem("token"), jobData);      
       setNotification({ type: "success", message: response.data.message});
-      setOpenAddJob(false);
+      setTimeout(() => {
+        setOpenAddJob(false);        
+      }, 2000);
     } catch (err) {
       switch (err.response.status) {
         case 401:
@@ -87,9 +90,7 @@ export const AddJob = ({ setOpenAddJob }) => {
   };
   return (
     <div className="z-20 fixed inset-0 flex items-center bg-black/50 text-gray-700 justify-center backdrop-blur-sm">
-      {notification && (
-        <Notification type={notification.type} message={notification.message} />
-      )}
+      
       <div className="bg-white dark:bg-gray-900 w-[90%] lg:w-[50%] px-6 py-8 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700">
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4 text-center">
           Job Posting
@@ -163,7 +164,7 @@ export const AddJob = ({ setOpenAddJob }) => {
             />
             <div className="flex gap-3">
               <Input
-                type="text"
+                type="number"
                 name="salaryFrom"
                 placeholder="From"
                 o
@@ -171,7 +172,7 @@ export const AddJob = ({ setOpenAddJob }) => {
                 className="border dark:border-gray-600 py-2 px-3 rounded-md dark:text-gray-300 w-2/5"
               />
               <Input
-                type="text"
+                type="number"
                 name="salaryTo"
                 placeholder="To"
                 onChange={(e) => setSalaryTo(e.target.value)}
@@ -294,6 +295,9 @@ export const AddJob = ({ setOpenAddJob }) => {
           </div>
         </div>
       </div>
+      {notification && (
+        <Notification type={notification.type} message={notification.message} />
+      )}
     </div>
   );
 };
