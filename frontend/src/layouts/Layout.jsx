@@ -19,7 +19,7 @@ const serverURL = import.meta.env.VITE_SERVER_URL;
 export const Layout = () => {
   const [showProfil, setShowProfil] = useState(false);
   const [openSearchModal, setOpenSearchModal] = useState(false);
-  const { isMessaged, isNotified, userData } = AppSelector();
+  const { userData } = AppSelector();
   const navigate = useNavigate();
 
   const [darkMode, setDarkMode] = useState(
@@ -27,14 +27,20 @@ export const Layout = () => {
   );
 
   const dispatch = useDispatch();
-  const { notifiedTimes } = AppSelector();
+  const { notifiedTimes,messagedTimes } = AppSelector();
 
   const notifiedTimesRef = useRef(notifiedTimes);
+  const messagedTimesRef = useRef(messagedTimes);
+
   const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
     notifiedTimesRef.current = notifiedTimes;
   }, [notifiedTimes]);
+
+  useEffect(() => {
+    messagedTimesRef.current = messagedTimes;
+  }, [messagedTimes]);
 
   useEffect(() => {
     if (darkMode) {
@@ -51,41 +57,7 @@ export const Layout = () => {
     showProfil === false ? setShowProfil(true) : setShowProfil(false);
   };
 
-  console.log(notifiedTimes);
 
-  useEffect(() => {
-    const reconnectIfNeeded = () => {
-      if (!socket.connected) {
-        socket.connect();
-        socket.emit("registerUser", localStorage.getItem("token"));
-      }
-    };
-
-    window.addEventListener("focus", reconnectIfNeeded);
-    window.addEventListener("click", reconnectIfNeeded);
-
-    return () => {
-      window.removeEventListener("focus", reconnectIfNeeded);
-      window.removeEventListener("click", reconnectIfNeeded);
-    };
-  }, []);
-
-  // useEffect(() => {
-  //   const reconnectIfNeeded = () => {
-  //     if (!socket.connected) {
-  //       socket.connect();
-  //       socket.emit('registerUser',localStorage.getItem('token'))
-  //     }
-  //   };
-
-  //   window.addEventListener("focus", reconnectIfNeeded);
-  //   window.addEventListener("click", reconnectIfNeeded);
-
-  //   return () => {
-  //     window.removeEventListener("focus", reconnectIfNeeded);
-  //     window.removeEventListener("click", reconnectIfNeeded);
-  //   };
-  // }, []);
 
   const notificationSound = new Audio("/public/audios/notificationSound.wav");
   useEffect(() => {
@@ -93,7 +65,7 @@ export const Layout = () => {
       socket.connect();
 
       socket.on("connect", () => {
-        console.log("connected to the server");
+        // console.log("connected to the server");
       });
       socket.emit("registerUser", localStorage.getItem("token"));
 
@@ -111,18 +83,19 @@ export const Layout = () => {
         });
       });
 
-      socket.on('newMessage',(newMessage) =>{
-          notificationSound.play()
+      socket.on('newMessage',() =>{
+          dispatch({
+            type:"UPDATE_MESSAGED_TIMES",
+            payload:messagedTimesRef.current + 1})
+          notificationSound.play();
       })
 
-      socket.on("newNotification", (newNotification) => {
+      socket.on("newNotification", () => {
         dispatch({
           type: "UPDATE_NOTIFIED_TIMES",
-          payload: notifiedTimesRef.current + 1,
+          payload: notifiedTimes + 1,
         });
         notificationSound.play();
-        console.log(notifiedTimes);
-        console.log("notified");
       });
     }
 
