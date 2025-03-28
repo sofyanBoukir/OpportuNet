@@ -67,3 +67,14 @@ export const updateConversationLastMessageStatus = async (
   );
   return response;
 };
+
+
+
+export const searchConversations = async (token,query) =>{
+  const response = await axios.get(`${serverUrl}/conversation/searchConversations?query=${query}`,{
+    headers : {
+      Authorization : `Bearer ${token}`
+    }
+  });
+  return response;
+}

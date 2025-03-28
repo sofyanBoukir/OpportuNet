@@ -16,7 +16,7 @@ const getConversations = async (request,response) =>{
             })
         }
         const page = parseInt(request.query.page) || 1;
-        const pageSize = 8;
+        const pageSize = 10;
         const skip = (page - 1) * pageSize; 
 
         const totalConversations = await Conversation.countDocuments({ participants: userId });
@@ -27,7 +27,7 @@ const getConversations = async (request,response) =>{
         const conversations = await Conversation.find({ participants: userId })
                                             .skip(skip)
                                             .limit(pageSize)
-                                            .sort({updatedAt:-1})
+                                            .sort({lastMessageAt:-1})
                                             .populate('job', 'title')
                                             .populate('participants', 'name headLine profile_picture profilePictureUrl')
 
@@ -153,6 +153,45 @@ const sendNewMessage = async (request,response) =>{
     }
 }
 
+const searchConversations = async (request,response) =>{
+    try{
+        const userId = request.user.id;
+
+        const user = await User.findById(userId);
+        if(!user){
+            return response.status(404).json({
+                'message' : 'User not found'
+            })
+        }
+
+        const { query } = request.query;
+        const matchingUsers = await User.find({
+            name: { $regex: `^${query}`, $options: "i" },
+            _id: { $ne: userId } 
+          }).select('_id');
+        
+          const matchingUserIds = matchingUsers.map(user => user._id);
+        
+          const conversations = await Conversation.find({
+            $and: [
+              { participants: userId }, 
+              { participants: { $in: matchingUserIds } } 
+            ]
+          })
+          .populate('participants', 'name profile_picture profilePictureUrl headLine')
+          .populate('lastMessageSender', 'name')
+          .sort({ lastMessageAt: -1 });
+
+        return response.json({
+            'conversations' : conversations
+        })
+
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+}
 
 const updateConversationLastMessageStatus = async (request,response) =>{
     try{
@@ -229,4 +268,4 @@ const getMessagesByConversation = async (request,response) =>{
 }
 
 
-module.exports = {getConversations, getMessagesByConversation, startConversation, updateConversationLastMessageStatus, sendNewMessage}
+module.exports = {getConversations, getMessagesByConversation, startConversation, searchConversations, updateConversationLastMessageStatus, sendNewMessage}

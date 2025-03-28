@@ -10,7 +10,7 @@ const getSavedPosts = async (request, response) => {
         .select('savedPosts')
         .populate({
           path: "savedPosts",
-          select: 'content image',
+          select: 'content image imageUrl',
           options: { sort: { createdAt: -1 } },
           populate: {
             path: "user",

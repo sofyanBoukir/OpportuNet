@@ -7,6 +7,14 @@ const postShema = new mongoose.Schema({
     likes : [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
     comments : [{type: mongoose.Schema.Types.ObjectId, ref: "Comment"}],
     mentions : [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
-},{timestamps:true});
+}, { 
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+});
+
+postShema.virtual("imageUrl").get(function () {
+    return `${process.env.SERVER_URL}${this.image}`;
+});
 
 module.exports = mongoose.model('Post',postShema);

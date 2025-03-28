@@ -28,8 +28,8 @@ export const Home = () => {
       loadingRef.current = true;
       const response = await getFeed(localStorage.getItem("token"), page);
       loadingRef.current = false;
-
-      setLoading(false);
+      
+      setLoading(false);  
 
       if (response.status === 200) {
         if (response.data.posts) {
@@ -67,11 +67,6 @@ export const Home = () => {
     _getFeed();
   }, [page]);
 
-  const suggestions = [
-    { sugName: "Ayoub Mhainid", sugHead: "UI/UX designer" },
-    { sugName: "Soufiane Boukir", sugHead: "Go developer" },
-    { sugName: "Said kachoud", sugHead: "PHP developer" },
-  ];
   const { userData } = AppSelector();
   return (
     <div className="md:px-[8%] relative top-16">
@@ -108,7 +103,7 @@ export const Home = () => {
 
         <div className="hidden lg:block left-[14%] lg:relative lg:w-[26%]">
           <div></div>
-          <SuggestionsModal suggestionList={suggestions} />
+          <SuggestionsModal />
         </div>
       </div>
       {addPost && <AddPost setAddPost={setAddPost} />}

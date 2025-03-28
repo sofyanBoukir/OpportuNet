@@ -15,11 +15,13 @@ const getFeed = async (request, response) => {
     // return response.json({
     //     'tags' : userHashTags
     // })
-    const posts = await Post.find({
-      tags: { $in: userHashTags },
+    const posts = await Post.find({$or:[
+      {tags: { $in: userHashTags }},
       // _id : { $ne : user.seenPosts},
-      // mentions : { $in : user.following}
-    })
+      {mentions : { $in : user.following}},
+      {user : {$in : user.following}},
+      {likes : {$in : user.following}},
+    ]})
       .populate("user", "name headLine profile_picture")
       .sort({ createdAt: -1 })
       .skip(skip)

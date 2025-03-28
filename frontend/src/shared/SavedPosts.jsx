@@ -7,7 +7,6 @@ import { SvgIcon } from "@mui/material";
 import { ArrowDownCircleIcon, BookmarkIcon } from "@heroicons/react/24/solid";
 import { SavedPostSkeleton } from "../components/skeletons/SavedPostSkeleton";
 
-const serverURL = import.meta.env.VITE_SERVER_URL;
 
 export const SavedPosts = () => {
   const [dataSavedPost, setDataSavedPost] = useState([]);
@@ -20,6 +19,7 @@ export const SavedPosts = () => {
   const SavedPost = async () => {
     try {
       const response = await getSavedPost(localStorage.getItem("token"), page);
+      
       setLastPage(response.data.lastPage);
       setTotalSavedPosts(response.data.totalSavedPosts);
 
@@ -33,8 +33,8 @@ export const SavedPosts = () => {
       }
     setLoading(false)
     } catch (error) {
-      console.error("Error fetching saved posts:", error);
       setLoading(false);
+      setTotalSavedPosts(0)
     }
   };
   
@@ -82,7 +82,7 @@ export const SavedPosts = () => {
                     <div className="flex flex-row items-center gap-3">
                       <img
                         src={saved.user.profilePictureUrl}
-                        className="w-[10%] rounded-full object-cover"
+                        className="w-12 h-12 rounded-full object-cover"
                       />
                       <div>
                         <h1 className="text-lg font-semibold">
@@ -94,7 +94,7 @@ export const SavedPosts = () => {
                     <div className="mt-4 w-full flex flex-row gap-3">
                       {saved.image && (
                         <img
-                          src={serverURL + saved.image}
+                          src={saved.imageUrl}
                           alt="image not found"
                           className="w-[40%] rounded-2xl"
                         />
@@ -119,6 +119,9 @@ export const SavedPosts = () => {
                 );
               })
             : null}
+            {
+              !loading && totalSavedPosts === 0 && <span className="text-xl font-semibold py-5 px-2">Try to save a post to appeared here</span>
+            }
             {!loading && lastPage !== page && totalSavedPosts !== 0 && <ArrowDownCircleIcon onClick={() => setPage(page+1)} className="flex mx-auto cursor-pointer my-3 text-blue-700 hover:text-blue-600 duration-200 w-12 h-12" /> }
 
         </div>

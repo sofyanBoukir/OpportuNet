@@ -4,18 +4,18 @@ import { Conversation } from '../components/App/Conversation'
 import defaultImage from '../../public/images/profilDefault.png'
 import { Button } from '../components/UI/Button'
 import messageBg from '../../public/images/bgMessage.png'
-import { ChatBubbleOvalLeftEllipsisIcon, CheckIcon } from '@heroicons/react/24/outline'
+import { ArrowDownCircleIcon, ChatBubbleOvalLeftEllipsisIcon, CheckIcon } from '@heroicons/react/24/outline'
 import { IncomingMessage } from '../components/App/IncomingMessage'
 import { OutgoingMessage } from '../components/App/OutgoingMessage'
-import { getConversations, getMessagesByConversation, sendNewMessage, updateConversationLastMessageStatus } from '../services/conversation'
+import { getConversations, getMessagesByConversation, searchConversations, sendNewMessage, updateConversationLastMessageStatus } from '../services/conversation'
 import { AppSelector } from '../selectors/AppSelector'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import socket from '../functions/socket'
 import { useDispatch } from 'react-redux'
 
 export const Messaging = () => {
 
-    const [loadingConversation,setLoadingConversations] = useState(false);
+    const [loadingConversation,setLoadingConversations] = useState(true);
     const [lastPage,setLastPage] = useState(null);
     const [totalConversations,setTotalConversations] = useState(null);
     const [conversations,setConversations] = useState([])
@@ -25,24 +25,40 @@ export const Messaging = () => {
     const [messages,setMessages] = useState([])
     const [otherParticipant,setOtherParticipiant] = useState(null)
     const [message,setMessage] = useState('')
+    const [searchInput,setSearchInput] = useState('')
     const {messagedTimes} = AppSelector()
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const {userData} = AppSelector()
+    const loadingRef = useRef(false)
 
     const messagedTimesRef = useRef(messagedTimes);    
     useEffect(() => {
         messagedTimesRef.current = messagedTimes;
       }, [messagedTimes]);
 
+
+
+    const _searchConversations = async () =>{
+        const response = await searchConversations(localStorage.getItem('token'),searchInput);
+        if(response.data.conversations){
+            setConversations(response.data.conversations)
+        }
+    }
+
     const _getUserConversations = async () =>{
         try{
+            if(loadingRef.current) return
+            loadingRef.current = true
             setLoadingConversations(true)
             const response = await getConversations(localStorage.getItem('token'),page);
-            
+            loadingRef.current = false
             setLoadingConversations(false)
             if(response.status === 200){
                 if(response.data.conversations){
-                    setConversations(response.data.conversations)
+                    setConversations((prevConv) => [...prevConv,...response.data.conversations])
+                    setTotalConversations(response.data.totalConversations)
+                    setLastPage(response.data.lastPage)
                 }
             }
         }catch(err){
@@ -54,7 +70,6 @@ export const Messaging = () => {
         try{
             setLoadMessages(true)
             const response = await getMessagesByConversation(localStorage.getItem('token'),selectedConversation._id);
-            console.log(response);
             
             setLoadMessages(false)
             if(response.status === 200){
@@ -82,6 +97,7 @@ export const Messaging = () => {
 
     const _sendNewMessage = async () =>{
         try{
+            if(message === '') return
             const response = await sendNewMessage(localStorage.getItem('token'),selectedConversation._id,{message,recipient:otherParticipant._id});            
             if(response.status === 200){
                 setMessages([...messages,{
@@ -90,9 +106,8 @@ export const Messaging = () => {
                     sender: userData._id
                 }])
                 setMessage('')
+                setConversations([])
                 _getUserConversations()
-                const updateConversations = conversations.map((conversation) => conversation._id === selectedConversation._id ? {...conversation,lastMessage:message,lastMessageStatus:'sent'} : conversation);
-                setConversations(updateConversations)
             }
         }catch(err){
             //
@@ -109,6 +124,7 @@ export const Messaging = () => {
             });
                 socket.emit("registerUser", localStorage.getItem("token"));
                 socket.on('newMessage',(newMessage) =>{
+                    setConversations([])
                     _getUserConversations();
                     setMessages((prevMessages) => [...prevMessages,newMessage])
                     notificationSound.play()
@@ -118,10 +134,15 @@ export const Messaging = () => {
             };
     }, []);
 
-    useEffect(() =>{
+    useEffect(() =>{        
         _getUserConversations()
     },[page])
 
+    useEffect(() =>{
+        searchInput !== '' && _searchConversations();
+    },[searchInput])
+
+    
     useEffect(() =>{
         _getMessagesByConversation();
         _updateConversationLastMessageStatus()
@@ -132,7 +153,8 @@ export const Messaging = () => {
             <div className='lg:w-[30%] lg:border-r border-r-gray-500 lg:pr-10'>
                 <h1 className='text-2xl font-semibold'>Messaging</h1>
                 <div className='mt-5'>
-                    <Input type={'text'} placeholder={'Search people...'} className={'w-[100%] border-2 outline-none dark:text-white border-gray-400 rounded-sm px-3 py-2'}/>
+                    <Input type={'text'} placeholder={'Search people...'} value={searchInput} onChange={(e) => setSearchInput(e.target.value)} 
+                    className={'w-[100%] border-2 outline-none dark:text-white border-gray-400 rounded-sm px-3 py-2'}/>
                 </div>
 
                 <div className='mt-6 flex flex-nowrap lg:flex-col gap-3 lg:h-[70vh] overflow-auto'>
@@ -143,6 +165,7 @@ export const Messaging = () => {
                             })
                         :null
                     }
+                  {!loadingConversation && lastPage !== page && totalConversations !== 0 && <ArrowDownCircleIcon onClick={() => setPage(page+1)} className="flex mx-auto cursor-pointer my-3 text-blue-700 hover:text-blue-600 duration-200 w-12 h-12" /> }
                 </div>
             </div>
             <div className='w-[75%] pl-[2%]'>
@@ -161,7 +184,7 @@ export const Messaging = () => {
                                 {
                                     selectedConversation.job ?
                                         <div>
-                                            <Button text={'View job'} className={'bg-blue-500 text-white'}/>
+                                            <Button text={'View job'} className={'bg-blue-500 text-white'} onClick={() => navigate(`/job-detail/${selectedConversation.job._id}`)}/>
                                         </div>
                                     :null
                                 }
@@ -174,9 +197,9 @@ export const Messaging = () => {
                                             !loadMessages && messages && messages.length ?
                                                 messages.map((message,index) =>{
                                                     if(message.sender === userData._id){
-                                                        return <OutgoingMessage message={message}/>
+                                                        return <OutgoingMessage key={index} message={message}/>
                                                     }else{
-                                                        return <IncomingMessage message={message}/>
+                                                        return <IncomingMessage key={index} message={message}/>
                                                     }
                                                 })
                                             :null
