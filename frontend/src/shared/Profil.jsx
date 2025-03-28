@@ -1,10 +1,10 @@
 import { ProfilInfoModal } from "../components/App/ProfilInfo";
-import { AboutModal } from "../components/App/About";
-import { EducationsModal } from "../components/App/Educations";
-import { ExperiencesModal } from "../components/App/Experiences";
-import { SkillsModal } from "../components/App/Skills";
-import { InterestsModal } from "../components/App/Interests";
-import { UrlProfilModal } from "../components/App/UrlProfile";
+import { About } from "../components/App/About";
+import { Educations } from "../components/App/Educations";
+import { Experiences } from "../components/App/Experiences";
+import { Skills } from "../components/App/Skills";
+import { Interests } from "../components/App/Interests";
+import { UrlProfile } from "../components/App/UrlProfile";
 import { SuggestionsModal } from "../components/App/Suggestions";
 import { UpdateModal } from "../components/modals/UpdateModal";
 import { AppSelector } from "../selectors/AppSelector";
@@ -158,7 +158,7 @@ export const Profil = () => {
           }
 
           {
-            <AboutModal
+            <About
               valuetoUpdate={setToUpdate}
               setShowModalUpdate={setShowUpdateModal}
               showIcon={showIcon}
@@ -166,7 +166,7 @@ export const Profil = () => {
             />
           }
           {userInfo.role === "candidate" && userInfo.education && (
-            <EducationsModal
+            <Educations
               notification={setNotification}
               idEduSelected={setSelectedId}
               setShowModalUpdate={setShowUpdateModal}
@@ -180,7 +180,7 @@ export const Profil = () => {
             />
           )}
           {userInfo.role === "candidate" && userInfo.experience && (
-            <ExperiencesModal
+            <Experiences
               notification={setNotification}
               idEduSelected={setSelectedId}
               setShowModalUpdate={setShowUpdateModal}
@@ -194,7 +194,7 @@ export const Profil = () => {
             />
           )}
           {userInfo.role === "candidate" && userInfo.skills && (
-            <SkillsModal
+            <Skills
               notification={setNotification}
               setShowModalAdd={setShowAddModal}
               valuetoAdd={setToAdd}
@@ -205,7 +205,7 @@ export const Profil = () => {
             />
           )}
           {userInfo.interests && (
-            <InterestsModal
+            <Interests
               setShowModalUpdate={setShowUpdateModal}
               valuetoUpdate={setToUpdate}
               showIcon={showIcon}
@@ -240,7 +240,7 @@ export const Profil = () => {
           )}
         </div>
         <div className="lg:w-[20%] flex flex-col gap-2 lg:pt-[80px] lg:ml-[4%]">
-          {<UrlProfilModal />}
+          {<UrlProfile />}
           {<SuggestionsModal />}
         </div>
         {showUpdateModal && (

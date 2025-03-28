@@ -53,7 +53,6 @@ function App() {
             <Route path="/search/results/all/:query" element={<Searchs />} />
             <Route path="/messaging" element={<Messaging />} />
             <Route path="/job-detail/:id" element={<JobsDetail />} />
-
           </Route>
         </Route>
       </Routes>

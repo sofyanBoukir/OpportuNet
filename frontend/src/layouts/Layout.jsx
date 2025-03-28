@@ -27,7 +27,7 @@ export const Layout = () => {
   );
 
   const dispatch = useDispatch();
-  const { notifiedTimes,messagedTimes } = AppSelector();
+  const { notifiedTimes, messagedTimes } = AppSelector();
 
   const notifiedTimesRef = useRef(notifiedTimes);
   const messagedTimesRef = useRef(messagedTimes);
@@ -57,8 +57,6 @@ export const Layout = () => {
     showProfil === false ? setShowProfil(true) : setShowProfil(false);
   };
 
-
-
   const notificationSound = new Audio("/public/audios/notificationSound.wav");
   useEffect(() => {
     if (!socket.connected) {
@@ -83,12 +81,13 @@ export const Layout = () => {
         });
       });
 
-      socket.on('newMessage',() =>{
-          dispatch({
-            type:"UPDATE_MESSAGED_TIMES",
-            payload:messagedTimesRef.current + 1})
-          notificationSound.play();
-      })
+      socket.on("newMessage", () => {
+        dispatch({
+          type: "UPDATE_MESSAGED_TIMES",
+          payload: messagedTimesRef.current + 1,
+        });
+        notificationSound.play();
+      });
 
       socket.on("newNotification", () => {
         dispatch({
@@ -198,7 +197,7 @@ export const Layout = () => {
         <div
           className={`${
             showProfil ? "block" : "hidden"
-          } w-[400px] py-2 px-3 rounded-xl shadow-lg flex flex-col bg-white fixed md:left-[65%] rounded-tr-none md:top-[75px] z-40`}
+          } w-[400px] py-2 px-3 rounded-xl shadow-lg flex flex-col bg-white fixed md:left-[65%] rounded-tr-none md:top-[75px] z-40 dark:bg-black dark:text-white`}
         >
           <div className="flex items-center gap-2">
             <div>
@@ -209,7 +208,9 @@ export const Layout = () => {
             </div>
             <div>
               <p className="text-lg font-semibold">{userData.name}</p>
-              <span className="text-gray-700">{userData.headLine}</span>
+              <span className="text-gray-700 dark:text-gray-500">
+                {userData.headLine}
+              </span>
             </div>
           </div>
           <div className="mt-2">
@@ -218,7 +219,7 @@ export const Layout = () => {
                 setShowProfil(false);
                 navigate(`/user/profile/${userData._id}`);
               }}
-              className="rounded-2xl font-semibold w-[100%] cursor-pointer border-2 border-blue-600 text-[#0A66C2] bg-gray-100 hover:bg-blue-50 duration-200"
+              className="rounded-2xl font-semibold w-[100%] cursor-pointer border-2 border-blue-600 text-[#0A66C2] bg-gray-100 hover:bg-blue-50 duration-200 dark:bg-black dark:hover:bg-gray-950"
             >
               View profile
             </button>
@@ -227,12 +228,14 @@ export const Layout = () => {
             <hr className="text-gray-300"></hr>
           </div>
           <div className="mt-2 flex gap-2 flex-col">
-            <div className="flex gap-2 items-center py-1 rounded-md cursor-pointer px-2 hover:bg-gray-100 duration-200">
+            <div className="flex gap-2 items-center py-1 rounded-md cursor-pointer px-2 hover:bg-gray-100 duration-200 dark:hover:bg-gray-900">
               <ArrowRightOnRectangleIcon
-                className="w-6 h-6 text-gray-700"
+                className="w-6 h-6 text-gray-700 dark:text-white"
                 strokeWidth={1.1}
               />
-              <span className="text-gray-700 text-lg">Sign out</span>
+              <span className="text-gray-700 text-lg dark:text-white">
+                Sign out
+              </span>
             </div>
           </div>
         </div>
