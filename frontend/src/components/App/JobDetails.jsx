@@ -10,7 +10,8 @@ export const JobDetails = ({ job, copyLink }) => {
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState();
   const { userData } = AppSelector();
-
+  console.log(job);
+  
   const _applyForJob = async () => {
     setNotification(null);
     try {

@@ -1,6 +1,7 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useState } from "react";
 import { AddJob } from "../../components/modals/AddJob";
+import { ModifyJob } from "../../components/modals/ModifyJob";
 import { deleteJob, getPostedJobs } from "../../services/job";
 import { formatDistanceToNow } from "date-fns";
 import {
@@ -15,14 +16,16 @@ import { DeleteModal } from "../../components/modals/DeleteModal";
 export const RecuiterJobs = () => {
   const [openAddJob, setOpenAddJob] = useState(false);
   const [jobs, setJobs] = useState([]);
+  const [job, setJob] = useState([]);
   const [notification, setNotification] = useState(null);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openModify, setOpenModify] = useState(false);
   const [loadingDelete, setLoadinDelete] = useState(false);
   const [idDelete, setIdDelete] = useState("");
   const navigate = useNavigate();
 
   const handleViewJob = (job) => {
-    navigate(`/job-detail/${job._id}`, { state: { job } });
+    navigate(`/job-detail/${job}`);
   };
   const getJobs = async () => {
     const response = await getPostedJobs(localStorage.getItem("token"));
@@ -45,7 +48,7 @@ export const RecuiterJobs = () => {
   }, []);
 
   return (
-    <div className="relative md:top-40 top-20 mb-40">
+    <div className="relative md:top-35 top-20 mb-40">
       <div className="2xl:px-[10%] md:px-[5%] px-[3%] w-[100%] flex md:flex-wrap md:flex-row flex-col md:gap-10 gap-5">
         {jobs.map((job) => (
           <div
@@ -71,9 +74,13 @@ export const RecuiterJobs = () => {
               <div className="flex gap-x-3">
                 <EyeIcon
                   className="text-green-600 w-6 h-6 cursor-pointer"
-                  onClick={() => handleViewJob(job)}
+                  onClick={() => handleViewJob(job._id)}
                 />
-                <PencilSquareIcon className="text-blue-600 w-6 h-6 cursor-pointer" />
+                <PencilSquareIcon className="text-blue-600 w-6 h-6 cursor-pointer" 
+                onClick={() => {
+                  setJob(job);
+                  setOpenModify(true);
+                }}/>
                 <TrashIcon
                   className="text-red-600 w-6 h-6 cursor-pointer"
                   onClick={() => {
@@ -83,6 +90,7 @@ export const RecuiterJobs = () => {
                 />
               </div>
             </div>
+
           </div>
         ))}
 
@@ -97,6 +105,8 @@ export const RecuiterJobs = () => {
         </div>
       </div>
       {openAddJob && <AddJob setOpenAddJob={setOpenAddJob} />}
+      {openModify && <ModifyJob setOpenAddJob={setOpenModify} data={job}/>}
+
       {openDelete && (
         <DeleteModal
           setOpen={setOpenDelete}
