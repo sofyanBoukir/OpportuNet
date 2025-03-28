@@ -3,6 +3,7 @@ const Message = require("../models/Message");
 const User = require("../models/User");
 const notifyMessageToOnlineUser = require("../sockets/real-time-messages");
 const { getIO } = require("../sockets/socket");
+const updateLastMessageStatus = require("../sockets/update-last-message-status");
 
 const getConversations = async (request,response) =>{
     try{
@@ -64,6 +65,7 @@ const startConversation = async (request,response) =>{
 
         const participants = [userId,otherUserId];
         const conversation = await Conversation.findOne({participants:{$all:participants}})
+        const io = getIO();
 
         if(conversation){
             return response.status(401).json({
@@ -73,6 +75,8 @@ const startConversation = async (request,response) =>{
             const newConversation = new Conversation({
                         participants,
                         lastMessage : `Hi👋, ${otherUser.name}`,
+                        lastMessageSender : userId,
+                        lastMessageAt : new Date(),
             })
 
             const newMessage = new Message({
@@ -80,6 +84,8 @@ const startConversation = async (request,response) =>{
                 sender : userId,
                 message : `Hi👋, ${otherUser.name}`,
             })
+
+            notifyMessageToOnlineUser(io,otherUserId,newMessage);
 
             await newConversation.save();
             await newMessage.save();
@@ -125,6 +131,7 @@ const sendNewMessage = async (request,response) =>{
             await Conversation.findByIdAndUpdate(conversationId, {
                 lastMessage: message,
                 lastMessageSender: userId,
+                lastMessageAt : new Date(),
                 lastMessageStatus: "sent",
             });
             
@@ -157,11 +164,27 @@ const updateConversationLastMessageStatus = async (request,response) =>{
                 'message' : 'User not found'
             })
         }
-        
-        const {conversationId} = request.params;
+
+        const {conversationId} = request.params;        
+        const conversation = await Conversation.findById(conversationId)
+        const io = getIO();
+
+        if(!conversation){
+            return response.status(404).json({
+                'message' : 'conversation not found'
+            })
+        }
+
+        if(conversation.lastMessageSender === userId){
+            return response.status(400).json({
+                'message' : 'Couldnt update the status'
+            })
+        }
+
         await Conversation.findByIdAndUpdate(conversationId, {
             lastMessageStatus: "seen",
         });
+        updateLastMessageStatus(io,conversation._id)
 
         return response.json({
             'message' : 'Updated successfully!'

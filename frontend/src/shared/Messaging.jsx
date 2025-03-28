@@ -25,8 +25,14 @@ export const Messaging = () => {
     const [messages,setMessages] = useState([])
     const [otherParticipant,setOtherParticipiant] = useState(null)
     const [message,setMessage] = useState('')
+    const {messagedTimes} = AppSelector()
     const dispatch = useDispatch()
     const {userData} = AppSelector()
+
+    const messagedTimesRef = useRef(messagedTimes);    
+    useEffect(() => {
+        messagedTimesRef.current = messagedTimes;
+      }, [messagedTimes]);
 
     const _getUserConversations = async () =>{
         try{
@@ -47,7 +53,7 @@ export const Messaging = () => {
     const _getMessagesByConversation = async () =>{
         try{
             setLoadMessages(true)
-            const response = await getMessagesByConversation(localStorage.getItem('token'),selectedConversation);
+            const response = await getMessagesByConversation(localStorage.getItem('token'),selectedConversation._id);
             console.log(response);
             
             setLoadMessages(false)
@@ -63,17 +69,20 @@ export const Messaging = () => {
 
     const _updateConversationLastMessageStatus = async () =>{
         if(selectedConversation.lastMessageStatus === 'seen') return;
-        const response = await updateConversationLastMessageStatus(localStorage.getItem('token'),selectedConversation);
+        const response = await updateConversationLastMessageStatus(localStorage.getItem('token'),selectedConversation._id);
         if(response.status === 200){
-            const updateConversations = conversations.map((conversation) => conversation._id === selectedConversation ? {...conversation,lastMessageStatus:'seen'} : conversation)
+            dispatch({
+                type:"UPDATE_MESSAGED_TIMES",
+                payload:messagedTimesRef.current- 1})
+            const updateConversations = conversations.map((conversation) => conversation._id === selectedConversation._id ? {...conversation,lastMessageStatus:'seen'} : conversation)
             setConversations(updateConversations)
-            dispatch({type:'UPDATE_MESSAGED_TIMES',payload:0})
+            dispatch({type:'UPDATE_MESSAGED_TIMES',payload:messagedTimesRef.current - 1})
         }
     }
 
     const _sendNewMessage = async () =>{
         try{
-            const response = await sendNewMessage(localStorage.getItem('token'),selectedConversation,{message,recipient:otherParticipant._id});            
+            const response = await sendNewMessage(localStorage.getItem('token'),selectedConversation._id,{message,recipient:otherParticipant._id});            
             if(response.status === 200){
                 setMessages([...messages,{
                     createdAt : new Date(),
@@ -81,7 +90,8 @@ export const Messaging = () => {
                     sender: userData._id
                 }])
                 setMessage('')
-                const updateConversations = conversations.map((conversation) => conversation._id === selectedConversation ? {...conversation,lastMessage:message} : conversation)
+                _getUserConversations()
+                const updateConversations = conversations.map((conversation) => conversation._id === selectedConversation._id ? {...conversation,lastMessage:message,lastMessageStatus:'sent'} : conversation);
                 setConversations(updateConversations)
             }
         }catch(err){
@@ -99,9 +109,11 @@ export const Messaging = () => {
             });
                 socket.emit("registerUser", localStorage.getItem("token"));
                 socket.on('newMessage',(newMessage) =>{
+                    _getUserConversations();
                     setMessages((prevMessages) => [...prevMessages,newMessage])
                     notificationSound.play()
                     AlwaysScrollToBottom()
+                    
                 })
             };
     }, []);
@@ -112,8 +124,8 @@ export const Messaging = () => {
 
     useEffect(() =>{
         _getMessagesByConversation();
-        _updateConversationLastMessageStatus();
-    },[selectedConversation])
+        _updateConversationLastMessageStatus()
+    },[selectedConversation]);
   return (
     <div className="px-3 relative top-16">
         <div className="bg-white dark:bg-black dark:text-white rounded-xl shadow-md px-10 py-5 lg:flex">
@@ -134,15 +146,25 @@ export const Messaging = () => {
                 </div>
             </div>
             <div className='w-[75%] pl-[2%]'>
-                <div className='lg:fixed w-[140%] lg:w-[65%]'>
+                <div className='w-[140%] lg:w-[100%]'>
                     {
                         selectedConversation !== null && <>
-                            <div className='flex gap-3 items-center'>
-                                <img src={otherParticipant.profilePictureUrl} className='rounded-full w-12 h-12'/>
-                                <div>
-                                    <Link className='text-xl font-semibold cursor-pointer hover:text-blue-800 duration-200' to={`/user/profile/${otherParticipant._id}`}>{otherParticipant.name}</Link>
-                                    <p className='text-gray-600'>{otherParticipant.headLine}</p>
+                            <div className='flex justify-between items-center'>
+                                <div className='flex gap-3 items-center'>
+                                    <img src={otherParticipant.profilePictureUrl} className='rounded-full w-12 h-12'/>
+                                    <div>
+                                        <Link className='text-xl font-semibold cursor-pointer hover:text-blue-800 duration-200' to={`/user/profile/${otherParticipant._id}`}>{otherParticipant.name}</Link>
+                                        <p className='text-gray-600'>{otherParticipant.headLine}</p>
+                                    </div>
                                 </div>
+
+                                {
+                                    selectedConversation.job ?
+                                        <div>
+                                            <Button text={'View job'} className={'bg-blue-500 text-white'}/>
+                                        </div>
+                                    :null
+                                }
                             </div>
                             <hr className='text-gray-200 border mt-2 w-4/4'></hr>
                             <div className='relative lg:mt-2 w-[100%] h-[70vh] overflow-auto' style={{backgroundSize:"cover",backgroundImage: `url(${messageBg})`}}>
@@ -150,7 +172,7 @@ export const Messaging = () => {
                                     <div className="w-full flex flex-col gap-2 lg:mb-0 mb-20">
                                         {
                                             !loadMessages && messages && messages.length ?
-                                                messages.map((message) =>{
+                                                messages.map((message,index) =>{
                                                     if(message.sender === userData._id){
                                                         return <OutgoingMessage message={message}/>
                                                     }else{
@@ -162,11 +184,11 @@ export const Messaging = () => {
                                     </div>
                                     <AlwaysScrollToBottom />
                                 </div>
-                                <div className='fixed bottom-14 lg:bottom-10 mt-2 w-[100%] flex gap-2 items-center'>
-                                    <Input type={'text'} placeholder={'Type somthing....'} value={message} 
-                                    onChange={(e) => setMessage(e.target.value)} className={'w-[60%] py-3 px-5 border dark:text-white border-gray-400 rounded-3xl outline-none'}/>
-                                    <Button text={'Send'} className={'text-white bg-blue-500'} onClick={_sendNewMessage}/>
-                                </div>
+                            </div>
+                            <div className='fixed bottom-14 lg:relative lg:bottom-0 mt-2 w-[85%] lg:w-[100%] flex gap-2 items-center'>
+                                <Input type={'text'} placeholder={'Type somthing....'} value={message} 
+                                onChange={(e) => setMessage(e.target.value)} className={'w-[90%] py-3 px-5 border dark:text-white border-gray-400 rounded-3xl outline-none'}/>
+                                <Button text={'Send'} className={'text-white bg-blue-500 w-[10%]'} onClick={_sendNewMessage}/>
                             </div>
                         </>
                     }

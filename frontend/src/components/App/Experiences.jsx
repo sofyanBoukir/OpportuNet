@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { deleteExperience } from "../../services/profile";
 import { ERROR_MESSAGES } from "../../constants/Errors";
 
-export const ExperiencesModal = ({
+export const Experiences = ({
   notification,
   valuetoUpdate,
   idEduSelected,
@@ -45,19 +45,21 @@ export const ExperiencesModal = ({
   };
 
   return (
-    <div className="bg-white w-full lg:w-[89%] p-[30px] lg:ml-[15%] relative lg:rounded-md flex gap-3 flex-col">
+    <div className="bg-white w-full lg:w-[89%] p-[30px] lg:ml-[15%] relative lg:rounded-md flex gap-3 flex-col dark:bg-black">
       {showIcon && (
         <div
           onClick={() => {
             setShowModalAdd(true);
             valuetoAdd("experience");
           }}
-          className="absolute right-0 top-[5px] mt-4 mr-5 p-1.5 w-10 duration-200 h-10  text-center text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[50%] "
+          className="absolute right-0 top-[5px] mt-4 mr-5 p-1.5 w-10 duration-200 h-10  text-center text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[50%] dark:text-white dark:hover:bg-gray-900 dark:hover:text-white"
         >
           <PlusIcon strokeWidth="1.3" />
         </div>
       )}
-      <h2 className="text-2xl font-semibold mb-4">Experience</h2>
+      <h2 className="text-2xl font-semibold mb-4 dark:text-white">
+        Experience
+      </h2>
       {experienceList.map((item) => (
         <div key={item._id} className="flex items-start gap-3">
           <div className="mb-4 ">
@@ -69,14 +71,16 @@ export const ExperiencesModal = ({
           </div>
           <div className=" w-full flex items-center justify-between pr-2">
             <div>
-              <h5 className="text-xl font-semibold text-black ">
+              <h5 className="text-xl font-semibold text-black dark:text-white">
                 {item.position} - {item.company}
               </h5>
-              <p className="text-lg font-light text-gray-900">
+              <p className="text-lg font-light text-gray-900 dark:text-white">
                 {item.location}
               </p>
-              <p className="text-lg font-light text-gray-900">{item.year}</p>
-              <span className="text-sm font-light text-gray-900">
+              <p className="text-lg font-light text-gray-900 dark:text-gray-500">
+                {item.year}
+              </p>
+              <span className="text-sm font-light text-gray-900 dark:text-white">
                 {item.description}
               </span>
             </div>
@@ -88,13 +92,13 @@ export const ExperiencesModal = ({
                     valuetoUpdate("experience");
                     idEduSelected(item._id);
                   }}
-                  className="text-center p-1.5 text-gray-600 cursor-pointer duration-200 hover:bg-gray-100 hover:text-black rounded-[50%]"
+                  className="text-center p-1.5 text-gray-600 cursor-pointer duration-200 hover:bg-gray-100 hover:text-black rounded-[50%] dark:text-white dark:hover:bg-gray-900 dark:hover:text-white"
                 >
                   <ModeEditOutlinedIcon />
                 </span>
                 <span
                   onClick={() => handleClickDelete(item._id)}
-                  className="text-center p-1.5 text-gray-600 cursor-pointer duration-200 hover:bg-gray-100 hover:text-black rounded-[50%]"
+                  className="text-center p-1.5 text-gray-600 cursor-pointer duration-200 hover:bg-gray-100 hover:text-black rounded-[50%] dark:text-white dark:hover:bg-gray-900 dark:hover:text-white"
                 >
                   <DeleteOutlinedIcon />
                 </span>

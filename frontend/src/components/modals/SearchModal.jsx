@@ -5,14 +5,13 @@ import { getSuggesstedUsers } from "../../services/home";
 import { ERROR_MESSAGES } from "../../constants/Errors";
 
 import { getserachUsers } from "../../services/search";
-import { useDispatch } from "react-redux";
+
 // import Cookie from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 const serverURL = import.meta.env.VITE_SERVER_URL;
 
 export const SearchModal = ({ query, openSearchModal }) => {
-  const dispatch = useDispatch();
   const [usersSearch, setUsersSearch] = useState([]);
   const [error, setError] = useState(null);
   const [suggesstedUsers, setSuggesstedUsers] = useState([]);
@@ -114,7 +113,7 @@ export const SearchModal = ({ query, openSearchModal }) => {
                 })
               ) : (
                 <span className="bg-white dark:bg-black dark:text-white font-semibold text-md p-4">
-                  not founddd
+                  {ERROR_MESSAGES.NOT_FOUND}
                 </span>
               )
             ) : (
@@ -153,7 +152,7 @@ export const SearchModal = ({ query, openSearchModal }) => {
               </div>
             )}
 
-            {!isVide && usersSearch.length && (
+            {!isVide && usersSearch.length > 0 && (
               <div
                 onClick={() => {
                   openSearchModal(false);

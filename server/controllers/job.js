@@ -233,6 +233,8 @@ const applyForJob = async (request,response) =>{
             
             const newConversation = new Conversation({
                 participants : [userId,job.recuiter],
+                lastMessageSender : userId,
+                lastMessageAt : new Date(),
                 lastMessage : "Hi! I’d like to apply for this job. Looking forward to your response!",
                 job : job._id,
             })

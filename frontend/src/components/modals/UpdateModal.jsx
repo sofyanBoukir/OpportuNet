@@ -241,7 +241,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
   return (
     <div className="z-20 abso)lute fixed w-full inset-0 pb-2 flex bg-black/50 text-gray-700 justify-center lg:backdrop-blur-xs">
       <div
-        className={`bg-[#ffffff] z-20 border w-full sm:w-[65%] ${
+        className={`bg-[#ffffff] z-20 border w-full sm:w-[65%] dark:bg-black ${
           toUpdate !== _intserest ? "lg:w-[50%]" : "lg:w-[65%]"
         } ${
           toUpdate === _intro ||
@@ -256,10 +256,10 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                   : "p-0 lg:px-[5px] sm:pb-1 h-[635px] lg:h-auto"
               }`
             : "pb-3"
-        } my-auto lg:mt-[30)px] px-8 rounded-lg shadow-sm overflow-auto sc)roll-auto`}
+        } my-auto lg:mt-[30)px] px-8 rounded-lg shadow-sm overflow-auto `}
       >
-        <div className="text-center sticky top-0 pt-4 pb-2 mb-1 bg-[#ffffff]">
-          <h1 className="text-2xl font-semibold text-gray-800">{`Edit ${toUpdate}`}</h1>
+        <div className="text-center sticky top-0 pt-4 pb-2 mb-1 bg-[#ffffff] dark:bg-black">
+          <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">{`Edit ${toUpdate}`}</h1>
           <p className="text-sm text-gray-500 mt-1">
             {`Fill this inputs to Edit ${toUpdate}`}
           </p>
@@ -277,7 +277,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                         ? "School*"
                         : toUpdate === _experience && "Position*"
                     }
-                    className="text-sm font-normal text-gray-600 mb-1"
+                    className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
                   />
                   <Input
                     type="text"
@@ -296,7 +296,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                         : toUpdate === _experience && experienceInfo.position
                     }
                     onChange={handleChange}
-                    className="p-2 font-normal text-sm outline-2 rounded-xs "
+                    className="p-2 font-normal text-sm outline-2 rounded-xs dark:border dark:border-gray-600 dark:text-gray-300 w-full"
                   />
                 </div>
               )}
@@ -304,14 +304,14 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                 <div className="flex flex-col mt-5">
                   <Label
                     text="Company*"
-                    className="text-sm font-normal text-gray-600 mb-1"
+                    className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
                   />
                   <Input
                     type="text"
                     name="company"
                     value={experienceInfo.company}
                     onChange={handleChange}
-                    className="p-2 font-normal text-sm outline-2 rounded-xs "
+                    className="p-2 font-normal text-sm outline-2 rounded-xs dark:border dark:border-gray-600 dark:text-gray-300 w-full"
                   />
                 </div>
               )}
@@ -325,7 +325,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                         ? "Degree*"
                         : toUpdate === _experience && "Location"
                     }
-                    className="text-sm font-normal text-gray-600 mb-1"
+                    className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
                   />
                   <Input
                     type="text"
@@ -344,7 +344,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                         : toUpdate === _experience && experienceInfo.location
                     }
                     onChange={handleChange}
-                    className="p-2 font-normal text-sm outline-2 rounded-xs "
+                    className="p-2 font-normal text-sm outline-2 rounded-xs dark:border dark:border-gray-600 dark:text-gray-300 w-full"
                   />
                 </div>
               )}
@@ -352,13 +352,13 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                 <div className="flex flex-col mt-5">
                   <Label
                     text="Photo Profil"
-                    className="text-sm font-normal text-gray-600 mb-1"
+                    className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
                   />
                   <Input
                     type="file"
                     name="profile_picture"
                     onChange={handleChange}
-                    className="p-2 font-normal text-sm outline-2 rounded-xs "
+                    className="p-2 font-normal text-sm outline-2 rounded-xs dark:border dark:border-gray-600 dark:text-gray-300 w-full"
                     required={false}
                   />
                 </div>
@@ -368,14 +368,14 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                 <div className="flex flex-col mt-5">
                   <Label
                     text="Company"
-                    className="text-sm font-normal text-gray-600 mb-1"
+                    className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
                   />
                   <Input
                     type="text"
                     name="companyName"
                     value={userInfo.companyName}
                     onChange={handleChange}
-                    className="p-2 font-normal text-sm outline-2 rounded-xs "
+                    className="p-2 font-normal text-sm outline-2 rounded-xs dark:border dark:border-gray-600 dark:text-gray-300 w-full"
                   />
                 </div>
               )}
@@ -383,14 +383,14 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                 <div className="flex flex-col mt-5">
                   <Label
                     text="Adresse*"
-                    className="text-sm font-normal text-gray-600 mb-1"
+                    className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
                   />
                   <Input
                     type="text"
                     name="location"
                     value={userInfo.location}
                     onChange={handleChange}
-                    className="p-2 font-normal text-sm outline-2 rounded-xs "
+                    className="p-2 font-normal text-sm outline-2 rounded-xs dark:border dark:border-gray-600 dark:text-gray-300 w-full"
                   />
                 </div>
               )}
@@ -401,14 +401,14 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                     <div className="flex items-center mt-5">
                       <Label
                         text="Current"
-                        className="text-sm font-normal text-gray-600 mb-1 mr-2"
+                        className="text-sm font-normal text-gray-600 mb-1 mr-2 dark:text-white"
                       />
                       <input
                         type="checkbox"
                         name="current"
                         checked={experienceInfo.current}
                         onChange={handleChange}
-                        className="p-2 font-normal text-sm rounded-xs "
+                        className="p-2 font-normal text-sm rounded-xs"
                         // required={false}
                       />
                     </div>
@@ -417,20 +417,20 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                     <div className="flex flex-col mt-5 w-[47%]">
                       <Label
                         text="Start*"
-                        className="text-sm font-normal text-gray-600 mb-1"
+                        className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
                       />
                       <Input
                         type="date"
                         name="start"
                         value={experienceInfo.start}
                         onChange={handleChange}
-                        className="p-2  font-normal text-sm outline-2 rounded-xs "
+                        className="p-2  font-normal text-sm outline-2 rounded-xs dark:border dark:border-gray-600 dark:text-gray-300 w-full"
                       />
                     </div>
                     <div className="flex flex-col mt-5 w-[47%]">
                       <Label
                         text="End"
-                        className="text-sm font-normal text-gray-600 mb-1"
+                        className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
                       />
                       <Input
                         type={experienceInfo.current ? "text" : "date"}
@@ -441,7 +441,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                             : experienceInfo.end
                         }
                         onChange={handleChange}
-                        className="p-2 font-normal text-sm outline-2 rounded-xs "
+                        className="p-2 font-normal text-sm outline-2 rounded-xs dark:border dark:border-gray-600 dark:text-gray-300 w-full"
                         disabled={experienceInfo.current}
                       />
                     </div>
@@ -452,14 +452,14 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                 <div className="flex flex-col mt-5">
                   <Label
                     text="Link"
-                    className="text-sm font-normal text-gray-600 mb-1"
+                    className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
                   />
                   <Input
                     type="text"
                     name="webSite"
                     value={userInfo.webSite}
                     onChange={handleChange}
-                    className="p-2 font-normal text-sm outline-2 rounded-xs "
+                    className="p-2 font-normal text-sm outline-2 rounded-xs dark:border dark:border-gray-600 dark:text-gray-300 w-full"
                     required={false}
                   />
                 </div>
@@ -468,7 +468,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                 <div className="flex flex-col mt-5">
                   <Label
                     text="Description"
-                    className="text-sm font-normal text-gray-600 mb-1"
+                    className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
                   />
 
                   <Textarea
@@ -477,17 +477,17 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                     placeholder="description"
                     value={experienceInfo.description}
                     onChange={handleChange}
-                    className="p-3 font-normal text-sm outline-2 rounded-xs "
+                    className="p-3 font-normal text-sm outline-2 rounded-xs dark:border dark:border-gray-600 dark:text-gray-300 w-full"
                   />
                 </div>
               )}
               {toUpdate === _intserest && (
                 <div>
-                  <h1 className="text-3xl font-semibold text-center">
+                  <h1 className="text-3xl font-semibold text-center dark:text-white">
                     Select your interests!{" "}
                   </h1>
                   <br></br>
-                  <span className="text-gray-800 text-lg">
+                  <span className="text-gray-800 text-lg dark:text-white">
                     Choose topics that matter to you the most. Your feed will be
                     customized based on your selections. <br></br>
                     <span className="underline">At least 5 interests</span>
@@ -532,7 +532,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
             <div className="flex flex-col mt-5">
               <Label
                 text="About"
-                className="text-sm font-normal text-gray-600 mb-1"
+                className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
               />
 
               <Textarea
@@ -541,7 +541,7 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
                 placeholder={!userInfo.about && "About"}
                 value={userInfo.about}
                 onChange={handleChange}
-                className="p-3 font-normal text-sm outline-2 rounded-xs "
+                className="p-3 font-normal text-sm outline-2 rounded-xs dark:border dark:border-gray-600 dark:text-gray-300 w-full"
               />
             </div>
           )}

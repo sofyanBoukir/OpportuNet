@@ -142,14 +142,14 @@ export const AddModal = ({ toAdd, setOpen }) => {
   return (
     <div className="z-20 abso)lute fixed w-full inset-0 p-2 flex bg-black/50 text-gray-700 justify-center lg:backdrop-blur-xs">
       <div
-        className={`bg-[#ffffff] z-20 border w-full sm:w-[65%] lg:w-[50%] ${
+        className={`bg-[#ffffff] z-20 border w-full sm:w-[65%] lg:w-[50%] dark:bg-black ${
           toAdd === _experience
             ? "p-0 lg:px-[32px] sm:pb-1 h-[635px] lg:h-auto"
             : " my-auto lg:p-4 pb-4 "
         } my-auto) lg:mt-[30)px] px-)8 rounded-lg shadow-sm overflow-auto`}
       >
-        <div className="text-center sticky top-0 pt-2 pb-1 mb-1 bg-[#ffffff]">
-          <h1 className="text-2xl font-semibold text-gray-800">{`Add ${toAdd}`}</h1>
+        <div className="text-center sticky top-0 pt-2 pb-1 mb-1 bg-[#ffffff] dark:bg-black">
+          <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">{`Add ${toAdd}`}</h1>
           <p className="text-sm text-gray-500 mt-1">
             {`Fill this inputs to Add ${toAdd}`}
           </p>
@@ -166,7 +166,7 @@ export const AddModal = ({ toAdd, setOpen }) => {
                       ? "Position*"
                       : toAdd === _skill && "Skill*"
                   }
-                  className="text-sm font-normal text-gray-600 mb-1"
+                  className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
                 />
                 <Input
                   type="text"
@@ -185,7 +185,7 @@ export const AddModal = ({ toAdd, setOpen }) => {
                       : toAdd === _skill && dataInfo.skill
                   }
                   onChange={handleChange}
-                  className="p-2 font-normal text-sm outline-2 rounded-xs "
+                  className="p-2 font-normal text-sm outline-2 rounded-xs dark:text-gray-300"
                 />
               </div>
             )}
@@ -194,14 +194,14 @@ export const AddModal = ({ toAdd, setOpen }) => {
               <div className="flex flex-col mt-5">
                 <Label
                   text="Company*"
-                  className="text-sm font-normal text-gray-600 mb-1"
+                  className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
                 />
                 <Input
                   type="text"
                   name="company"
                   value={dataInfo.company}
                   onChange={handleChange}
-                  className="p-2 font-normal text-sm outline-2 rounded-xs "
+                  className="p-2 font-normal text-sm outline-2 rounded-xs dark:text-gray-300"
                 />
               </div>
             )}
@@ -214,7 +214,7 @@ export const AddModal = ({ toAdd, setOpen }) => {
                         ? "Degree*"
                         : toAdd === _experience && "Location"
                     }
-                    className="text-sm font-normal text-gray-600 mb-1"
+                    className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
                   />
                   <Input
                     type="text"
@@ -229,21 +229,21 @@ export const AddModal = ({ toAdd, setOpen }) => {
                         : toAdd === _experience && dataInfo.location
                     }
                     onChange={handleChange}
-                    className="p-2 font-normal text-sm outline-2 rounded-xs "
+                    className="p-2 font-normal text-sm outline-2 rounded-xs dark:text-gray-300"
                   />
                 </div>
                 {toAdd === _experience && (
                   <div className="flex items-center mt-5 mb-0">
                     <Label
                       text="Current"
-                      className="text-sm font-normal text-gray-600 mb-1 mr-2"
+                      className="text-sm font-normal text-gray-600 mb-1 mr-2 dark:text-white"
                     />
                     <input
                       type="checkbox"
                       name="current"
                       checked={dataInfo.current}
                       onChange={handleChange}
-                      className="p-2 font-normal text-sm rounded-xs "
+                      className="p-2 font-normal text-sm rounded-xs"
                     />
                   </div>
                 )}
@@ -251,27 +251,27 @@ export const AddModal = ({ toAdd, setOpen }) => {
                   <div className="flex flex-col  w-[47%]">
                     <Label
                       text="Start*"
-                      className="text-sm font-normal text-gray-600 mb-1"
+                      className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
                     />
                     <Input
                       type="date"
                       name="start"
                       value={dataInfo.start}
                       onChange={handleChange}
-                      className="p-2  font-normal text-sm outline-2 rounded-xs "
+                      className="p-2  font-normal text-sm outline-2 rounded-xs dark:text-gray-300"
                     />
                   </div>
                   <div className="flex flex-col w-[47%]">
                     <Label
                       text="End"
-                      className="text-sm font-normal text-gray-600 mb-1"
+                      className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
                     />
                     <Input
                       type={dataInfo.current ? "text" : "date"}
                       name="end"
                       value={dataInfo.current ? "Current" : dataInfo.end}
                       onChange={handleChange}
-                      className="p-2 font-normal text-sm outline-2 rounded-xs "
+                      className="p-2 font-normal text-sm outline-2 rounded-xs dark:text-gray-300"
                       disabled={dataInfo.current}
                     />
                   </div>
@@ -287,7 +287,7 @@ export const AddModal = ({ toAdd, setOpen }) => {
                       ? "Description"
                       : toAdd === _about && "About"
                   }
-                  className="text-sm font-normal text-gray-600 mb-1"
+                  className="text-sm font-normal text-gray-600 mb-1 dark:text-white"
                 />
 
                 <Textarea
@@ -308,7 +308,7 @@ export const AddModal = ({ toAdd, setOpen }) => {
                       : toAdd === _about && dataInfo.about
                   }
                   onChange={handleChange}
-                  className="p-3 font-normal text-sm outline-2 rounded-xs "
+                  className="p-3 font-normal text-sm outline-2 rounded-xs dark:text-gray-300"
                 />
               </div>
             )}
