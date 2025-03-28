@@ -31,9 +31,7 @@ export const SavedPosts = () => {
           ...response.data.savedPosts.savedPosts,
         ]);
       }
-      setTimeout(() => {
-        setLoading(false)
-    }, 3000);
+    setLoading(false)
     } catch (error) {
       console.error("Error fetching saved posts:", error);
       setLoading(false);

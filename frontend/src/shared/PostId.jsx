@@ -15,9 +15,7 @@ export const PostId = () => {
       const response = await getPost(localStorage.getItem("token"), postId);
       console.log(response);
       if (response.data.post) {
-        setTimeout(() => {
-          setLoading(false);
-        }, 3000);
+        setLoading(false);
         setPostData(response.data.post);
       } else {
         navigate("/notFound");

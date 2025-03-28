@@ -31,9 +31,7 @@ export const Notifications = () => {
             setLastPage(response.data.lastPage)
             setTotalNotifications(response.data.totalNotifications)
             loadingRef.current = false
-            setTimeout(() => {
-              setLoading(false)
-            }, 3000);  
+            setLoading(false)
             
             setTimeout(() => {
                 setLoading(false)

@@ -29,9 +29,7 @@ export const Home = () => {
       const response = await getFeed(localStorage.getItem("token"), page);
       loadingRef.current = false;
 
-      setTimeout(() => {
-        setLoading(false);
-      }, 3000);
+      setLoading(false);
 
       if (response.status === 200) {
         if (response.data.posts) {

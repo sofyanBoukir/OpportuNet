@@ -60,9 +60,7 @@ export const Profil = () => {
 
       loadingRef.current = false;
 
-      setTimeout(() => {
-        setLoading(false);
-      }, 3000);
+      setLoading(false);
       if (response.status === 200) {
         setUserInfo(response.data.userData);
         if (response.data.posts) {
