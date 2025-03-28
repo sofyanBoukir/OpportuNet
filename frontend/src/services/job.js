@@ -36,6 +36,14 @@ export const addJob = async (token, jobData) => {
   });
   return response;
 };
+export const modifyJob = async (token, jobData ,jobId) => {
+  const response = await axios.put(`${serverUrl}/job/editJob/${jobId}`, jobData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
 export const getPostedJobs = async (token) =>{
     const response = await axios.get(`${serverUrl}/job/getPostedJobs`,{
         headers : {
@@ -43,6 +51,14 @@ export const getPostedJobs = async (token) =>{
         }
     })
     return response;
+}
+export const getPostedJobsById = async (token , jobId) =>{
+  const response = await axios.get(`${serverUrl}/job/getPostedJob/${jobId}`,{
+      headers : {
+          Authorization : `Bearer ${token}`
+      }
+  })
+  return response;
 }
 
 export const deleteJob = async (token, jobId) => {
