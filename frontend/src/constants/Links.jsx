@@ -1,7 +1,3 @@
-import HomeIcon from "@mui/icons-material/Home";
-import WorkIcon from "@mui/icons-material/Work";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import ForumIcon from "@mui/icons-material/Forum";
 import { AiFillHome } from "react-icons/ai";
 import { FaBriefcase } from "react-icons/fa6";
 import { TbMessageFilled } from "react-icons/tb";
