@@ -8,6 +8,7 @@ import { getserachPosts, getserachUsers } from "../../services/search";
 import ExtraLoader from "../../components/UI/ExtraLoader";
 import { searchForJobs } from "../../services/job";
 import { Notification } from "../../components/UI/Notification";
+import jobDefault from "../../../public/images/jobDefault.png";
 
 const serverURL = import.meta.env.VITE_SERVER_URL;
 
@@ -285,12 +286,12 @@ export const Searchs = () => {
                       return (
                         <div key={item} className="mb-2">
                           <div className="pl-4 p-2 pr-10 flex justify-between">
-                            <div className="flex gap-4">
-                              <div className="w-15 h-15 rounded-[50%])">
+                            <div className="flex gap-4 items-center">
+                              <div className="w-15 h-15">
                                 <img
-                                  src={profilDefault}
+                                  src={jobDefault}
                                   alt=""
-                                  className="w-15 h-15 rounded-[50%])"
+                                  className="w-15 h-15"
                                 />
                               </div>
                               <div>

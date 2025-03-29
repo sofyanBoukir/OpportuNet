@@ -54,7 +54,13 @@ export const Layout = () => {
 
   const showProfil_FUNCTION = (e) => {
     e.stopPropagation();
-    showProfil === false ? setShowProfil(true) : setShowProfil(false);
+    if (document.documentElement.clientWidth < 1024) {
+      navigate(`/user/profile/${userData._id}`);
+    } else {
+      showProfil === false ? setShowProfil(true) : setShowProfil(false);
+    }
+    setOpenSearchModal(false);
+    setSearchInput("");
   };
 
   const notificationSound = new Audio("/public/audios/notificationSound.wav");
@@ -122,6 +128,7 @@ export const Layout = () => {
           onClick={() => {
             setShowProfil(false);
             setOpenSearchModal(false);
+            setSearchInput("");
           }}
         >
           <div
@@ -144,9 +151,11 @@ export const Layout = () => {
                 className="w-[50px] h-[40px]"
               />
               <Input
+                value={searchInput}
                 onClick={(e) => {
                   e.stopPropagation();
                   setOpenSearchModal(true);
+                  setShowProfil(false);
                 }}
                 onChange={handleSearchInput}
                 placeholder="Search"
@@ -244,6 +253,7 @@ export const Layout = () => {
           <SearchModal
             query={searchInput}
             openSearchModal={setOpenSearchModal}
+            valueSearchInput={setSearchInput}
           />
         )}
       </div>
