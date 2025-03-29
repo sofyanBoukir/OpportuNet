@@ -253,3 +253,4 @@ const AlwaysScrollToBottom = () => {
     useEffect(() => elementRef.current.scrollIntoView({ behavior: "smooth" }));
     return <div ref={elementRef} />;
   };
+  
