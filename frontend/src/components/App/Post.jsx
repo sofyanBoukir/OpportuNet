@@ -18,9 +18,9 @@ import { HeartIcon as OutlineHeart } from "@heroicons/react/24/outline";
 
 import { BookmarkIcon as SolidBookMark } from "@heroicons/react/16/solid";
 import { BookmarkIcon as OutlineBookMark } from "@heroicons/react/24/outline";
-
+import { FiSend } from "react-icons/fi";
 import { Skeleton } from "@mui/material";
-import { isAlreadyLiked, toggleLike, toggleSave } from "../../services/post";
+import { toggleLike, toggleSave } from "../../services/post";
 import { AppSelector } from "../../selectors/AppSelector";
 import { Link } from "react-router-dom";
 import { copyText } from "../../functions/copyText";
@@ -200,8 +200,8 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
           <img src={serverUrl + post.image} className="w-[100%]" alt="" />
         </div>
         <div className="px-4 py-3 flex flex-row justify-between">
-          <h1 className="dark:text-white">{post.likes.length} Likes</h1>
-          <h1 className="dark:text-white">{post.comments.length} comments</h1>
+          <h1 className="dark:text-white hover:text-blue-700 hover:underline duration-200 cursor-pointer">{post.likes.length} Likes</h1>
+          <h1 className="dark:text-white hover:text-blue-700 hover:underline duration-200 cursor-pointer" onClick={() => setOpenModalPost(true)}>{post.comments.length} comments</h1>
         </div>
         <hr className="w-[95%] py-1 text-gray-200 mx-auto" />
         <div className="flex flex-row items-center py-2 px-5  justify-center">
@@ -238,6 +238,15 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
                 <OutlineBookMark className="text-black w-6 h-6 dark:text-white" />
               )}
               <h1 className="dark:text-white">Save</h1>
+            </div>
+          </button>
+
+          <button
+            className="flex flex-row items-center w-[30%] hover:bg-gray-100 dark:hover:bg-gray-900 justify-center py-2 rounded-lg cursor-pointer duration-200"
+          >
+            <div className="flex flex-row items-center gap-2">
+              <FiSend className="w-6 h-6 text-black w-6 h-6 dark:text-white" strokeWidth={1.4} />
+              <h1 className="dark:text-white">Share</h1>
             </div>
           </button>
         </div>
