@@ -116,7 +116,7 @@ export const ModifyJob = ({ setOpenAddJob, data }) => {
   };
 
   return (
-    <div className="z-20 fixed inset-0 flex items-center bg-black/50 text-gray-700 justify-center backdrop-blur-sm">
+    <div className="z-20 overflow-auto fixed inset-0 flex items-center bg-black/50 text-gray-700 justify-center backdrop-blur-sm">
       <div className="bg-white dark:bg-gray-900 w-[90%] lg:w-[50%] px-6 py-8 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700">
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4 text-center">
           Job Posting

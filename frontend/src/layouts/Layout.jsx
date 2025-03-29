@@ -12,9 +12,7 @@ import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import socket from "../functions/socket";
 import { useDispatch } from "react-redux";
-import ExtraLoader from "../components/UI/ExtraLoader";
 import { SearchModal } from "../components/modals/SearchModal";
-const serverURL = import.meta.env.VITE_SERVER_URL;
 
 export const Layout = () => {
   const [showProfil, setShowProfil] = useState(false);
@@ -73,7 +71,7 @@ export const Layout = () => {
       });
       socket.emit("registerUser", localStorage.getItem("token"));
 
-      socket.on("missedNotifications", (missedNotifications) => {
+      socket.on("missedNotifications", (missedNotifications) => {        
         dispatch({
           type: "UPDATE_NOTIFIED_TIMES",
           payload: missedNotifications.length,
@@ -87,10 +85,10 @@ export const Layout = () => {
         });
       });
 
-      socket.on("newMessage", () => {
+      socket.on("newMessage", (newMessage) => {
         dispatch({
           type: "UPDATE_MESSAGED_TIMES",
-          payload: messagedTimesRef.current + 1,
+          payload: {newMessage:newMessage},
         });
         notificationSound.play();
       });
@@ -98,8 +96,10 @@ export const Layout = () => {
       socket.on("newNotification", () => {
         dispatch({
           type: "UPDATE_NOTIFIED_TIMES",
-          payload: notifiedTimes + 1,
+          payload: notifiedTimesRef.current + 1,
         });
+        notifiedTimesRef.current += 1;
+        
         notificationSound.play();
       });
     }
@@ -206,12 +206,12 @@ export const Layout = () => {
         <div
           className={`${
             showProfil ? "block" : "hidden"
-          } w-[400px] py-2 px-3 rounded-xl shadow-lg flex flex-col bg-white fixed md:left-[65%] rounded-tr-none md:top-[75px] z-40 dark:bg-black dark:text-white`}
+          } lg:w-[400px] py-2 px-3 rounded-xl shadow-lg w-[100%] flex flex-col bg-white fixed md:left-[65%] rounded-tr-none md:top-[75px] z-40 dark:bg-black dark:text-white`}
         >
           <div className="flex items-center gap-2">
             <div>
               <img
-                src={`${serverURL}` + userData.profile_picture}
+                src={userData.profilePictureUrl}
                 className="rounded-full w-16 h-16"
               />
             </div>

@@ -4,7 +4,7 @@ import { SuggesstionsSkeleton } from "../skeletons/SuggesstionsSkeleton";
 import { getSuggesstedUsers } from "../../services/home";
 import { Link } from "react-router-dom";
 
-export const SuggestionsModal = ({ suggestionList }) => {
+export const SuggestionsModal = () => {
   const [loading, setLoading] = useState(true);
   const [suggesstedUsers,setSuggesstedUsers] = useState([])
 
