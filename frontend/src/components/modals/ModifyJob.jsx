@@ -2,17 +2,19 @@ import React, { useEffect, useState } from "react";
 import { Label } from "../UI/Label";
 import { Input } from "../UI/Input";
 import { Textarea } from "../UI/Textarea";
-import { addJob } from "../../services/job";
+import { modifyJob } from "../../services/job";
 import { Notification } from "../UI/Notification";
 
-export const AddJob = ({ setOpenAddJob}) => {
+export const ModifyJob = ({ setOpenAddJob, data }) => {
   const [skills, setSkills] = useState([]);
   const [skillInput, setSkillInput] = useState("");
   const [responsibilities, setResponsibilities] = useState([]);
-  const [responsibilitiInput, setResponsibilitiInput] = useState("");
+  const [responsibilityInput, setResponsibilityInput] = useState(""); // Corrected spelling
   const [salaryFrom, setSalaryFrom] = useState("");
   const [salaryTo, setSalaryTo] = useState("");
   const [salaryCurrency, setSalaryCurrency] = useState("");
+  const [notification, setNotification] = useState(null);
+
   const [jobData, setJobData] = useState({
     title: "",
     company: "",
@@ -23,38 +25,61 @@ export const AddJob = ({ setOpenAddJob}) => {
     skills: [],
     responsibilities: [],
   });
-  const [notification, setNotification] = useState(null);  
+
   const handlePostJob = async () => {
-    setNotification(null)
+    setNotification(null);
     try {
-      const response = await addJob(localStorage.getItem("token"), jobData);      
-      setNotification({ type: "success", message: response.data.message});
+      const response = await modifyJob(localStorage.getItem("token"), jobData, data._id);
+      setNotification({ type: "success", message: response.data.message });
       setTimeout(() => {
-        setOpenAddJob(false);        
+        setOpenAddJob(false);
       }, 2000);
     } catch (err) {
-      switch (err.response.status) {
+      const errorMessage = err.response?.data?.message || "An error occurred"; // Added fallback
+      switch (err.response?.status) {
         case 401:
-          setNotification({
-            type: "error",
-            message: err.response.data.message,
-          });
+          setNotification({ type: "error", message: errorMessage });
           break;
         case 500:
-          setNotification({
-            type: "error",
-            message: err.response.data.message,
-          });
+          setNotification({ type: "error", message: errorMessage });
           break;
+        default:
+          setNotification({ type: "error", message: errorMessage });
       }
     }
   };
+
+  useEffect(() => {
+    if (data) {
+      setJobData({
+        title: data.title || "",
+        company: data.company || "",
+        location: data.location || "",
+        empType: data.empType || "",
+        salaryRange: data.salaryRange || "",
+        description: data.description || "",
+        skills: data.skills || [],
+        responsibilities: data.responsibilities || [],
+      });
+
+      setSkills(data.skills || []);
+      setResponsibilities(data.responsibilities || []);
+
+      // Extract salary details if available
+      const salaryParts = data.salaryRange ? data.salaryRange.split(" ") : [];
+      setSalaryFrom(salaryParts[0] || "");
+      setSalaryTo(salaryParts[2] || "");
+      setSalaryCurrency(salaryParts[3] || "");
+    }
+  }, [data]);
+
   useEffect(() => {
     setJobData((prev) => ({
       ...prev,
       salaryRange: `${salaryFrom} to ${salaryTo} ${salaryCurrency}`,
     }));
   }, [salaryFrom, salaryTo, salaryCurrency]);
+
   useEffect(() => {
     setJobData((prev) => ({
       ...prev,
@@ -62,44 +87,43 @@ export const AddJob = ({ setOpenAddJob}) => {
       responsibilities,
     }));
   }, [skills, responsibilities]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setJobData((prev) => ({ ...prev, [name]: value }));
   };
-  const addresponsibilitie = () => {
-    if (
-      responsibilitiInput.trim() &&
-      !responsibilities.includes(responsibilitiInput.trim())
-    ) {
-      setResponsibilities([...responsibilities, responsibilitiInput.trim()]);
-      setResponsibilitiInput("");
+
+  const addResponsibility = () => {
+    if (responsibilityInput.trim() && !responsibilities.includes(responsibilityInput.trim())) {
+      setResponsibilities([...responsibilities, responsibilityInput.trim()]);
+      setResponsibilityInput("");
     }
   };
-  const removeresponsibilitie = (resp) => {
-    setResponsibilities(responsibilities.filter((s) => s !== resp));
+
+  const removeResponsibility = (resp) => {
+    setResponsibilities(responsibilities.filter((r) => r !== resp));
   };
+
   const addSkill = () => {
     if (skillInput.trim() && !skills.includes(skillInput.trim())) {
       setSkills([...skills, skillInput.trim()]);
       setSkillInput("");
     }
   };
+
   const removeSkill = (skill) => {
     setSkills(skills.filter((s) => s !== skill));
   };
+
   return (
     <div className="z-20 fixed inset-0 flex items-center bg-black/50 text-gray-700 justify-center backdrop-blur-sm">
-      
       <div className="bg-white dark:bg-gray-900 w-[90%] lg:w-[50%] px-6 py-8 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700">
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4 text-center">
           Job Posting
         </h2>
         <div className="flex flex-wrap gap-4">
           <div className="flex flex-col w-full sm:w-[48%]">
-            <Label
-              text="Title of Job"
-              className="text-lg font-medium dark:text-gray-300"
-            />
+            <Label text="Title of Job" className="text-lg font-medium dark:text-gray-300" />
             <Input
               type="text"
               name="title"
@@ -110,10 +134,7 @@ export const AddJob = ({ setOpenAddJob}) => {
             />
           </div>
           <div className="flex flex-col w-full sm:w-[48%]">
-            <Label
-              text="Company Name"
-              className="text-lg font-medium dark:text-gray-300"
-            />
+            <Label text="Company Name" className="text-lg font-medium dark:text-gray-300" />
             <Input
               type="text"
               name="company"
@@ -124,10 +145,7 @@ export const AddJob = ({ setOpenAddJob}) => {
             />
           </div>
           <div className="flex flex-col w-full sm:w-[48%]">
-            <Label
-              text="Location"
-              className="text-lg font-medium dark:text-gray-300"
-            />
+            <Label text="Location" className="text-lg font-medium dark:text-gray-300" />
             <Input
               type="text"
               name="location"
@@ -138,10 +156,7 @@ export const AddJob = ({ setOpenAddJob}) => {
             />
           </div>
           <div className="flex flex-col w-full sm:w-[48%]">
-            <Label
-              text="Employment Type"
-              className="text-lg font-medium dark:text-gray-300"
-            />
+            <Label text="Employment Type" className="text-lg font-medium dark:text-gray-300" />
             <select
               className="border dark:border-gray-600 py-2 px-3 rounded-md dark:text-gray-300 dark:bg-gray-900 w-full"
               name="empType"
@@ -157,16 +172,15 @@ export const AddJob = ({ setOpenAddJob}) => {
             </select>
           </div>
           <div className="flex flex-col w-full">
-            <Label
-              text="Salary Range"
-              className="text-lg font-medium dark:text-gray-300"
-            />
+            <div className="flex flex-row gap-4">
+              <Label text="Salary Range" className="text-lg font-medium dark:text-gray-300" />
+              <Label text={jobData.salaryRange} className="text-lg font-medium dark:text-gray-500" />
+            </div>
             <div className="flex gap-3">
               <Input
                 type="number"
                 name="salaryFrom"
                 placeholder="From"
-                o
                 onChange={(e) => setSalaryFrom(e.target.value)}
                 className="border dark:border-gray-600 py-2 px-3 rounded-md dark:text-gray-300 w-2/5"
               />
@@ -190,10 +204,7 @@ export const AddJob = ({ setOpenAddJob}) => {
             </div>
           </div>
           <div className="flex flex-col w-full">
-            <Label
-              text="Description"
-              className="text-lg font-medium dark:text-gray-300"
-            />
+            <Label text="Description" className="text-lg font-medium dark:text-gray-300" />
             <Textarea
               name="description"
               value={jobData.description}
@@ -203,10 +214,7 @@ export const AddJob = ({ setOpenAddJob}) => {
             />
           </div>
           <div className="flex flex-col w-full">
-            <Label
-              text="Skills"
-              className="text-lg font-medium dark:text-gray-300"
-            />
+            <Label text="Skills" className="text-lg font-medium dark:text-gray-300" />
             <div className="flex gap-2">
               <Input
                 type="text"
@@ -241,21 +249,18 @@ export const AddJob = ({ setOpenAddJob}) => {
             </div>
           </div>
           <div className="flex flex-col w-full">
-            <Label
-              text="Responsibilitie"
-              className="text-lg font-medium dark:text-gray-300"
-            />
+            <Label text="Responsibilities" className="text-lg font-medium dark:text-gray-300" />
             <div className="flex gap-2">
               <Input
                 type="text"
-                value={responsibilitiInput}
-                onChange={(e) => setResponsibilitiInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && addresponsibilitie()}
-                placeholder="Add a skill and press Enter"
+                value={responsibilityInput}
+                onChange={(e) => setResponsibilityInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && addResponsibility()}
+                placeholder="Add a responsibility and press Enter"
                 className="border dark:border-gray-600 py-2 px-3 rounded-md dark:text-gray-300 w-full"
               />
               <button
-                onClick={addresponsibilitie}
+                onClick={addResponsibility}
                 className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg"
               >
                 Add
@@ -269,7 +274,7 @@ export const AddJob = ({ setOpenAddJob}) => {
                 >
                   {resp}
                   <button
-                    onClick={() => removeresponsibilitie(resp)}
+                    onClick={() => removeResponsibility(resp)}
                     className="ml-2 bg-red-500 hover:bg-red-600 text-white rounded-full px-2"
                   >
                     X
@@ -289,7 +294,7 @@ export const AddJob = ({ setOpenAddJob}) => {
               className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg"
               onClick={handlePostJob}
             >
-              Post Job
+              Update Job
             </button>
           </div>
         </div>

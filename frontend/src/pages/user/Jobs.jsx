@@ -34,9 +34,7 @@ export const Jobs = () => {
             if(loadingRef.current) return;
             loadingRef.current = true
             const response = await getJobs(localStorage.getItem('token'),page);
-            setTimeout(() => {
-                setLoading(false)
-            }, 3000);
+            setLoading(false)
             loadingRef.current = false
             if(response.data.postedJobs){
                 setPostedJobs((prevData) => [...prevData, ...response.data.postedJobs])

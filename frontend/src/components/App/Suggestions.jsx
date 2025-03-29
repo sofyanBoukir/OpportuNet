@@ -14,9 +14,7 @@ export const SuggestionsModal = ({ suggestionList }) => {
     if(response.status === 200){
       if(response.data.suggesstedUsers){
         setSuggesstedUsers(response.data.suggesstedUsers);
-        setTimeout(() => {
-          setLoading(false);
-        }, 3000);
+        setLoading(false);  
       }
     }
   }

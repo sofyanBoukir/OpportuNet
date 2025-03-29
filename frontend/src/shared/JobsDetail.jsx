@@ -1,18 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { JobDetails } from "../components/App/JobDetails";
-import { useLocation } from "react-router-dom";
+import {  useParams } from "react-router-dom";
+import { useState } from "react";
+import { getPostedJobsById } from "../services/job";
 
 export const JobsDetail = () => {
-  const location = useLocation();
-  const { job } = location.state || {}; 
-
-  if (!job) {
-    return <div className="text-center mt-10 text-red-500">Job not found.</div>;
-  }
-
+  const [jobData, setJobData] = useState([]);
+  const {id} = useParams()  
+  const getJobs = async () => {
+      const response = await getPostedJobsById(localStorage.getItem("token"),id);
+      setJobData(response.data.postedJob);
+    };
+    useEffect(()=>{
+      getJobs();
+    },[])
   return (
     <div className=" relative top-15 px-[20%]">
-      <JobDetails job={job}/>
+      <JobDetails job={jobData}/>
     </div>
   );
 };
