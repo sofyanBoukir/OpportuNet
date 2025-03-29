@@ -10,8 +10,10 @@ const {
   signInButNotVerified,
   isNewUser,
   getUsers,
+  deleteUser,
 } = require("../controllers/auth");
 const isAuth = require("../middlewares/isAuth");
+const isAdmin = require("../middlewares/isAdmin");
 const router = express.Router();
 
 router.get("/getUserData", isAuth, getUserData);
@@ -23,6 +25,7 @@ router.post("/checkVCode", checkVcode);
 router.post("/sendResetLink", sendResetLink);
 router.post("/resetPassword", resetPassword);
 router.post("/logout", logout);
-router.get("/getUsers", isAuth, getUsers);
+router.get("/getUsers", isAuth, isAdmin, getUsers);
+router.delete("/deleteUser/:userId", isAuth, isAdmin, deleteUser);
 
 module.exports = router;
