@@ -7,15 +7,6 @@ export const SingleLink = ({ link, svg, text }) => {
   const currentPath = window.location.pathname;
   const { notifiedTimes,messagedTimes } = AppSelector()
 
-  
-  //   const [showBorder, setShowBorder] = useState(false);
-  //   const refDiv = useRef("");
-
-  //   const showBorder_FUNCTION = () => {
-  //     refDiv.current.id === text:
-  //     showProfil === false ? setShowProfil(true) : setShowProfil(false);
-  //   };
-
   return (
     <div
       onClick={() => {
@@ -32,7 +23,7 @@ export const SingleLink = ({ link, svg, text }) => {
         }`}
       >
         {
-          text === 'Messaging' && messagedTimes > 0 &&  <div className="w-5 h-5 text-center text-white dark:text-black bg-red-600 absolute flex items-center justify-center rounded-full top-[-7px] right-[-10px] text-[13px]">{messagedTimes > 9 ? "+9" : messagedTimes }</div>
+          text === 'Messaging' && messagedTimes.length > 0 &&  <div className="w-5 h-5 text-center text-white dark:text-black bg-red-600 absolute flex items-center justify-center rounded-full top-[-7px] right-[-10px] text-[13px]">{messagedTimes.length }</div>
         }
         {
           text === 'Notifications' &&  notifiedTimes !== 0 && <div className="w-5 h-5 text-center text-white dark:text-black bg-red-600 absolute flex items-center justify-center rounded-full top-[-7px] right-[-10px] text-[13px]">{notifiedTimes > 9 ? "+9" : notifiedTimes }</div>
@@ -51,8 +42,3 @@ export const SingleLink = ({ link, svg, text }) => {
     </div>
   );
 };
-
-// export const Selector = () => {
-//   const user = useSelector((state) => state.userData);
-//   return user;
-// };

@@ -2,6 +2,8 @@ const Conversation = require("../models/Conversation");
 const Job = require("../models/Job");
 const Message = require("../models/Message");
 const User = require("../models/User");
+const notifyMessageToOnlineUser = require("../sockets/real-time-messages");
+const { getIO } = require("../sockets/socket");
 
 const getPostedJobs = async (request,response) =>{
     try{
@@ -230,7 +232,7 @@ const applyForJob = async (request,response) =>{
 
             job.applicants.push(userId);
             await job.save();
-            
+            const io = getIO()
             const newConversation = new Conversation({
                 participants : [userId,job.recuiter],
                 lastMessageSender : userId,
@@ -247,6 +249,8 @@ const applyForJob = async (request,response) =>{
                 message : 'Hi! I’d like to apply for this job. Looking forward to your response!',
             });
             await newMessage.save();
+
+            notifyMessageToOnlineUser(io,job.recuiter,newMessage);
 
             return response.json({
                 'message' : 'Successfully apllied for this job'

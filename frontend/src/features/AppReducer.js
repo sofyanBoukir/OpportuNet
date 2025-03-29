@@ -3,7 +3,7 @@ const appState = {
   // isMessaged: false,
   // isNotified: false,
   notifiedTimes: 0,
-  messagedTimes: 0,
+  messagedTimes: [],
   theme: localStorage.getItem("theme"),
   // resultSearch: { users: [], posts: [] },
 };
@@ -23,7 +23,13 @@ export const AppReducer = (state = appState, action) => {
       return { ...state, notifiedTimes: action.payload };
 
     case "UPDATE_MESSAGED_TIMES":
-      return { ...state, messagedTimes: action.payload };
+      if(state.messagedTimes.some((message) => message?.conversation === action.payload.newMessage.conversation)){
+        return {...state}
+      }
+      return { ...state, messagedTimes:[...state.messagedTimes,action.payload.newMessage]};
+    
+    case "MESSAGE_SEEN":
+      return {...state, messagedTimes: state.messagedTimes.filter((message) => message.conversation !== action.payload)}
 
     case "UPDATE_THEME":
       return { ...state, theme: action.payload };

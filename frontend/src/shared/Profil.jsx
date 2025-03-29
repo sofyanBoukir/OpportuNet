@@ -4,7 +4,6 @@ import { Educations } from "../components/App/Educations";
 import { Experiences } from "../components/App/Experiences";
 import { Skills } from "../components/App/Skills";
 import { Interests } from "../components/App/Interests";
-import { UrlProfile } from "../components/App/UrlProfile";
 import { SuggestionsModal } from "../components/App/Suggestions";
 import { UpdateModal } from "../components/modals/UpdateModal";
 import { AppSelector } from "../selectors/AppSelector";
@@ -240,7 +239,6 @@ export const Profil = () => {
           )}
         </div>
         <div className="lg:w-[20%] flex flex-col gap-2 lg:pt-[80px] lg:ml-[4%]">
-          {<UrlProfile />}
           {<SuggestionsModal />}
         </div>
         {showUpdateModal && (

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Input } from '../components/UI/Input'
 import { Conversation } from '../components/App/Conversation'
-import defaultImage from '../../public/images/profilDefault.png'
 import { Button } from '../components/UI/Button'
 import messageBg from '../../public/images/bgMessage.png'
 import { ArrowDownCircleIcon, ChatBubbleOvalLeftEllipsisIcon, CheckIcon } from '@heroicons/react/24/outline'
@@ -20,12 +19,13 @@ export const Messaging = () => {
     const [totalConversations,setTotalConversations] = useState(null);
     const [conversations,setConversations] = useState([])
     const [page,setPage] = useState(1)
-    const [selectedConversation,setSelectefConversation] = useState(null)
+    const [selectedConversation,setSelectedConversation] = useState(null)
     const [loadMessages,setLoadMessages] = useState(false)
     const [messages,setMessages] = useState([])
     const [otherParticipant,setOtherParticipiant] = useState(null)
     const [message,setMessage] = useState('')
     const [searchInput,setSearchInput] = useState('')
+    const selectedConversationRef = useRef(selectedConversation)
     const {messagedTimes} = AppSelector()
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -35,9 +35,12 @@ export const Messaging = () => {
     const messagedTimesRef = useRef(messagedTimes);    
     useEffect(() => {
         messagedTimesRef.current = messagedTimes;
-      }, [messagedTimes]);
+    }, [messagedTimes]);
 
-
+    useEffect(() =>{
+        selectedConversationRef.current = selectedConversation;
+    },[selectedConversation])
+    
 
     const _searchConversations = async () =>{
         const response = await searchConversations(localStorage.getItem('token'),searchInput);
@@ -86,12 +89,9 @@ export const Messaging = () => {
         if(selectedConversation.lastMessageStatus === 'seen') return;
         const response = await updateConversationLastMessageStatus(localStorage.getItem('token'),selectedConversation._id);
         if(response.status === 200){
-            dispatch({
-                type:"UPDATE_MESSAGED_TIMES",
-                payload:messagedTimesRef.current- 1})
             const updateConversations = conversations.map((conversation) => conversation._id === selectedConversation._id ? {...conversation,lastMessageStatus:'seen'} : conversation)
             setConversations(updateConversations)
-            dispatch({type:'UPDATE_MESSAGED_TIMES',payload:messagedTimesRef.current - 1})
+            dispatch({type:'MESSAGE_SEEN',payload:selectedConversation._id})
         }
     }
 
@@ -118,20 +118,34 @@ export const Messaging = () => {
     useEffect(() => {
         if (!socket.connected) {
             socket.connect();
-        
-            socket.on("connect", () => {
-                console.log("connected to the server");
-            });
-                socket.emit("registerUser", localStorage.getItem("token"));
-                socket.on('newMessage',(newMessage) =>{
-                    setConversations([])
-                    _getUserConversations();
-                    setMessages((prevMessages) => [...prevMessages,newMessage])
-                    notificationSound.play()
-                    AlwaysScrollToBottom()
-                    
-                })
-            };
+        }
+    
+        const handleConnect = () => {
+            console.log("connected to the server");
+            socket.emit("registerUser", localStorage.getItem("token"));
+        };
+    
+        const handleNewMessage = (newMessage) => {
+            setConversations([]);
+            _getUserConversations();
+            
+            const currentConv = selectedConversationRef.current;
+
+            if (currentConv && newMessage.conversation === currentConv._id) {
+                setMessages((prevMessages) => [...prevMessages, newMessage]);
+                dispatch({type:'MESSAGE_SEEN',payload:currentConv._id})
+                notificationSound.play();
+                AlwaysScrollToBottom();
+            }
+        };
+    
+        socket.on("connect", handleConnect);
+        socket.on('newMessage', handleNewMessage);
+    
+        return () => {
+            socket.off("connect", handleConnect);
+            socket.off('newMessage', handleNewMessage);
+        };
     }, []);
 
     useEffect(() =>{        
@@ -161,7 +175,7 @@ export const Messaging = () => {
                     {
                         !loadingConversation && conversations && conversations.length ?
                             conversations.map((conversation,index) =>{
-                                return <Conversation key={index} conversation={conversation} setOtherParticipiant={setOtherParticipiant} setSelectefConversation={setSelectefConversation}/>
+                                return <Conversation key={index} conversation={conversation} setOtherParticipiant={setOtherParticipiant} setSelectedConversation={setSelectedConversation}/>
                             })
                         :null
                     }
