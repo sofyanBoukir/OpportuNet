@@ -378,10 +378,53 @@ const logout = (request, response) => {
   }
 };
 
-const getUsers = (request, response) => {
+const getUsers = async (request, response) => {
   try {
+    const userRole = request.user.role;
+
+    const page = parseInt(request.query.page) || 1;
+    const pageSize = 4;
+    const skip = (page - 1) * pageSize;
+
+    const users = await User.find({ role: { $ne: userRole } })
+      .skip(skip)
+      .limit(pageSize)
+      .sort({
+        createdAt: -1,
+      });
+
+    if (!users) {
+      response.status(404).json({
+        message: "Users Not found",
+      });
+    }
+
+    const totalUsers = await User.countDocuments({
+      role: { $ne: userRole },
+    });
+
+    const totalPages = Math.ceil(totalUsers / pageSize);
+
     return response.json({
-      message: "this gooood",
+      users,
+      totalUsers,
+      totalPages,
+    });
+  } catch (err) {
+    return response.json({
+      message: err.message,
+    });
+  }
+};
+
+const deleteUser = async (request, response) => {
+  try {
+    const { userId } = request.params;
+
+    const user = await User.findByIdAndDelete(userId);
+    return response.json({
+      user,
+      message: "Post deleted successfully",
     });
   } catch (err) {
     return response.json({
@@ -401,4 +444,5 @@ module.exports = {
   resetPassword,
   logout,
   getUsers,
+  deleteUser,
 };
