@@ -120,7 +120,11 @@ export const SearchModal = ({ query, openSearchModal }) => {
               <div>
                 <div className="px-4 py-1 mb-1 w-full">
                   <h1 className="font-bold text-sm mb-2">Suggestions</h1>
-                  <div className="flex gap-3 justify-evenly flex-wrap w-full">
+                  <div
+                    className={`flex gap-3 ${
+                      suggesstedUsers.length > 3 && "justify-evenly"
+                    } flex-wrap w-full`}
+                  >
                     {suggesstedUsers.map((item) => (
                       <div
                         onClick={() => {
@@ -143,12 +147,12 @@ export const SearchModal = ({ query, openSearchModal }) => {
                     ))}
                   </div>
                 </div>
-                <div className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-900 duration-200 cursor-pointer ">
+                {/* <div className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-900 duration-200 cursor-pointer ">
                   <ClockIcon strokeWidth="2" className="w-5 h-5" />
                   <h5 className="font-semibold text-md text-center">
                     kachoud said
                   </h5>
-                </div>
+                </div> */}
               </div>
             )}
 
