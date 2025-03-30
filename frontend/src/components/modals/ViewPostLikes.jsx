@@ -4,6 +4,7 @@ import { getWhoLikedPost } from '../../services/post';
 import { Follow } from '../UI/Follow';
 import { Link } from 'react-router-dom';
 import { AppSelector } from '../../selectors/AppSelector';
+import { HeartIcon } from '@heroicons/react/16/solid';
 
 export const ViewPostLikes = ({setViewLikes,postId}) => {
     const [loading,setLoading] = useState(false);
@@ -31,8 +32,8 @@ export const ViewPostLikes = ({setViewLikes,postId}) => {
         _getWhoLikedPost()
     },[postId])
   return (
-    <div className="fixed inset-0 flex items-center bg-black/50 text-gray-700 justify-center backdrop-blur-xs z-20">
-        <div className="bg-white w-[100%] lg:w-[30%] px-8 py-6 rounded-lg shadow-xl max-h-96 overflow-auto">
+    <div className="fixed inset-0 flex items-center bg-black/50 dark:text-gray-200 text-gray-700 justify-center backdrop-blur-xs z-20">
+        <div className="bg-white dark:bg-black w-[100%] lg:w-[30%] px-8 py-6 rounded-lg shadow-xl max-h-96 overflow-auto">
             <div className='flex justify-between items-center mb-2'>
                 <div className='flex gap-2 items-center'>
                     <div>
@@ -51,7 +52,10 @@ export const ViewPostLikes = ({setViewLikes,postId}) => {
                         postLikes.map((user) =>{
                             return <div className='flex justify-between items-center'>
                                     <div className='flex gap-2 items-center'>
-                                        <img src={user.profilePictureUrl} className='w-10 h-10 rounded-full'/>
+                                        <div className='relative'>
+                                            <img src={user.profilePictureUrl} className='w-14 h-14 border border-white rounded-full'/>
+                                            <HeartIcon className='w-5 h-5 text-red-500 absolute bottom-[-8px] right-[-6px]'/>
+                                        </div>
                                         <div>
                                             <Link className='text-lg font-semibold hover:text-blue-500' to={`/user/profile/${user._id}`}>{user.name}</Link>
                                             <p>{user.headLine}</p>

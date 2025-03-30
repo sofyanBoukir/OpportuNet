@@ -1,7 +1,6 @@
 import React from 'react'
 import { AppSelector } from '../../selectors/AppSelector'
-import coverProfile from '../../../public/images/coverProfil.png'
-const authService = import.meta.env.VITE_SERVER_URL;
+import coverProfile from '../../../public/images/coverProfile.png'
 
 export const Profile = () => {
     const {userData } = AppSelector();

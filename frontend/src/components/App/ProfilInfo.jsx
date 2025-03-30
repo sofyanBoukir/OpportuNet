@@ -1,5 +1,4 @@
-import coverProfil from "../../../public/images/coverProfil.png";
-import ProfilImg from "../../../public/images/profilDefault.png";
+import coverProfil from "../../../public/images/coverProfile.png";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import { Follow } from "../UI/Follow";
 import { UserPlusIcon } from "@heroicons/react/24/outline";

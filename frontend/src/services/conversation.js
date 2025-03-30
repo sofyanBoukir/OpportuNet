@@ -52,6 +52,16 @@ export const sendNewMessage = async (token, conversationId, data) => {
   return response;
 };
 
+
+export const sendPostToMultipleUsers = async (token,postId,conversations) =>{
+  const response = await axios.post(`${serverUrl}/conversation/sendPostToMultipleUsers/${postId}`,{conversations},{
+    headers : {
+      Authorization : `Bearer ${token}`
+    }
+  });
+  return response;
+}
+
 export const updateConversationLastMessageStatus = async (
   token,
   conversationId

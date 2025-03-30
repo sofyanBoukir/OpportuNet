@@ -19,14 +19,15 @@ import { HeartIcon as OutlineHeart } from "@heroicons/react/24/outline";
 import { BookmarkIcon as SolidBookMark } from "@heroicons/react/16/solid";
 import { BookmarkIcon as OutlineBookMark } from "@heroicons/react/24/outline";
 import { FiSend } from "react-icons/fi";
-import { Skeleton } from "@mui/material";
 import { toggleLike, toggleSave } from "../../services/post";
 import { AppSelector } from "../../selectors/AppSelector";
 import { Link } from "react-router-dom";
 import { copyText } from "../../functions/copyText";
 import { Notification } from "../UI/Notification";
 import { ViewPostLikes } from "../modals/ViewPostLikes";
+import { SharePost } from "../modals/SharePost";
 const frontendUrl = import.meta.env.VITE_FRONTEND_URL;
+
 export const Post = ({ post, showIcon, postSelected, openDelete }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -52,10 +53,10 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
   );
   const [notification, setNotification] = useState();
   const [viewLikes,setViewLikes] = useState(false);
+  const [sharePost,setSharePost] = useState(false);
 
   const _toggleLike = async () => {
     const response = await toggleLike(localStorage.getItem("token"), post._id);
-    console.log(response);
 
     if (response.status === 200) {
       if (response.data.liked === true) {
@@ -73,9 +74,7 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
   };
 
   const _toggleSave = async () => {
-    console.log("toggle save for post " + post._id);
     const response = await toggleSave(localStorage.getItem("token"), post._id);
-    console.log(response);
 
     if (response.status === 200) {
       if (response.data.saved === true) {
@@ -241,6 +240,7 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
           </button>
 
           <button
+            onClick={() => setSharePost(true)}
             className="flex flex-row items-center w-[30%] hover:bg-gray-100 dark:hover:bg-gray-900 justify-center py-2 rounded-lg cursor-pointer duration-200"
           >
             <div className="flex flex-row items-center gap-2">
@@ -258,6 +258,9 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
       )}
       {
         viewLikes && <ViewPostLikes setViewLikes={setViewLikes} postId={post._id}/>
+      }
+      {
+        sharePost && <SharePost postId={post._id} setSharePost={setSharePost}/>
       }
     </div>
   );

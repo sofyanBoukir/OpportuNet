@@ -5,12 +5,12 @@ import { applyForJob } from "../../services/job";
 import { ERROR_MESSAGES } from "../../constants/Errors";
 import { Notification } from "../UI/Notification";
 import { AppSelector } from "../../selectors/AppSelector";
-
-export const JobDetails = ({ job, copyLink }) => {
+import { copyText } from "../../functions/copyText";
+const frontendUrl = import.meta.env.VITE_FRONTEND_URL;
+export const JobDetails = ({ job }) => {
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState();
   const { userData } = AppSelector();
-  console.log(job);
   
   const _applyForJob = async () => {
     setNotification(null);
@@ -66,7 +66,7 @@ export const JobDetails = ({ job, copyLink }) => {
           </span>
           <button
             className="bg-blue-200 px-2 py-1 rounded-md cursor-pointer dark:text-black"
-            onClick={copyLink}
+            onClick={() => copyText(`${frontendUrl}/job-detail/${job._id}`,setNotification)}
           >
             <LinkIcon className="w-6 h-6" />
           </button>
@@ -97,10 +97,6 @@ export const JobDetails = ({ job, copyLink }) => {
             Responsibilities
           </h1>
           <ul className="ml-10 list-disc text-gray-700 flex flex-col gap-2 mt-1 dark:text-gray-400">
-            {/* <li>Co-développer des agents IA permettant d’automatiser les flux de travail, de traiter des documents et d’améliorer la prise de décision.</li>
-                    <li>Implémenter des systèmes RAG pour améliorer la récupération des connaissances et la qualité des réponses générées par l’IA.</li>
-                    <li>Intégrer des systèmes IA aux outils métiers existants (CRM, ERP, Google Workspace, WhatsApp, etc.).</li>
-                    <li>Participer à l’élaboration de solutions low-code/no-code pour faciliter l’adoption de l’IA.</li> */}
             {job.responsibilities && job.responsibilities.length
               ? job.responsibilities.map((responsibility) => {
                   return <li>{responsibility}</li>;
