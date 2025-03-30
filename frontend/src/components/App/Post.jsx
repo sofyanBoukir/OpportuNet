@@ -25,7 +25,7 @@ import { AppSelector } from "../../selectors/AppSelector";
 import { Link } from "react-router-dom";
 import { copyText } from "../../functions/copyText";
 import { Notification } from "../UI/Notification";
-const serverUrl = import.meta.env.VITE_SERVER_URL;
+import { ViewPostLikes } from "../modals/ViewPostLikes";
 const frontendUrl = import.meta.env.VITE_FRONTEND_URL;
 export const Post = ({ post, showIcon, postSelected, openDelete }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -51,8 +51,7 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
     userData.savedPosts.includes(post._id)
   );
   const [notification, setNotification] = useState();
-
-  console.log(userData.likedPosts);
+  const [viewLikes,setViewLikes] = useState(false);
 
   const _toggleLike = async () => {
     const response = await toggleLike(localStorage.getItem("token"), post._id);
@@ -197,10 +196,10 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
           )}
         </div>
         <div className="w-[100%] mt-1">
-          <img src={serverUrl + post.image} className="w-[100%]" alt="" />
+          <img src={post.imageUrl} className="w-[100%]" alt="" />
         </div>
         <div className="px-4 py-3 flex flex-row justify-between">
-          <h1 className="dark:text-white hover:text-blue-700 hover:underline duration-200 cursor-pointer">{post.likes.length} Likes</h1>
+          <h1 className="dark:text-white hover:text-blue-700 hover:underline duration-200 cursor-pointer" onClick={() => setViewLikes(true)}>{post.likes.length} Likes</h1>
           <h1 className="dark:text-white hover:text-blue-700 hover:underline duration-200 cursor-pointer" onClick={() => setOpenModalPost(true)}>{post.comments.length} comments</h1>
         </div>
         <hr className="w-[95%] py-1 text-gray-200 mx-auto" />
@@ -245,7 +244,7 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
             className="flex flex-row items-center w-[30%] hover:bg-gray-100 dark:hover:bg-gray-900 justify-center py-2 rounded-lg cursor-pointer duration-200"
           >
             <div className="flex flex-row items-center gap-2">
-              <FiSend className="w-6 h-6 text-black w-6 h-6 dark:text-white" strokeWidth={1.4} />
+              <FiSend className="w-6 h-6 text-black dark:text-white" strokeWidth={1.4} />
               <h1 className="dark:text-white">Share</h1>
             </div>
           </button>
@@ -257,6 +256,9 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
       {notification && (
         <Notification type={notification.type} message={notification.message} />
       )}
+      {
+        viewLikes && <ViewPostLikes setViewLikes={setViewLikes} postId={post._id}/>
+      }
     </div>
   );
 };

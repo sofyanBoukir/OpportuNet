@@ -27,6 +27,36 @@ const getPost = async (request, response) => {
     });
   }
 };
+
+const getPostLikes = async (request,response) =>{
+  try{
+    const userId = request.user.id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return response.status(404).json({
+        message: "user not found",
+      });
+    }
+
+    const {postId} = request.params;
+    const postLikes = await Post.findById(postId)
+                          .select('likes')
+                          .populate('likes', 'name profile_picture headLine')
+
+    if(postLikes){
+      return response.json({
+        'postLikes' : postLikes
+      })
+    }
+  }catch(err){
+    return response.status(500).json({
+      'message' : err.message
+    })
+  }
+}
+
+
 const addPost = async (request, response) => {
   try {
     const { content, tags, mentionsIds } = request.body;
@@ -221,6 +251,7 @@ const toggleSave = async (request, response) => {
 
 module.exports = {
   getPost,
+  getPostLikes,
   addPost,
   deletePost,
   toggleLike,

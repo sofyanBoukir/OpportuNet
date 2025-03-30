@@ -11,17 +11,16 @@ export const addPost = async (token, postData) => {
   return response;
 };
 
-export const isAlreadyLiked = async (token, postId) => {
-  const response = await axios.get(
-    `${serverURL}/post/idAlreadyLiked/${postId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+
+
+export const getWhoLikedPost = async (token,postId) =>{
+  const response = await axios.get(`${serverURL}/post/getWhoLikedPost/${postId}`,{
+    headers : {
+      Authorization : `Bearer ${token}`
     }
-  );
-  return response;
-};
+  });
+  return response
+}
 
 export const toggleLike = async (token, postId) => {
   const response = await axios.put(
