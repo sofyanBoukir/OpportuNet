@@ -50,7 +50,7 @@ export const ProfileStatus = () => {
           </div>
 
           <div className='mt-[-50px]'>
-            <span className='text-xl font-semibold'>Interests</span>
+            <p className='text-xl font-semibold'>Interests</p>
             <div>
               {
                 userData?.interests?.slice(0,3).map((interest) =>{
@@ -62,9 +62,9 @@ export const ProfileStatus = () => {
 
             <br></br>
             
-            <span className='text-xl font-semibold'>Skills</span>
+            <p className='text-xl font-semibold'>Skills</p>
             {
-              userData.skills ? 
+              userData.skills.length ? 
               <div>
                 {
                   userData?.skills?.slice(0,3).map((skill) =>{

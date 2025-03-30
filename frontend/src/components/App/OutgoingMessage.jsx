@@ -10,7 +10,7 @@ export const OutgoingMessage = ({message}) => {
     <div className="bg-gray-200 relative text-black self-end max-w-[70%] rounded-br-none px-6 py-2 rounded-3xl break-words">
         <span className="font-semibold break-words">
             {message.message}
-            {post && <div onClick={() => navigate(`/post/${post._id}`)}>
+            {post && <div onClick={() => navigate(`/post/${post._id}`)} className='cursor-pointer'>
                     <div className='flex gap-2 items-center'>
                         <img src={post.user.profilePictureUrl} className='w-10 h-10 rounded-full'/>
                         <div>

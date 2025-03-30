@@ -11,7 +11,7 @@ export const IncomingMessage = ({message}) => {
     <div className="flex bg-blue-500 relative flex-col self-start max-w-[70%] rounded-tl-none px-6 py-2 rounded-3xl break-words">
         <span className="text-white font-semibold break-words">
             {message.message}
-            {post && <div onClick={() => navigate(`/post/${post._id}`)}>
+            {post && <div onClick={() => navigate(`/post/${post._id}`)} className='cursor-pointer'>
                     <div className='flex gap-2 items-center'>
                         <img src={post.user.profilePictureUrl} className='w-10 h-10 rounded-full'/>
                         <div>
