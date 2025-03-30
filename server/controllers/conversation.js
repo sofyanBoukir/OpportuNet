@@ -3,7 +3,6 @@ const Message = require("../models/Message");
 const User = require("../models/User");
 const notifyMessageToOnlineUser = require("../sockets/real-time-messages");
 const { getIO } = require("../sockets/socket");
-const updateLastMessageStatus = require("../sockets/update-last-message-status");
 
 const getConversations = async (request,response) =>{
     try{
@@ -153,6 +152,53 @@ const sendNewMessage = async (request,response) =>{
     }
 }
 
+const sendPostToMultipleUsers = async (request,response) =>{
+    try{
+        const userId = request.user.id;
+
+        const user = await User.findById(userId);
+        if(!user){
+            return response.status(404).json({
+                'message' : 'User not found'
+            })
+        }
+        
+        const { conversations } = request.body;
+        const { postId } = request.params;
+        const io = getIO();
+
+        conversations.map(async (conversation) =>{
+            const toConversation = await Conversation.findById(conversation);
+            const recipient = toConversation.participants.find(participant => participant.toString() !== userId.toString());
+            if(toConversation){
+                const newMessage = new Message({
+                    sender : userId,
+                    post : postId,
+                    recipient,
+                    conversation : toConversation._id
+                })
+
+                notifyMessageToOnlineUser(io,recipient,newMessage);
+                
+                await newMessage.save();
+                toConversation.lastMessageSender = userId;
+                toConversation.lastMessageAt = new Date();
+                toConversation.lastMessage = 'Sharing a post';
+                await toConversation.save();
+            }
+        })
+
+        return response.json({
+            'message' : 'Sent successfully!'
+        })
+
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+}
+
 const searchConversations = async (request,response) =>{
     try{
         const userId = request.user.id;
@@ -206,7 +252,6 @@ const updateConversationLastMessageStatus = async (request,response) =>{
 
         const {conversationId} = request.params;        
         const conversation = await Conversation.findById(conversationId)
-        const io = getIO();
 
         if(!conversation){
             return response.status(404).json({
@@ -223,7 +268,6 @@ const updateConversationLastMessageStatus = async (request,response) =>{
         await Conversation.findByIdAndUpdate(conversationId, {
             lastMessageStatus: "seen",
         });
-        updateLastMessageStatus(io,conversation._id)
 
         return response.json({
             'message' : 'Updated successfully!'
@@ -254,7 +298,15 @@ const getMessagesByConversation = async (request,response) =>{
             })
         }
 
-        const messages = await Message.find({conversation:conversation._id});
+        const messages = await Message.find({conversation:conversation._id})
+                        .populate({
+                            path : 'post',
+                            select : 'name content image user',
+                            populate : {
+                                path : 'user',
+                                select : 'name headLine profile_picture'
+                            }
+                        })
 
         return response.json({
             'messages' : messages
@@ -268,4 +320,4 @@ const getMessagesByConversation = async (request,response) =>{
 }
 
 
-module.exports = {getConversations, getMessagesByConversation, startConversation, searchConversations, updateConversationLastMessageStatus, sendNewMessage}
+module.exports = {getConversations, getMessagesByConversation, startConversation, sendPostToMultipleUsers, searchConversations, updateConversationLastMessageStatus, sendNewMessage}

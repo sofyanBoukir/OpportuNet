@@ -121,7 +121,6 @@ export const Messaging = () => {
         }
     
         const handleConnect = () => {
-            console.log("connected to the server");
             socket.emit("registerUser", localStorage.getItem("token"));
         };
     
@@ -148,7 +147,7 @@ export const Messaging = () => {
         };
     }, []);
 
-    useEffect(() =>{        
+    useEffect(() =>{
         _getUserConversations()
     },[page])
 

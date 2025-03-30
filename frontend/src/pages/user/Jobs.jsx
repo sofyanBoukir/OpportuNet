@@ -126,7 +126,7 @@ export const Jobs = () => {
                 {
                     !loading && postedJobs && postedJobs.length ?
                         postedJobs.map((job) =>{
-                            return <Job job={job} onClick={() => {setSelectedJob(job);setUrlPath(window.location.href+"/"+job._id)}} selectedJob={selectedJob}/>
+                            return <Job job={job} onClick={() => setSelectedJob(job)} selectedJob={selectedJob}/>
                         })
                     :null
                 }
@@ -135,7 +135,7 @@ export const Jobs = () => {
             </div>
 
             <div className='w-[58%] h-[100vh]  top-20'>
-                {!loading && selectedJob && <JobDetails job={selectedJob} copyLink={() => copyText(urlPath,setNotification)}/>}
+                {!loading && selectedJob && <JobDetails job={selectedJob} />}
                 { loading && <JobDetailsSkeleton /> }
             </div>
         </div>

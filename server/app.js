@@ -39,7 +39,7 @@ app.use("/follow", require("./routes/follow"));
 app.use("/search", require("./routes/search"));
 app.use("/job", require("./routes/job"));
 app.use("/conversation", require("./routes/conversation"));
-app.use("/report", require("./routes/Report"));
+app.use("/report", require("./routes/report"));
 
 server.listen(process.env.PORT, () => {
   console.log(`User service is running on port ${process.env.PORT}`);
