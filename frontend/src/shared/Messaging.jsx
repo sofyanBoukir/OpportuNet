@@ -6,11 +6,13 @@ import messageBg from '../../public/images/bgMessage.png'
 import { ArrowDownCircleIcon, ChatBubbleOvalLeftEllipsisIcon, CheckIcon } from '@heroicons/react/24/outline'
 import { IncomingMessage } from '../components/App/IncomingMessage'
 import { OutgoingMessage } from '../components/App/OutgoingMessage'
-import { deleteMessage, getConversations, getMessagesByConversation, searchConversations, sendNewMessage, updateConversationLastMessageStatus } from '../services/conversation'
+import { deleteMessage, getConversations, getMessagesByConversation, getOnlineUsers, searchConversations, sendNewMessage, updateConversationLastMessageStatus } from '../services/conversation'
 import { AppSelector } from '../selectors/AppSelector'
 import { Link, useNavigate } from 'react-router-dom'
 import socket from '../functions/socket'
 import { useDispatch } from 'react-redux'
+import defaultUser from '../../public/images/profilDefault.png'
+
 
 export const Messaging = () => {
 
@@ -24,7 +26,8 @@ export const Messaging = () => {
     const [messages,setMessages] = useState([])
     const [otherParticipant,setOtherParticipiant] = useState(null)
     const [message,setMessage] = useState('')
-    const [searchInput,setSearchInput] = useState('')
+    const [searchInput,setSearchInput] = useState('');
+    const [onlineUsers,setOnlineUsers] = useState([]);
     const selectedConversationRef = useRef(selectedConversation)
     const {messagedTimes} = AppSelector()
     const navigate = useNavigate()
@@ -116,10 +119,7 @@ export const Messaging = () => {
     }
 
     const _deleteMessage = async (message) =>{
-        // console.log(message);
-        const response = await deleteMessage(localStorage.getItem('token'),message._id);
-        console.log(response);
-        
+        const response = await deleteMessage(localStorage.getItem('token'),message._id);        
         if(response.status === 200){
             const updateMessages = messages.filter((mssg) => mssg._id !== message._id);
             setMessages(updateMessages);
@@ -151,10 +151,15 @@ export const Messaging = () => {
                 AlwaysScrollToBottom();
             }
         };
+
+        const updateOnlineUsers = (disconnectedUser) =>{
+            const newOnlineUsers = onlineUsers.filter((onlineUser) => onlineUser._id !== disconnectedUser);
+            setOnlineUsers(newOnlineUsers);
+        }
     
         socket.on("connect", handleConnect);
         socket.on('newMessage', handleNewMessage);
-    
+        socket.on('updateOnlineUsers',updateOnlineUsers)
         return () => {
             socket.off("connect", handleConnect);
             socket.off('newMessage', handleNewMessage);
@@ -171,6 +176,16 @@ export const Messaging = () => {
 
     
     useEffect(() =>{
+        const _getOnlineUsers = async () =>{
+            const response = await getOnlineUsers(localStorage.getItem('token'));
+            if(response.status === 200 && response.data.onlineUsers){
+                setOnlineUsers(response.data.onlineUsers);
+            }
+        }
+        _getOnlineUsers()
+    },[])
+
+    useEffect(() =>{
         _getMessagesByConversation();
         _updateConversationLastMessageStatus()
     },[selectedConversation]);
@@ -179,12 +194,27 @@ export const Messaging = () => {
         <div className="dark:bg-black bg-white dark:text-white rounded-xl shadow-md px-5 py-5 lg:flex">
             <div className='lg:w-[30%] lg:border-r border-r-gray-500 lg:pr-10'>
                 <h1 className='text-2xl font-semibold'>Messaging</h1>
+
+                <div className="mt-1 flex gap-2 w-full overflow-x-auto py-2">
+                    {onlineUsers && onlineUsers.length ? (
+                        onlineUsers.map((onlineUser, index) => (
+                            <div key={index} className="flex flex-col items-center relative min-w-[100px] sm:min-w-[120px] md:min-w-[110px]">
+                                <div className="relative w-20 h-20">
+                                    <img src={onlineUser.profilePictureUrl} className="rounded-full w-full h-full object-cover" alt={onlineUser.name + ' avatar'}/>
+                                    <div className="absolute bottom-0 right-1 w-6 h-6 bg-green-500 rounded-full border-3 border-white"></div>
+                                </div>
+                                <p className="text-sm font-semibold text-center">{onlineUser.name}</p>
+                            </div>
+                        ))
+                    ): null}
+                </div>
+
                 <div className='mt-5'>
                     <Input type={'text'} placeholder={'Search people...'} value={searchInput} onChange={(e) => setSearchInput(e.target.value)} 
                     className={'w-[100%] border-2 outline-none dark:text-white border-gray-400 rounded-sm px-3 py-2'}/>
                 </div>
-
-                <div className='mt-6 flex flex-nowrap lg:flex-col gap-3 lg:h-[70vh] overflow-auto'>
+                
+                <div className={`mt-6 flex flex-nowrap lg:flex-col gap-3 lg:h-[55vh] ${onlineUsers.length === 0 && 'lg:h-[70vh]'} overflow-auto`}>
                     {
                         !loadingConversation && conversations && conversations.length ?
                             conversations.map((conversation,index) =>{

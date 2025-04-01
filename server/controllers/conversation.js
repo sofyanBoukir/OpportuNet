@@ -1,6 +1,7 @@
 const Conversation = require("../models/Conversation");
 const Message = require("../models/Message");
 const User = require("../models/User");
+const { users } = require("../sockets/connected-users");
 const notifyMessageToOnlineUser = require("../sockets/real-time-messages");
 const { getIO } = require("../sockets/socket");
 
@@ -310,7 +311,7 @@ const getMessagesByConversation = async (request,response) =>{
                         })
 
         return response.json({
-            'messages' : messages
+            'messages' : messages,
         })
 
     }catch(err){
@@ -351,5 +352,47 @@ const deleteMessage = async (request,response) =>{
     }
 } 
 
+const getOnlineUsers = async (request,response) =>{
+    try{
+        const userId = request.user.id;
+        
+        const user = await User.findById(userId);
+        if(!user){
+            return response.status(404).json({
+                'message' : 'User not found'
+            })
+        }
 
-module.exports = {getConversations, getMessagesByConversation, startConversation, sendPostToMultipleUsers, searchConversations, updateConversationLastMessageStatus, sendNewMessage, deleteMessage}
+        
+        const onlineUsersIds = Object.keys(users);
+        
+        const onlineFollowsWhoFollowedMe = []; 
+        if (Array.isArray(user.following) && Array.isArray(user.followers)) {
+            for (const following of user.following) {
+                const followingId = following.toString();
+        
+                if (
+                    user.followers.map(f => f.toString()).includes(followingId) && 
+                    onlineUsersIds.includes(followingId)
+                ) {
+                    const foundUser = await User.findById(followingId).select('name profile_picture');
+                    if (foundUser) {
+                        onlineFollowsWhoFollowedMe.push(foundUser);
+                    }
+                }
+            }
+        }
+        return response.json({
+            'onlineUsers' : onlineFollowsWhoFollowedMe,
+            'userd' : users
+        })
+
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+}
+
+
+module.exports = {getConversations, getMessagesByConversation, startConversation, sendPostToMultipleUsers, searchConversations, updateConversationLastMessageStatus, sendNewMessage, deleteMessage,getOnlineUsers}

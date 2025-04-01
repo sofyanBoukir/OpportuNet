@@ -98,3 +98,13 @@ export const deleteMessage = async (token,messageId) =>{
   });
   return response;
 }
+
+
+export const getOnlineUsers = async (token) =>{
+  const response = await axios.get(`${serverUrl}/conversation/getOnlineUsers`,{
+    headers : {
+      Authorization : `Bearer ${token}`
+    }
+  });
+  return response;
+}
