@@ -106,7 +106,7 @@ export const Jobs = () => {
                     <Input value={query} onChange={(e) => setQuery(e.target.value)}
                     type={'text'} 
                     placeholder={'Search for jobs, software developer ...'} 
-                    className={'border rounded-md text-xl pl-12 border-gray-600 shadow-xl w-[100%] py-4 px-2 outline-none'} />
+                    className={'border rounded-md text-xl pl-12 border-gray-600 dark:text-white shadow-xl w-[100%] py-4 px-2 outline-none'} />
                     
                     <button onClick={() => setSelectedResult(query)}
                     className='bg-[#1c51a1] text-lg text-white absolute right-2 rounded-md my-2 font-semibold cursor-pointer px-5 py-2 hover:bg-[#164081] duration-200'>

@@ -3,9 +3,9 @@ import { SuggestionsModal } from "../components/App/Suggestions";
 import { ProfileStatus } from "../components/App/ProfileStatus";
 import { getSavedPost } from "../services/saved";
 import { Link, useNavigate } from "react-router-dom";
-import { SvgIcon } from "@mui/material";
 import { ArrowDownCircleIcon, BookmarkIcon } from "@heroicons/react/24/solid";
 import { SavedPostSkeleton } from "../components/skeletons/SavedPostSkeleton";
+import notFoundImage from '../../public/images/NotFound.jpg'
 
 
 export const SavedPosts = () => {
@@ -51,12 +51,12 @@ export const SavedPosts = () => {
   return (
     <div className="md:px-[10%] px-3 relative top-16">
       <div className="flex justify-center gap-[1%]">
-        <div className="hidden md:block bg-white px-2 py-3 rounded-2xl h-fit">
+        <div className="hidden md:block bg-white dark:bg-black px-2 py-3 rounded-2xl h-fit">
           <div className="flex flex-row gap-2 py-1  ">
-            <BookmarkIcon className="text-gray-500 w-5" />
-            <h1 className="text-gray-500 font-semibold">My elements</h1>
+            <BookmarkIcon className="text-gray-500 dark:text-gray-100 w-5" />
+            <h1 className="text-gray-500 dark:text-gray-200 font-semibold">My elements</h1>
           </div>
-          <hr className="text-gray-400 mt-3" />
+          <hr className="text-gray-400 dark:text-gray-200 mt-3" />
           <div className="py-2 px-2 text-blue-600 font-semibold text-sm flex flex-row gap-5 items-center">
             <h1 className="cursor-pointer">Saved Posts and Articles</h1>
             {dataSavedPost && !loading ? (
@@ -66,7 +66,7 @@ export const SavedPosts = () => {
             ) : null}
           </div>
         </div>
-        <div className="flex flex-col w-[100%] lg:w-[43%] h-max  lg:relative bg-white rounded-2xl ">
+        <div className="flex flex-col w-[100%] lg:w-[43%] h-max  lg:relative bg-white dark:bg-black rounded-2xl ">
         {loading && <SavedPostSkeleton />}
           {dataSavedPost && !loading
             ? dataSavedPost.map((saved, index) => {
@@ -88,7 +88,7 @@ export const SavedPosts = () => {
                         <h1 className="text-lg font-semibold">
                           {saved.user.name}
                         </h1>
-                        <span className="text-sm text-gray-700 font-semibold">{saved.user.headLine}</span>
+                        <span className="text-sm text-gray-700 dark:text-gray-200 font-semibold">{saved.user.headLine}</span>
                       </div>
                     </div>
                     <div className="mt-4 w-full flex flex-row gap-3">
@@ -105,7 +105,7 @@ export const SavedPosts = () => {
                         {saved.content.length > contentPreview.length && (
                           <button
                             onClick={() => navigate(`/post/${saved._id}`)}
-                            className="text-gray-500 hover:underline hover:cursor-pointer ml-2"
+                            className="text-gray-500 dark:text-gray-100 hover:underline hover:cursor-pointer ml-2"
                           >
                             ...See More
                           </button>
@@ -120,7 +120,10 @@ export const SavedPosts = () => {
               })
             : null}
             {
-              !loading && totalSavedPosts === 0 && <span className="text-xl font-semibold py-5 px-2">Try to save a post to appeared here</span>
+              !loading && totalSavedPosts === 0 && <div className="flex flex-col justify-center pb-6">
+                              <img src={notFoundImage} />
+                              <p className="text-xl font-semibold mx-auto">Try to save posts to be appear here</p>
+                            </div>
             }
             {!loading && lastPage !== page && totalSavedPosts !== 0 && <ArrowDownCircleIcon onClick={() => setPage(page+1)} className="flex mx-auto cursor-pointer my-3 text-blue-700 hover:text-blue-600 duration-200 w-12 h-12" /> }
 

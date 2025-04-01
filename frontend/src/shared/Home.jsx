@@ -14,13 +14,13 @@ import { PostSkeleton } from "../components/skeletons/PostSkeleton";
 
 export const Home = () => {
   const [addPost, setAddPost] = useState(false);
-
   const [feedPosts, setFeedPosts] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-
   const loadingRef = useRef(false);
+  const seenPosts = JSON.parse(localStorage.getItem('seenPosts')) || []; 
+  const [unseenPosts,setUnseenPosts] = useState([]);
 
   const _getFeed = async () => {
     try {

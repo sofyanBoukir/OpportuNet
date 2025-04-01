@@ -26,7 +26,7 @@ export const Comment = ({comment,deleteComment}) => {
             className="rounded-full w-10 h-8 object-cover"
             />
         </div>
-        <div className="w-auto rounded-tl-none bg-gray-200 rounded-2xl px-3 py-2">
+        <div className="w-auto rounded-tl-none bg-gray-200 dark:bg-gray-800 rounded-2xl px-3 py-2">
             <Link className="text-xl font-semibold hover:text-blue-700 duration-200" to={`/user/profile/${comment.user._id}`}>{comment.user.name}</Link> <span className="text-gray-500 text-sm">{moment(comment.createdAt).fromNow()}</span>
             <p>{comment.comment}</p>
         </div>
@@ -40,7 +40,7 @@ export const Comment = ({comment,deleteComment}) => {
                   aria-expanded={open ? 'true' : undefined}
                   onClick={handleClick}    
               >
-                  <EllipsisVerticalIcon className='text-gray-700 w-7 px-0'/>
+                  <EllipsisVerticalIcon className='text-gray-700 dark:text-gray-200 w-7 px-0'/>
               </Button>
               <Menu
                   id="basic-menu"

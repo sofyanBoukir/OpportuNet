@@ -4,10 +4,10 @@ import { ProfileStatus } from "../components/App/ProfileStatus";
 import { NotificationApp } from "../components/App/NotificationApp";
 import { NotificationsSkeleton } from "../components/skeletons/NotificationsSkeleton";
 import { deleteNotification, getUserNotifications, makeNotificationsSeen } from "../services/notification";
-import { Button } from "../components/UI/Button";
 import { ArrowDownCircleIcon } from "@heroicons/react/24/solid";
 import { useDispatch } from "react-redux";
-const authService = import.meta.env.VITE_SERVER_URL;
+import notFoundImage from '../../public/images/NotFound.jpg'
+
 
 export const Notifications = () => {
 
@@ -101,7 +101,10 @@ export const Notifications = () => {
             loading && <NotificationsSkeleton />
           }
           {
-            !loading && totalNotifications === 0 && <span className="py-2 px-3 text-lg font-semibold">You hasn't notified yet!</span>
+            !loading && totalNotifications === 0 && <div className="flex flex-col justify-center pb-6">
+                <img src={notFoundImage} />
+                <p className="text-xl font-semibold mx-auto">You may not have any notifications</p>
+              </div>
           }
         </div>
 
