@@ -40,7 +40,7 @@ const initialSocket = (server) =>{
             }
         }
     
-        io.emit('updateOnlineUsers', userId);
+        io.emit('updateOnlineUsers', disconnectedUser);
     })
     })
 
