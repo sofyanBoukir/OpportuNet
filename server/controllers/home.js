@@ -53,14 +53,14 @@ const getSuggesstedUsers = async (request, response) => {
         {
           $or: [
             { interests: { $in: user.interests } },
-            { followers: { $in: user.followers } },
             { following: { $in: user.following } },
           ],
         },
       ],
     })
       .select("name headLine profile_picture profilePictureUrl")
-      .limit(6);
+      .limit(6)
+      .sort({followers:-1});
 
     if (suggesstedUsers) {
       return response.json({

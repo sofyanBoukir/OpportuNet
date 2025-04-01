@@ -89,7 +89,7 @@ export const ProfileStatus = () => {
 
               <div className='flex justify-between'>
                 <span className='text-lg font-semibold'>Seen posts</span>
-                <span>{userData?.seenPosts.length}</span>
+                <span>{0}</span>
               </div>
             </div>
           </div>

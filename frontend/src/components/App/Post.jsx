@@ -55,7 +55,16 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
   const [notification, setNotification] = useState();
   const [viewLikes,setViewLikes] = useState(false);
   const [sharePost,setSharePost] = useState(false);
-  const seenPosts = JSON.parse(localStorage.getItem('seenPosts')) || []; 
+  
+  let seenPosts = [];
+
+  try {
+    const storedPosts = localStorage.getItem('seenPosts');
+    seenPosts = storedPosts !== null || storedPosts !== '' ? JSON.parse(storedPosts) : [];
+  } catch (error) {
+    console.error("Error parsing seenPosts from localStorage:", error);
+    seenPosts = [];
+  }
 
   const _toggleLike = async () => {
     const response = await toggleLike(localStorage.getItem("token"), post._id);
@@ -94,15 +103,15 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
     }
   };
 
-  useEffect(() =>{
-    if(!seenPosts.includes(post._id)){
-      const updateSeenPosts = [...seenPosts,post._id];
-      localStorage.setItem('seenPosts',JSON.stringify(updateSeenPosts));
-    }
-    if(seenPosts.includes(post._id)){
-      return null
-    }
-  },[post._id])
+  // useEffect(() =>{
+  //   if(!seenPosts.includes(post._id)){
+  //     const updateSeenPosts = [...seenPosts,post._id];
+  //     localStorage.setItem('seenPosts',JSON.stringify(updateSeenPosts));
+  //   }
+  //   if(seenPosts.includes(post._id)){
+  //     return undefined
+  //   }
+  // },[post._id])
 
   return (
     <div className="w-[100%] md:w-[100%] dark:bg-black bg-white rounded-xl">

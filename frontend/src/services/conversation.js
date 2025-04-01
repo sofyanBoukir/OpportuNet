@@ -88,3 +88,13 @@ export const searchConversations = async (token,query) =>{
   });
   return response;
 }
+
+
+export const deleteMessage = async (token,messageId) =>{
+  const response = await axios.delete(`${serverUrl}/conversation/deleteMessage/${messageId}`,{
+    headers : {
+      Authorization : `Bearer ${token}`
+    }
+  });
+  return response;
+}

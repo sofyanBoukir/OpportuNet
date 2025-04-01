@@ -6,7 +6,7 @@ import messageBg from '../../public/images/bgMessage.png'
 import { ArrowDownCircleIcon, ChatBubbleOvalLeftEllipsisIcon, CheckIcon } from '@heroicons/react/24/outline'
 import { IncomingMessage } from '../components/App/IncomingMessage'
 import { OutgoingMessage } from '../components/App/OutgoingMessage'
-import { getConversations, getMessagesByConversation, searchConversations, sendNewMessage, updateConversationLastMessageStatus } from '../services/conversation'
+import { deleteMessage, getConversations, getMessagesByConversation, searchConversations, sendNewMessage, updateConversationLastMessageStatus } from '../services/conversation'
 import { AppSelector } from '../selectors/AppSelector'
 import { Link, useNavigate } from 'react-router-dom'
 import socket from '../functions/socket'
@@ -100,11 +100,12 @@ export const Messaging = () => {
             if(message === '') return
             const response = await sendNewMessage(localStorage.getItem('token'),selectedConversation._id,{message,recipient:otherParticipant._id});            
             if(response.status === 200){
-                setMessages([...messages,{
-                    createdAt : new Date(),
-                    message : message,
-                    sender: userData._id
-                }])
+                const newMessage = response.data.newMessage;
+                setMessages([...messages,
+                    newMessage
+                ])
+                console.log(newMessage);
+                
                 setMessage('')
                 setConversations([])
                 _getUserConversations()
@@ -113,6 +114,19 @@ export const Messaging = () => {
             //
         }
     }
+
+    const _deleteMessage = async (message) =>{
+        // console.log(message);
+        const response = await deleteMessage(localStorage.getItem('token'),message._id);
+        console.log(response);
+        
+        if(response.status === 200){
+            const updateMessages = messages.filter((mssg) => mssg._id !== message._id);
+            setMessages(updateMessages);
+        }
+    }
+
+
     const notificationSound = new Audio("../../public/audios/notificationSound.wav");
 
     useEffect(() => {
@@ -161,8 +175,8 @@ export const Messaging = () => {
         _updateConversationLastMessageStatus()
     },[selectedConversation]);
   return (
-    <div className="px-3 relative top-16">
-        <div className="bg-white dark:bg-black dark:text-white rounded-xl shadow-md px-10 py-5 lg:flex">
+    <div className="relative px-3 top-16">
+        <div className="dark:bg-black bg-white dark:text-white rounded-xl shadow-md px-5 py-5 lg:flex">
             <div className='lg:w-[30%] lg:border-r border-r-gray-500 lg:pr-10'>
                 <h1 className='text-2xl font-semibold'>Messaging</h1>
                 <div className='mt-5'>
@@ -176,7 +190,7 @@ export const Messaging = () => {
                             conversations.map((conversation,index) =>{
                                 return <Conversation key={index} conversation={conversation} setOtherParticipiant={setOtherParticipiant} setSelectedConversation={setSelectedConversation}/>
                             })
-                        :null
+                        :<p className='text-xl font-semibold'>No conversations yet!</p>
                     }
                   {!loadingConversation && lastPage !== page && totalConversations !== 0 && <ArrowDownCircleIcon onClick={() => setPage(page+1)} className="flex mx-auto cursor-pointer my-3 text-blue-700 hover:text-blue-600 duration-200 w-12 h-12" /> }
                 </div>
@@ -210,7 +224,7 @@ export const Messaging = () => {
                                             !loadMessages && messages && messages.length ?
                                                 messages.map((message,index) =>{
                                                     if(message.sender === userData._id){
-                                                        return <OutgoingMessage key={index} message={message}/>
+                                                        return <OutgoingMessage key={index} message={message} deleteMessage={_deleteMessage}/>
                                                     }else{
                                                         return <IncomingMessage key={index} message={message}/>
                                                     }

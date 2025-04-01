@@ -137,7 +137,8 @@ const sendNewMessage = async (request,response) =>{
             await newMessage.save();
             notifyMessageToOnlineUser(io,recipient,newMessage);
             return response.json({
-                'message' : 'New message sended successfully!'
+                'message' : 'New message sended successfully!', 
+                'newMessage' : newMessage
             })
         }else{
             // return response.json({
@@ -319,5 +320,36 @@ const getMessagesByConversation = async (request,response) =>{
     }
 }
 
+const deleteMessage = async (request,response) =>{
+    try{
+        const userId = request.user.id;
+        
+        const user = await User.findById(userId);
+        if(!user){
+            return response.status(404).json({
+                'message' : 'User not found'
+            })
+        }
 
-module.exports = {getConversations, getMessagesByConversation, startConversation, sendPostToMultipleUsers, searchConversations, updateConversationLastMessageStatus, sendNewMessage}
+        const { messageId } = request.params;
+        const message = await Message.findOneAndDelete({$and:[{_id:messageId},{sender:userId}]});
+        if(!message){
+            return response.status(401).json({
+                'message' : 'Unauthorized to delete this message',
+            })
+        }else{
+
+            return response.json({
+                'message' : 'Deleted successfully'
+            })
+        }
+
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+} 
+
+
+module.exports = {getConversations, getMessagesByConversation, startConversation, sendPostToMultipleUsers, searchConversations, updateConversationLastMessageStatus, sendNewMessage, deleteMessage}
