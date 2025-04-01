@@ -15,7 +15,6 @@ export const ViewPostLikes = ({setViewLikes,postId}) => {
         try{
             setLoading(true);
             const response = await getWhoLikedPost(localStorage.getItem('token'),postId);
-            console.log(response);
             
             setLoading(false);
             if(response.status === 200){

@@ -31,6 +31,16 @@ const initialSocket = (server) =>{
     
     socket.on('disconnect',() =>{
         console.log('user disconnected '+socket.id);
+        var disconnectedUser = null;
+        for (const userId in users) {
+            if (users[userId] === socket.id) {
+                disconnectedUser = userId
+                delete users[userId]; 
+                break; 
+            }
+        }
+    
+        io.emit('updateOnlineUsers', userId);
     })
     })
 

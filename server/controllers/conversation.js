@@ -1,6 +1,7 @@
 const Conversation = require("../models/Conversation");
 const Message = require("../models/Message");
 const User = require("../models/User");
+const { users } = require("../sockets/connected-users");
 const notifyMessageToOnlineUser = require("../sockets/real-time-messages");
 const { getIO } = require("../sockets/socket");
 
@@ -137,7 +138,8 @@ const sendNewMessage = async (request,response) =>{
             await newMessage.save();
             notifyMessageToOnlineUser(io,recipient,newMessage);
             return response.json({
-                'message' : 'New message sended successfully!'
+                'message' : 'New message sended successfully!', 
+                'newMessage' : newMessage
             })
         }else{
             // return response.json({
@@ -309,7 +311,80 @@ const getMessagesByConversation = async (request,response) =>{
                         })
 
         return response.json({
-            'messages' : messages
+            'messages' : messages,
+        })
+
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+}
+
+const deleteMessage = async (request,response) =>{
+    try{
+        const userId = request.user.id;
+        
+        const user = await User.findById(userId);
+        if(!user){
+            return response.status(404).json({
+                'message' : 'User not found'
+            })
+        }
+
+        const { messageId } = request.params;
+        const message = await Message.findOneAndDelete({$and:[{_id:messageId},{sender:userId}]});
+        if(!message){
+            return response.status(401).json({
+                'message' : 'Unauthorized to delete this message',
+            })
+        }else{
+
+            return response.json({
+                'message' : 'Deleted successfully'
+            })
+        }
+
+    }catch(err){
+        return response.status(500).json({
+            'message' : err.message
+        })
+    }
+} 
+
+const getOnlineUsers = async (request,response) =>{
+    try{
+        const userId = request.user.id;
+        
+        const user = await User.findById(userId);
+        if(!user){
+            return response.status(404).json({
+                'message' : 'User not found'
+            })
+        }
+
+        
+        const onlineUsersIds = Object.keys(users);
+        
+        const onlineFollowsWhoFollowedMe = []; 
+        if (Array.isArray(user.following) && Array.isArray(user.followers)) {
+            for (const following of user.following) {
+                const followingId = following.toString();
+        
+                if (
+                    user.followers.map(f => f.toString()).includes(followingId) && 
+                    onlineUsersIds.includes(followingId)
+                ) {
+                    const foundUser = await User.findById(followingId).select('name profile_picture');
+                    if (foundUser) {
+                        onlineFollowsWhoFollowedMe.push(foundUser);
+                    }
+                }
+            }
+        }
+        return response.json({
+            'onlineUsers' : onlineFollowsWhoFollowedMe,
+            'userd' : users
         })
 
     }catch(err){
@@ -320,4 +395,4 @@ const getMessagesByConversation = async (request,response) =>{
 }
 
 
-module.exports = {getConversations, getMessagesByConversation, startConversation, sendPostToMultipleUsers, searchConversations, updateConversationLastMessageStatus, sendNewMessage}
+module.exports = {getConversations, getMessagesByConversation, startConversation, sendPostToMultipleUsers, searchConversations, updateConversationLastMessageStatus, sendNewMessage, deleteMessage,getOnlineUsers}

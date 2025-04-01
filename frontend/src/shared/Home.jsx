@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Post } from "../components/App/Post";
-import userDefaultImage from "../../public/images/profilDefault.png";
 import { Input } from "../components/UI/Input";
 import { Profile } from "../components/App/Profile";
 import { AppSelector } from "../selectors/AppSelector";
@@ -14,13 +13,19 @@ import { PostSkeleton } from "../components/skeletons/PostSkeleton";
 
 export const Home = () => {
   const [addPost, setAddPost] = useState(false);
-
   const [feedPosts, setFeedPosts] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-
   const loadingRef = useRef(false);
+  let seenPosts = [];
+
+  try {
+    const storedPosts = localStorage.getItem('seenPosts');
+    seenPosts = storedPosts !== null || storedPosts !== '' ? JSON.parse(storedPosts) : [];
+  } catch (err) {
+    seenPosts = [];
+  }
 
   const _getFeed = async () => {
     try {
@@ -31,10 +36,11 @@ export const Home = () => {
       
       setLoading(false);  
 
-      if (response.status === 200) {
-        if (response.data.posts) {
-          setFeedPosts((prevPosts) => [...prevPosts, ...response.data.posts]);
-        }
+      if (response.status === 200 && response.data.posts) {
+        setFeedPosts((prevPosts) => [
+          ...prevPosts, 
+          ...response.data.posts.filter((post) => !seenPosts?.includes(post._id))
+        ]);
       }
     } catch (err) {
       setLoading(false);
@@ -95,9 +101,9 @@ export const Home = () => {
               })
             : null}
           {!loading && feedPosts.length === 0 && (
-            <span className="text-xl font-semibold">
-              Try to post new posts on diff accounts
-            </span>
+            <div className="text-xl font-semibold bg-white px-3 py-2">
+              <span>Try to follow other users to see their posts</span>
+            </div>
           )}
         </div>
 

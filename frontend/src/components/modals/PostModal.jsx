@@ -85,8 +85,8 @@ export const PostModal = ({setOpenModalPost,post}) => {
     _getPostComments()
   },[page])
   return (
-    <div className="fixed inset-0 z-20 flex w-[100%] items-center bg-black/50 justify-center h-screen text-gray-700 backdrop-blur-xs">
-      <div className="bg-white lg:w-[50%] w-[90%] px-1 py-6 rounded-lg shadow-xl flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-20 flex w-[100%] items-center bg-black/50 justify-center h-screen dark:text-gray-200 text-gray-700 backdrop-blur-xs">
+      <div className="bg-white dark:bg-black lg:w-[50%] w-[90%] px-1 py-6 rounded-lg shadow-xl flex flex-col max-h-[90vh]">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold px-2">{post.user.name}'s Post</h1>
           <div className="text-xl w-10 h-10 cursor-pointer rounded-full flex items-center justify-center hover:bg-gray-200 duration-200">
@@ -105,13 +105,13 @@ export const PostModal = ({setOpenModalPost,post}) => {
             </div>
           </div>
 
-          <div className="text-gray-800 px-4 py-2 text-xl">
+          <div className="text-gray-800 dark:text-gray-300 px-4 py-2 text-xl">
               {post.content.length > 100 ? (
                   <>
                   <span>{isExpanded ? post.content : post.content.slice(0, 100) + "..."}</span>
                   <button
                       onClick={toggleText}
-                      className="text-gray-700 underline text-sm ml-2 cursor-pointer"
+                      className="text-gray-700 dark:text-gray-200 underline text-sm ml-2 cursor-pointer"
                   >
                       {isExpanded ? "See Less" : "See More"}
                   </button>
@@ -151,7 +151,7 @@ export const PostModal = ({setOpenModalPost,post}) => {
           }
         </div>
 
-        <div className="sticky bottom-0 left-0 flex items-center w-full py-2 gap-2 bg-white">
+        <div className="sticky bottom-0 left-0 flex items-center w-full py-2 gap-2 bg-white dark:bg-black">
           <img
             src={serverUrl+userData.profile_picture}
             className="w-10 h-10 rounded-full object-cover"

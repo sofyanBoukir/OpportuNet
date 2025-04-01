@@ -19,13 +19,14 @@ import { HeartIcon as OutlineHeart } from "@heroicons/react/24/outline";
 import { BookmarkIcon as SolidBookMark } from "@heroicons/react/16/solid";
 import { BookmarkIcon as OutlineBookMark } from "@heroicons/react/24/outline";
 import { FiSend } from "react-icons/fi";
-import { toggleLike, toggleSave } from "../../services/post";
+import { markPostAsSeen, toggleLike, toggleSave } from "../../services/post";
 import { AppSelector } from "../../selectors/AppSelector";
 import { Link } from "react-router-dom";
 import { copyText } from "../../functions/copyText";
 import { Notification } from "../UI/Notification";
 import { ViewPostLikes } from "../modals/ViewPostLikes";
 import { SharePost } from "../modals/SharePost";
+import { Follow } from "../UI/Follow";
 const frontendUrl = import.meta.env.VITE_FRONTEND_URL;
 
 export const Post = ({ post, showIcon, postSelected, openDelete }) => {
@@ -54,6 +55,16 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
   const [notification, setNotification] = useState();
   const [viewLikes,setViewLikes] = useState(false);
   const [sharePost,setSharePost] = useState(false);
+  
+  let seenPosts = [];
+
+  try {
+    const storedPosts = localStorage.getItem('seenPosts');
+    seenPosts = storedPosts !== null || storedPosts !== '' ? JSON.parse(storedPosts) : [];
+  } catch (error) {
+    console.error("Error parsing seenPosts from localStorage:", error);
+    seenPosts = [];
+  }
 
   const _toggleLike = async () => {
     const response = await toggleLike(localStorage.getItem("token"), post._id);
@@ -91,6 +102,17 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
       }
     }
   };
+
+  // useEffect(() =>{
+  //   if(!seenPosts.includes(post._id)){
+  //     const updateSeenPosts = [...seenPosts,post._id];
+  //     localStorage.setItem('seenPosts',JSON.stringify(updateSeenPosts));
+  //   }
+  //   if(seenPosts.includes(post._id)){
+  //     return undefined
+  //   }
+  // },[post._id])
+
   return (
     <div className="w-[100%] md:w-[100%] dark:bg-black bg-white rounded-xl">
       <div className="w-[100%] px-4 py-4 justify-between flex flex-row items-center">
@@ -122,7 +144,10 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
             </div>
           </div>
         </div>
-        <div>
+        <div className="flex gap-2 items-center">
+          {
+          userData?._id !== post?.user?._id && !userData?.following?.includes(post?.user?._id) && <Follow userId={post.user._id} className={'border-3 rounded-md px-3 py-2'}/>
+          }
           <Button
             id="basic-button"
             aria-controls={open ? "basic-menu" : undefined}

@@ -67,3 +67,13 @@ export const toggleSave = async (token, postId) => {
   );
   return response;
 };
+
+
+export const markPostAsSeen = async (token,postId) =>{
+  const response = await axios.put(`${serverURL}/home/markPostAsSeen/${postId}`,null,{
+    headers : {
+      Authorization : `Bearer ${token}`
+    }
+  });
+  return response;
+}

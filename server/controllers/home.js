@@ -12,12 +12,10 @@ const getFeed = async (request, response) => {
     const pageSize = 2;
     const skip = (page - 1) * pageSize;
 
-    // return response.json({
-    //     'tags' : userHashTags
-    // })
-    const posts = await Post.find({$or:[
+    const posts = await Post.find({
+      user : { $ne: userId},
+      $or:[
       {tags: { $in: userHashTags }},
-      // _id : { $ne : user.seenPosts},
       {mentions : { $in : user.following}},
       {user : {$in : user.following}},
       {likes : {$in : user.following}},
@@ -55,14 +53,14 @@ const getSuggesstedUsers = async (request, response) => {
         {
           $or: [
             { interests: { $in: user.interests } },
-            { followers: { $in: user.followers } },
             { following: { $in: user.following } },
           ],
         },
       ],
     })
       .select("name headLine profile_picture profilePictureUrl")
-      .limit(6);
+      .limit(6)
+      .sort({followers:-1});
 
     if (suggesstedUsers) {
       return response.json({
@@ -76,4 +74,38 @@ const getSuggesstedUsers = async (request, response) => {
   }
 };
 
-module.exports = { getFeed, getSuggesstedUsers };
+
+const markPostAsSeen = async (request,response) =>{
+  try{
+    const userId = request.user.id;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return response.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    const { postId } = request.params;
+    const post = await Post.findById(postId);
+
+    if(post){
+      if(user.seenPosts.includes(postId)){
+        return;
+      }else{
+        user.seenPosts.push(postId);
+        user.save()
+        return response.json({
+          'message' : 'Marked as seen!'
+        })
+      }
+    }
+
+  }catch(err){
+    return response.status(500).json({
+      'message' : err.messasge
+    })
+  }
+}
+
+module.exports = { getFeed, getSuggesstedUsers, markPostAsSeen };
