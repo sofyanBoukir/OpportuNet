@@ -32,15 +32,24 @@ const addReport = async (request, response) => {
 
 const getAllReports = async (request, response) => {
   try {
-    const page = parseInt(request.query.page) || 1;
-    const pageSize = 4;
-    const skip = (page - 1) * pageSize;
+    // const page = parseInt(request.query.page) || 1;
+    // const pageSize = 4;
+    // const skip = (page - 1) * pageSize;
 
     const reports = await Report.aggregate([
       { $group: { _id: "$post", total: { $sum: 1 } } },
+      {
+        $lookup: {
+          from: "posts",
+          localField: "_id",
+          foreignField: "_id",
+          as: "postInfo",
+        },
+      },
+      {
+        $unwind: "$postInfo",
+      },
     ]);
-
-    // const list = reports.map((item)=>{await Report.find({$post:item._id})})
 
     return response.json({
       reports,
@@ -52,4 +61,20 @@ const getAllReports = async (request, response) => {
   }
 };
 
-module.exports = { addReport, getAllReports };
+const deleteReport = async (request, response) => {
+  try {
+    const { reportId } = request.params;
+
+    await Report.findByIdAndDelete(reportId);
+
+    return response.json({
+      message: "Post deleted successfully",
+    });
+  } catch (err) {
+    return response.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+module.exports = { addReport, getAllReports, deleteReport };
