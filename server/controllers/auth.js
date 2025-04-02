@@ -383,7 +383,7 @@ const getUsers = async (request, response) => {
     const userRole = request.user.role;
 
     const page = parseInt(request.query.page) || 1;
-    const pageSize = 4;
+    const pageSize = 10;
     const skip = (page - 1) * pageSize;
 
     const users = await User.find({ role: { $ne: userRole } })
@@ -424,7 +424,7 @@ const deleteUser = async (request, response) => {
     const user = await User.findByIdAndDelete(userId);
     return response.json({
       user,
-      message: "Post deleted successfully",
+      message: "delete successfully",
     });
   } catch (err) {
     return response.json({

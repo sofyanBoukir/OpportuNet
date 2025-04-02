@@ -1,3 +1,4 @@
+const Post = require("../models/Post");
 const Report = require("../models/Report");
 const User = require("../models/User");
 
@@ -32,12 +33,17 @@ const addReport = async (request, response) => {
 
 const getAllReports = async (request, response) => {
   try {
-    // const page = parseInt(request.query.page) || 1;
-    // const pageSize = 4;
-    // const skip = (page - 1) * pageSize;
+    const page = parseInt(request.query.page) || 1;
+    const pageSize = 10;
+    const skip = (page - 1) * pageSize;
 
     const reports = await Report.aggregate([
-      { $group: { _id: "$post", total: { $sum: 1 } } },
+      {
+        $group: {
+          _id: "$post",
+          total: { $sum: 1 },
+        },
+      },
       {
         $lookup: {
           from: "posts",
@@ -49,10 +55,21 @@ const getAllReports = async (request, response) => {
       {
         $unwind: "$postInfo",
       },
+    ])
+      .skip(skip)
+      .limit(pageSize)
+      .sort({ createdAt: -1 });
+
+    const Posts = await Report.aggregate([
+      { $group: { _id: "$post", total: { $sum: 1 } } },
     ]);
+    const totalPosts = Posts.length;
+    const totalPages = Math.ceil(totalPosts / pageSize);
 
     return response.json({
       reports,
+      totalPages,
+      totalPosts,
     });
   } catch (err) {
     return response.status(500).json({
@@ -63,10 +80,13 @@ const getAllReports = async (request, response) => {
 
 const deleteReport = async (request, response) => {
   try {
-    const { reportId } = request.params;
+    const { postId } = request.params;
+    const reports = await Report.find({ post: postId });
+    reports.forEach(async (report) => {
+      await Report.findOneAndDelete({ post: postId });
+    });
 
-    await Report.findByIdAndDelete(reportId);
-
+    await Post.findByIdAndDelete(postId);
     return response.json({
       message: "Post deleted successfully",
     });
