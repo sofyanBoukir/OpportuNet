@@ -11,6 +11,6 @@ const router = express.Router();
 
 router.post("/addReport", isAuth, addReport);
 router.get("/getAllReports", isAuth, isAdmin, getAllReports);
-router.delete("/deleteReport/:id", isAuth, isAdmin, deleteReport);
+router.delete("/deleteReport/:postId", isAuth, isAdmin, deleteReport);
 
 module.exports = router;
