@@ -8,8 +8,8 @@ export const IncomingMessage = ({message}) => {
 
 
   return (
-    <div className="flex bg-blue-500 relative flex-col self-start max-w-[70%] rounded-tl-none px-6 py-2 rounded-3xl break-words">
-        <span className="text-white font-semibold break-words">
+    <div className="flex bg-gray-200 relative flex-col self-start max-w-[70%] rounded-tl-none px-6 py-2 rounded-3xl break-words">
+        <span className="text-black font-semibold break-words">
             {message.message}
             {post && <div onClick={() => navigate(`/post/${post._id}`)} className='cursor-pointer'>
                     <div className='flex gap-2 items-center'>
@@ -25,7 +25,7 @@ export const IncomingMessage = ({message}) => {
                     </div>
                 </div>}
         </span>
-        <span className='text-gray-100 flex justify-end'>{moment(message.createdAt).format('LT')}</span>
+        <span className='text-gray-800 flex justify-end'>{moment(message.createdAt).format('LT')}</span>
     </div>
     )
 }

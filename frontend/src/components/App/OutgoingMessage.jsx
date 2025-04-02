@@ -18,7 +18,7 @@ export const OutgoingMessage = ({message,deleteMessage}) => {
       };
       
   return (
-    <div className="bg-gray-200 relative text-black flex self-end max-w-[70%] rounded-br-none px-6 py-2 rounded-3xl break-words">
+    <div className="bg-blue-500 relative text-white flex self-end max-w-[70%] rounded-br-none px-6 py-2 rounded-3xl break-words">
         <span className="font-semibold break-words">
             {message.message}
             {post && <div onClick={() => navigate(`/post/${post._id}`)} className='cursor-pointer'>
@@ -36,7 +36,7 @@ export const OutgoingMessage = ({message,deleteMessage}) => {
                 </div>}
                 <br></br>
             <div className='flex gap-2 items-center float-right relative'>
-                <span className='text-gray-800'>{moment(message.createdAt).format('LT')}</span>
+                <span className='text-gray-200'>{moment(message.createdAt).format('LT')}</span>
             </div>
         </span>
 
@@ -48,7 +48,7 @@ export const OutgoingMessage = ({message,deleteMessage}) => {
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
             >
-                <EllipsisVerticalIcon className="text-black w-8 dark:text-white" />
+                <EllipsisVerticalIcon className="text-white w-8 dark:text-white" />
             </Button>
             <Menu
                 id="basic-menu"
