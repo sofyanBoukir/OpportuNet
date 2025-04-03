@@ -13,6 +13,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import socket from "../functions/socket";
 import { useDispatch } from "react-redux";
 import { SearchModal } from "../components/modals/SearchModal";
+import { logout } from "../services/auth";
 
 export const Layout = () => {
   const [showProfil, setShowProfil] = useState(false);
@@ -61,13 +62,14 @@ export const Layout = () => {
     setSearchInput("");
   };
 
+  
+
   const notificationSound = new Audio("/public/audios/notificationSound.wav");
   useEffect(() => {
     if (!socket.connected) {
       socket.connect();
 
       socket.on("connect", () => {
-        // console.log("connected to the server");
       });
       socket.emit("registerUser", localStorage.getItem("token"));
 
@@ -119,6 +121,14 @@ export const Layout = () => {
   const handleSearchInput = (e) => {
     setSearchInput(e.target.value);
   };
+
+  const logoutFromApp = async () =>{
+    const response = await logout(localStorage.getItem('token'));    
+    if(response.status === 200){
+      navigate('/')
+      localStorage.clear();
+    }
+  }
 
   return (
     <div>
@@ -237,7 +247,7 @@ export const Layout = () => {
             <hr className="text-gray-300"></hr>
           </div>
           <div className="mt-2 flex gap-2 flex-col">
-            <div className="flex gap-2 items-center py-1 rounded-md cursor-pointer px-2 hover:bg-gray-100 duration-200 dark:hover:bg-gray-900">
+            <div className="flex gap-2 items-center py-1 rounded-md cursor-pointer px-2 hover:bg-gray-100 duration-200 dark:hover:bg-gray-900" onClick={logoutFromApp}>
               <ArrowRightOnRectangleIcon
                 className="w-6 h-6 text-gray-700 dark:text-white"
                 strokeWidth={1.1}

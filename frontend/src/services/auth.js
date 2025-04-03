@@ -6,6 +6,17 @@ export const login = async (formData) => {
   return response;
 };
 
+
+export const logout = async (token) =>{
+  const response = await axios.post(`${serverURL}/auth/logout`,null,{
+    headers : {
+      Authorization : `Bearer ${token}`
+    }
+  });
+  return response;
+}
+
+
 export const signUp = async (formData) => {
   const response = await axios.post(`${serverURL}/auth/signUp`, formData);
   return response;
