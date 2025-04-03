@@ -80,7 +80,7 @@ export const LandingPage = () => {
         </div>
       </header>
 
-      <section className="w-full px-4 lg:px-16 pb-16 md:py-20 bg-gradient-to-r from-blue-50 to-gray-50">
+      <section className="w-full px-4 lg:px-16 pb-16 md:py-20 bg-gradient-to-r from-blue-100 to-gray-50">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row">
           <div className="md:w-1/2 mb-10 md:mb-15 2xl:mb-1 mt-20">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 leading-tight mb-6">
