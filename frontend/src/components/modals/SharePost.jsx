@@ -91,26 +91,43 @@ export const SharePost = ({setSharePost,postId}) => {
                     </div>
                 </div>
             </div>
-            <div className='flex flex-row gap-8 flex-wrap'>
+            <div className='flex flex-row gap-4 md:gap-6 lg:gap-8 flex-wrap justify-center md:justify-start'>
                 {
-                    loading && <div>...Loading</div>
+                    loading && <div className='w-full text-center py-4'>...Loading</div>
                 }
                 {
                     !loading && conversations && conversations.length && otherParticipants && otherParticipants.length ?
-                        otherParticipants.filter(Boolean).map((otherParticipant) =>{
-                            return <div className={`flex flex-col gap-1 items-center cursor-pointer relative`}
-                            onClick={() => selectConversation(otherParticipant.conversationId)}>
-                                    <img src={otherParticipant?.otherParticipant?.profilePictureUrl} className='w-20 h-20 rounded-full'/>
-                                    <p className='text-lg font-semibold'>{otherParticipant?.otherParticipant?.name}</p>
-                                    {
-                                        selectedConversations.includes(otherParticipant.conversationId) && <CheckCircle className='text-blue-600 absolute bottom-[35px] right-[15px]'/>
-                                    }
+                        otherParticipants.filter(Boolean).map((otherParticipant) => {
+                            return (
+                                <div 
+                                    key={otherParticipant.conversationId}
+                                    className={`flex flex-col gap-1 items-center cursor-pointer relative p-2 w-24 sm:w-28 md:w-32`}
+                                    onClick={() => selectConversation(otherParticipant.conversationId)}
+                                >
+                                    <div className='relative'>
+                                        <img 
+                                            src={otherParticipant?.otherParticipant?.profilePictureUrl} 
+                                            className='w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover'
+                                            alt={otherParticipant?.otherParticipant?.name}
+                                        />
+                                        {
+                                            selectedConversations.includes(otherParticipant.conversationId) && 
+                                            <CheckCircle className='text-blue-600 absolute -bottom-1 -right-1 bg-white rounded-full' size={20}/>
+                                        }
+                                    </div>
+                                    <p className='text-sm sm:text-base font-semibold text-center truncate w-full'>
+                                        {otherParticipant?.otherParticipant?.name}
+                                    </p>
                                 </div>
+                            )
                         })
-                    :null
+                    : null
                 }
                 {
-                    !loading && conversations.length === 0 && <h1 className='text-xl font-semibold'>Please start a conversation with someOne</h1>
+                    !loading && conversations.length === 0 && 
+                    <h1 className='text-lg md:text-xl font-semibold w-full text-center py-8'>
+                        Please start a conversation with someone
+                    </h1>
                 }
             </div>
             {
