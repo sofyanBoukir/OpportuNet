@@ -14,8 +14,8 @@ export const PersisReload = () => {
       if (response.data.userData) {
         response.data.userData.isNewUser &&
           navigate("/user/completeRegistration");
-        dispatch({ type: "UPDATE_USERDATA", payload: response.data.userData });
-        setValidToken(true);
+          dispatch({ type: "UPDATE_USERDATA", payload: response.data.userData });
+          setValidToken(true);
       }
     } catch (err) {
       navigate("/user/sign_in");
@@ -28,3 +28,17 @@ export const PersisReload = () => {
 
   return validToken ? <Outlet /> : navigate("/user/sign_in");
 };
+
+
+export const isUserAuth = async () =>{
+    try {
+      const response = await getUserData(localStorage.getItem("token"));      
+      if (response.data.userData) {
+        return true;
+      }else{
+        return false;
+      }
+    } catch (err) {
+      return false
+    }
+}

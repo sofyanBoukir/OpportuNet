@@ -1,13 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import appLogo from "../../public/appLogo.png";
 import { Button } from "../components/UI/Button";
 import { Link, useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
 import AnimationJob from "../assets/AnimationJob.json";
 import AnimationFind from "../assets/AnimationFind.json";
+import { isUserAuth } from "../protectedRoutes/PersisReload";
 
 export const LandingPage = () => {
+  
   const navigate = useNavigate();
+  const [isAuth,setIsAuth] = useState(false);
+
+  useEffect(() =>{
+    const isUserAuthenticated = async () =>{
+      const isAuthenticated = await isUserAuth();
+      console.log(isAuthenticated);
+      
+      if(isAuthenticated){
+        setIsAuth(true)
+      }
+    }
+    isUserAuthenticated();
+  },[])
+
   return (
     <div className="bg-white font-sans">
       <header className="w-full px-4 lg:px-16 py-4 bg-white shadow-sm sticky top-0 z-50">
@@ -43,26 +59,30 @@ export const LandingPage = () => {
             </a>
           </nav>
 
-          <div className="flex space-x-4">
-            <Button
-              text={"Sign In"}
-              onClick={() => navigate("/user/sign_in")}
-              className={
-                "px-4 py-2 text-blue-600 border border-blue-600 hover:bg-blue-50"
-              }
-            />
-            <Button
-              text={"Join Now"}
-              onClick={() => navigate("/user/sign_up")}
-              className={"px-4 py-2 bg-blue-600 text-white hover:bg-blue-700"}
-            />
-          </div>
+          {
+            !isAuth?
+            <div className="flex space-x-4">
+              <Button
+                text={"Sign In"}
+                onClick={() => navigate("/user/sign_in")}
+                className={
+                  "px-4 py-2 text-blue-600 border border-blue-600 hover:bg-blue-50"
+                }
+              />
+              <Button
+                text={"Join Now"}
+                onClick={() => navigate("/user/sign_up")}
+                className={"px-4 py-2 bg-blue-600 text-white hover:bg-blue-700"}
+              />
+            </div>
+            :null
+          }
         </div>
       </header>
 
-      <section className="w-full px-4 lg:px-16 py-16 md:py-20 bg-gradient-to-r from-blue-50 to-gray-50">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center">
-          <div className="md:w-1/2 mb-10 md:mb-15 2xl:mb-1">
+      <section className="w-full px-4 lg:px-16 pb-16 md:py-20 bg-gradient-to-r from-blue-50 to-gray-50">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row">
+          <div className="md:w-1/2 mb-10 md:mb-15 2xl:mb-1 mt-20">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 leading-tight mb-6">
               Elevate Your <span className="text-blue-600">Professional</span>{" "}
               Journey
@@ -414,7 +434,6 @@ export const LandingPage = () => {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <img src={appLogo} className="h-8" alt="OpportuNet Logo" />
-                <span className="text-xl font-semibold">OpportuNet</span>
               </div>
               <p className="text-gray-400">
                 The professional network designed to help you connect, grow, and
