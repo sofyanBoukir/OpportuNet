@@ -212,7 +212,8 @@ export const Signup = () => {
                     >
                       I agree to the{" "}
                     </label>
-                    <Link className="text-blue-400 text-sm">
+                    <Link className="text-blue-400 text-sm"
+                    to="/legalPAge">
                       Terms & conditions
                     </Link>
                   </div>
