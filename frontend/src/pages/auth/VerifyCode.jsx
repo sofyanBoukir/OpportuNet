@@ -7,6 +7,8 @@ import { checkVcode } from '../../services/auth';
 import { Notification } from '../../components/UI/Notification';
 import { useNavigate } from 'react-router-dom';
 import { ExtraLoading } from '../../components/App/ExtraLoading';
+import Lottie from 'lottie-react';
+import EmailSentAnimation from '../../assets/AnimationEmail.json'
 export const VerifyCode = ({setClose}) => {
     const [vCode, setVcode] = useState('')
     const email = localStorage.getItem('email')
@@ -57,12 +59,19 @@ export const VerifyCode = ({setClose}) => {
         }
     }
   return (
-    <div className='md:w-[35%] w-[80%] mx-auto mt-40 fade-in'>
+    <div className='md:w-[35%] w-[80%] mx-auto mt-20 fade-in'>
         <div className='flex justify-center'>
             <img src={appName} className='w-52'/>
         </div>
-        <div className='bg-gray-100 rounded-md px-10 py-5 text-center mt-5'>
-            <h1 className='text-xl font-semibold'>Verify code</h1>
+        <div className='bg-gray-100 rounded-md px-10 py-5 text-center'>
+            <div>
+                <Lottie
+                animationData={EmailSentAnimation}
+                loop={true}
+                className="w-60 mx-auto mb-[-40px] mt-[-40px]"
+                />
+            </div>
+            <h1 className='text-2xl font-semibold'>Verification code</h1>
             <p className='text-gray-500 font-semibold text-sm mt-2'>We've sent a verification code to <span className='text-black'>{email}</span>. Please enter it below to complete your signup!</p>
 
             <form className='mt-2 flex flex-col gap-4' onSubmit={handleSubmit}>

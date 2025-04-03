@@ -86,7 +86,7 @@ export const SavedPosts = () => {
                         className="w-12 h-12 rounded-full object-cover"
                       />
                       <div>
-                        <h1 className="text-lg font-semibold">
+                        <h1 className="text-lg font-semibold dark:text-gray-200">
                           {saved.user.name}
                         </h1>
                         <span className="text-sm text-gray-700 dark:text-gray-200 font-semibold">
@@ -104,7 +104,7 @@ export const SavedPosts = () => {
                       )}
 
                       <div>
-                        <p>{contentPreview}...</p>
+                        <p className="dark:text-gray-200">{contentPreview}...</p>
                         {saved.content.length > contentPreview.length && (
                           <button
                             onClick={() => navigate(`/post/${saved._id}`)}
