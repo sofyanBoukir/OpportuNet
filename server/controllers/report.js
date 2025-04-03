@@ -5,7 +5,7 @@ const User = require("../models/User");
 const addReport = async (request, response) => {
   try {
     const userId = request.user.id;
-    const { postId } = request.body;
+    const { postId } = request.params;
 
     const user = await User.findById(userId);
 
