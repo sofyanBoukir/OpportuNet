@@ -27,6 +27,7 @@ import { Notification } from "../UI/Notification";
 import { ViewPostLikes } from "../modals/ViewPostLikes";
 import { SharePost } from "../modals/SharePost";
 import { Follow } from "../UI/Follow";
+import { ReportModal } from "../modals/ReportModal";
 const frontendUrl = import.meta.env.VITE_FRONTEND_URL;
 
 export const Post = ({ post, showIcon, postSelected, openDelete }) => {
@@ -53,14 +54,17 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
     userData.savedPosts.includes(post._id)
   );
   const [notification, setNotification] = useState();
-  const [viewLikes,setViewLikes] = useState(false);
-  const [sharePost,setSharePost] = useState(false);
-  
+  const [viewLikes, setViewLikes] = useState(false);
+  const [sharePost, setSharePost] = useState(false);
+  const [openReport, setOpenReport] = useState(false);
+  const [reportId, setReportId] = useState("");
+
   let seenPosts = [];
 
   try {
-    const storedPosts = localStorage.getItem('seenPosts');
-    seenPosts = storedPosts !== null || storedPosts !== '' ? JSON.parse(storedPosts) : [];
+    const storedPosts = localStorage.getItem("seenPosts");
+    seenPosts =
+      storedPosts !== null || storedPosts !== "" ? JSON.parse(storedPosts) : [];
   } catch (error) {
     console.error("Error parsing seenPosts from localStorage:", error);
     seenPosts = [];
@@ -145,9 +149,13 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
           </div>
         </div>
         <div className="flex gap-2 items-center">
-          {
-          userData?._id !== post?.user?._id && !userData?.following?.includes(post?.user?._id) && <Follow userId={post.user._id} className={'border-3 rounded-md px-3 py-2'}/>
-          }
+          {userData?._id !== post?.user?._id &&
+            !userData?.following?.includes(post?.user?._id) && (
+              <Follow
+                userId={post.user._id}
+                className={"border-3 rounded-md px-3 py-2"}
+              />
+            )}
           <Button
             id="basic-button"
             aria-controls={open ? "basic-menu" : undefined}
@@ -180,7 +188,13 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
                 </div>
               </MenuItem>
             ) : (
-              <MenuItem onClick={handleClose}>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  setReportId(post._id);
+                  setOpenReport(true);
+                }}
+              >
                 <div className="flex flex-row items-center gap-2">
                   <FlagIcon className="text-black w-6 h-6" strokeWidth={1.2} />
                   <h1>Report</h1>
@@ -223,8 +237,18 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
           <img src={post.imageUrl} className="w-[100%]" alt="" />
         </div>
         <div className="px-4 py-3 flex flex-row justify-between">
-          <h1 className="dark:text-white hover:text-blue-700 hover:underline duration-200 cursor-pointer" onClick={() => setViewLikes(true)}>{post.likes.length} Likes</h1>
-          <h1 className="dark:text-white hover:text-blue-700 hover:underline duration-200 cursor-pointer" onClick={() => setOpenModalPost(true)}>{post.comments.length} comments</h1>
+          <h1
+            className="dark:text-white hover:text-blue-700 hover:underline duration-200 cursor-pointer"
+            onClick={() => setViewLikes(true)}
+          >
+            {post.likes.length} Likes
+          </h1>
+          <h1
+            className="dark:text-white hover:text-blue-700 hover:underline duration-200 cursor-pointer"
+            onClick={() => setOpenModalPost(true)}
+          >
+            {post.comments.length} comments
+          </h1>
         </div>
         <hr className="w-[95%] py-1 text-gray-200 mx-auto" />
         <div className="flex flex-row items-center py-2 px-5  justify-center">
@@ -269,7 +293,10 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
             className="flex flex-row items-center w-[30%] hover:bg-gray-100 dark:hover:bg-gray-900 justify-center py-2 rounded-lg cursor-pointer duration-200"
           >
             <div className="flex flex-row items-center gap-2">
-              <FiSend className="w-6 h-6 text-black dark:text-white" strokeWidth={1.4} />
+              <FiSend
+                className="w-6 h-6 text-black dark:text-white"
+                strokeWidth={1.4}
+              />
               <h1 className="dark:text-white">Share</h1>
             </div>
           </button>
@@ -281,12 +308,11 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
       {notification && (
         <Notification type={notification.type} message={notification.message} />
       )}
-      {
-        viewLikes && <ViewPostLikes setViewLikes={setViewLikes} postId={post._id}/>
-      }
-      {
-        sharePost && <SharePost postId={post._id} setSharePost={setSharePost}/>
-      }
+      {viewLikes && (
+        <ViewPostLikes setViewLikes={setViewLikes} postId={post._id} />
+      )}
+      {sharePost && <SharePost postId={post._id} setSharePost={setSharePost} />}
+      {openReport && <ReportModal setOpen={setOpenReport} postId={reportId} />}
     </div>
   );
 };
