@@ -3,83 +3,96 @@ import { SuggestionsModal } from "../components/App/Suggestions";
 import { ProfileStatus } from "../components/App/ProfileStatus";
 import { NotificationApp } from "../components/App/NotificationApp";
 import { NotificationsSkeleton } from "../components/skeletons/NotificationsSkeleton";
-import { deleteNotification, getUserNotifications, makeNotificationsSeen } from "../services/notification";
+import {
+  deleteNotification,
+  getUserNotifications,
+  makeNotificationsSeen,
+} from "../services/notification";
 import { ArrowDownCircleIcon } from "@heroicons/react/24/solid";
 import { useDispatch } from "react-redux";
-import notFoundImage from '../../public/images/NotFound.jpg'
-
+import Lottie from "lottie-react";
+import AnimationError from "../assets/AnimationError.json";
 
 export const Notifications = () => {
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [errMessage, setErrMessage] = useState("");
+  const [page, setPage] = useState(1);
+  const loadingRef = useRef(false);
+  const [lastPage, setLastPage] = useState(null);
+  const [totalNotifications, setTotalNotifications] = useState(null);
+  const [close, setClose] = useState(false);
+  const [notificationsDelivred, setNotificationsDelivred] = useState(false);
+  const dispatch = useDispatch();
 
-    const [notifications,setNotifications] = useState([]);
-    const [loading,setLoading] = useState(true);
-    const [errMessage,setErrMessage] = useState('')
-    const [page,setPage] = useState(1)
-    const loadingRef = useRef(false)
-    const [lastPage,setLastPage] = useState(null)
-    const [totalNotifications,setTotalNotifications] = useState(null)
-    const [close,setClose] = useState(false);
-    const [notificationsDelivred,setNotificationsDelivred] = useState(false)
-    const dispatch = useDispatch()
+  const _getUserNotifications = async () => {
+    try {
+      if (loadingRef.current) return;
+      loadingRef.current = true;
 
-    const _getUserNotifications = async () =>{
-        try{
-            if(loadingRef.current) return
-            loadingRef.current = true
-            
-            const response = await getUserNotifications(localStorage.getItem('token'),page)
-            setLastPage(response.data.lastPage)
-            setTotalNotifications(response.data.totalNotifications)
-            loadingRef.current = false
-            setLoading(false)
-            
-            setTimeout(() => {
-                setLoading(false)
-            }, 3000);
-            if(response.status === 200){
-                if(response.data.notifications){
-                    setNotifications((prevNotifications) => [...prevNotifications, ...response.data.notifications]);
-                }
-                setNotificationsDelivred(true)
-            }
-        }catch(err){
-            setErrMessage(err.response.data.message)
+      const response = await getUserNotifications(
+        localStorage.getItem("token"),
+        page
+      );
+      setLastPage(response.data.lastPage);
+      setTotalNotifications(response.data.totalNotifications);
+      loadingRef.current = false;
+      setLoading(false);
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 3000);
+      if (response.status === 200) {
+        if (response.data.notifications) {
+          setNotifications((prevNotifications) => [
+            ...prevNotifications,
+            ...response.data.notifications,
+          ]);
         }
-    }
-
-    const _makeNotificationsSeen = async () =>{
-      const response = await makeNotificationsSeen(localStorage.getItem('token'));
-      
-      if(response.status === 200){
-        dispatch({type:'UPDATE_NOTIFIED_TIMES',payload:0})
+        setNotificationsDelivred(true);
       }
+    } catch (err) {
+      setErrMessage(err.response.data.message);
     }
+  };
 
+  const _makeNotificationsSeen = async () => {
+    const response = await makeNotificationsSeen(localStorage.getItem("token"));
 
-    const _deleteNotification = async (notificationId) =>{
-        setClose(false)
-        const response = await deleteNotification(localStorage.getItem('token'),notificationId)
-        
-        if(response.status === 200){
-          const newNotifications = notifications.filter((notification) => notification._id !== notificationId);
-          setNotifications(newNotifications)
-          setClose(true)
-        }
+    if (response.status === 200) {
+      dispatch({ type: "UPDATE_NOTIFIED_TIMES", payload: 0 });
     }
+  };
 
-    useEffect(() =>{
-        _getUserNotifications()
-    },[page])
+  const _deleteNotification = async (notificationId) => {
+    setClose(false);
+    const response = await deleteNotification(
+      localStorage.getItem("token"),
+      notificationId
+    );
 
-    useEffect(() =>{
-      notificationsDelivred && _makeNotificationsSeen()
-    },[notificationsDelivred])
+    if (response.status === 200) {
+      const newNotifications = notifications.filter(
+        (notification) => notification._id !== notificationId
+      );
+      setNotifications(newNotifications);
+      setClose(true);
+    }
+  };
+
+  useEffect(() => {
+    _getUserNotifications();
+  }, [page]);
+
+  useEffect(() => {
+    notificationsDelivred && _makeNotificationsSeen();
+  }, [notificationsDelivred]);
   const suggestions = [
     { sugName: "Ayoub Mhainid", sugHead: "UI/UX designer" },
     { sugName: "Soufiane Boukir", sugHead: "Go developer" },
     { sugName: "Said kachoud", sugHead: "PHP developer" },
   ];
-  
+
   return (
     <div className="md:px-[8%] px-3 relative top-16">
       <div className="flex justify-center gap-[1%]">
@@ -88,24 +101,34 @@ export const Notifications = () => {
           {/* <NotificationApp />
           <NotificationApp />
           <NotificationApp /> */}
-          {
-            !loading && notifications.length ?
-                notifications.map((notification,index) => {
-                    return <NotificationApp close={close} key={index} notification={notification} deleteNotification={_deleteNotification}/>
-                })
-            :null
-          }
-          {!loading && lastPage !== page && totalNotifications !== 0 && <ArrowDownCircleIcon onClick={() => setPage(page+1)} className="flex mx-auto cursor-pointer my-3 text-blue-700 hover:text-blue-600 duration-200 w-12 h-12" /> }
+          {!loading && notifications.length
+            ? notifications.map((notification, index) => {
+                return (
+                  <NotificationApp
+                    close={close}
+                    key={index}
+                    notification={notification}
+                    deleteNotification={_deleteNotification}
+                  />
+                );
+              })
+            : null}
+          {!loading && lastPage !== page && totalNotifications !== 0 && (
+            <ArrowDownCircleIcon
+              onClick={() => setPage(page + 1)}
+              className="flex mx-auto cursor-pointer my-3 text-blue-700 hover:text-blue-600 duration-200 w-12 h-12"
+            />
+          )}
           {/* <Button type={'button'} text={'View more'} className={'bg-blue-500 text-white my-2'} onClick={() => setPage(page+1)}/> */}
-          {
-            loading && <NotificationsSkeleton />
-          }
-          {
-            !loading && totalNotifications === 0 && <div className="flex flex-col justify-center pb-6">
-                <img src={notFoundImage} />
-                <p className="text-xl font-semibold mx-auto">You may not have any notifications</p>
-              </div>
-          }
+          {loading && <NotificationsSkeleton />}
+          {!loading && totalNotifications === 0 && (
+            <div className="flex flex-col justify-center pb-6">
+              <Lottie animationData={AnimationError} loop={true} />
+              <p className="text-xl font-semibold mx-auto">
+                You may not have any notifications
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="hidden sticky  lg:block left-[14%] lg:relative lg:w-[26%]">
