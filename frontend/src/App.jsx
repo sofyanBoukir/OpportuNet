@@ -23,6 +23,8 @@ import { Searchs } from "./pages/user/Searchs";
 import { RecuiterJobs } from "./pages/recuiter/RecuiterJobs";
 import { Messaging } from "./shared/Messaging";
 import { JobsDetail } from "./shared/JobsDetail";
+import { LandingPage } from "./shared/LandingPage";
+import { LegalPage } from "./shared/LegalPage";
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
         <Route path="/user/new_password/:token" element={<NewPassword />} />
         <Route path="/user/forgot_password" element={<ForgotPassword />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/legalPage" element={<LegalPage />} />
 
         <Route element={<IsNewUser />}>
           <Route

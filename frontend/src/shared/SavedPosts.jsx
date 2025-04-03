@@ -5,8 +5,8 @@ import { getSavedPost } from "../services/saved";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowDownCircleIcon, BookmarkIcon } from "@heroicons/react/24/solid";
 import { SavedPostSkeleton } from "../components/skeletons/SavedPostSkeleton";
-import notFoundImage from '../../public/images/NotFound.jpg'
-
+import Lottie from "lottie-react";
+import AnimationError from "../assets/AnimationError.json";
 
 export const SavedPosts = () => {
   const [dataSavedPost, setDataSavedPost] = useState([]);
@@ -19,7 +19,7 @@ export const SavedPosts = () => {
   const SavedPost = async () => {
     try {
       const response = await getSavedPost(localStorage.getItem("token"), page);
-      
+
       setLastPage(response.data.lastPage);
       setTotalSavedPosts(response.data.totalSavedPosts);
 
@@ -31,13 +31,12 @@ export const SavedPosts = () => {
           ...response.data.savedPosts.savedPosts,
         ]);
       }
-    setLoading(false)
+      setLoading(false);
     } catch (error) {
       setLoading(false);
-      setTotalSavedPosts(0)
+      setTotalSavedPosts(0);
     }
   };
-  
 
   useEffect(() => {
     SavedPost();
@@ -54,7 +53,9 @@ export const SavedPosts = () => {
         <div className="hidden md:block bg-white dark:bg-black px-2 py-3 rounded-2xl h-fit">
           <div className="flex flex-row gap-2 py-1  ">
             <BookmarkIcon className="text-gray-500 dark:text-gray-100 w-5" />
-            <h1 className="text-gray-500 dark:text-gray-200 font-semibold">My elements</h1>
+            <h1 className="text-gray-500 dark:text-gray-200 font-semibold">
+              My elements
+            </h1>
           </div>
           <hr className="text-gray-400 dark:text-gray-200 mt-3" />
           <div className="py-2 px-2 text-blue-600 font-semibold text-sm flex flex-row gap-5 items-center">
@@ -67,7 +68,7 @@ export const SavedPosts = () => {
           </div>
         </div>
         <div className="flex flex-col w-[100%] lg:w-[43%] h-max  lg:relative bg-white dark:bg-black rounded-2xl ">
-        {loading && <SavedPostSkeleton />}
+          {loading && <SavedPostSkeleton />}
           {dataSavedPost && !loading
             ? dataSavedPost.map((saved, index) => {
                 const contentPreview = saved.content?.slice(
@@ -88,7 +89,9 @@ export const SavedPosts = () => {
                         <h1 className="text-lg font-semibold">
                           {saved.user.name}
                         </h1>
-                        <span className="text-sm text-gray-700 dark:text-gray-200 font-semibold">{saved.user.headLine}</span>
+                        <span className="text-sm text-gray-700 dark:text-gray-200 font-semibold">
+                          {saved.user.headLine}
+                        </span>
                       </div>
                     </div>
                     <div className="mt-4 w-full flex flex-row gap-3">
@@ -119,14 +122,20 @@ export const SavedPosts = () => {
                 );
               })
             : null}
-            {
-              !loading && totalSavedPosts === 0 && <div className="flex flex-col justify-center pb-6">
-                              <img src={notFoundImage} />
-                              <p className="text-xl font-semibold mx-auto">Try to save posts to be appear here</p>
-                            </div>
-            }
-            {!loading && lastPage !== page && totalSavedPosts !== 0 && <ArrowDownCircleIcon onClick={() => setPage(page+1)} className="flex mx-auto cursor-pointer my-3 text-blue-700 hover:text-blue-600 duration-200 w-12 h-12" /> }
-
+          {!loading && totalSavedPosts === 0 && (
+            <div className="flex flex-col justify-center pb-6">
+              <Lottie animationData={AnimationError} loop={true} />
+              <p className="text-xl font-semibold mx-auto">
+                Try to save posts to be appear here
+              </p>
+            </div>
+          )}
+          {!loading && lastPage !== page && totalSavedPosts !== 0 && (
+            <ArrowDownCircleIcon
+              onClick={() => setPage(page + 1)}
+              className="flex mx-auto cursor-pointer my-3 text-blue-700 hover:text-blue-600 duration-200 w-12 h-12"
+            />
+          )}
         </div>
 
         <div className="hidden sticky  lg:block lg:relative lg:w-[25%]">
