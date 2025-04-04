@@ -25,6 +25,10 @@ import { Messaging } from "./shared/Messaging";
 import { JobsDetail } from "./shared/JobsDetail";
 import { LandingPage } from "./shared/LandingPage";
 import { LegalPage } from "./shared/LegalPage";
+import { SideBar } from "./layouts/SideBar";
+import { ManageUsers } from "./pages/admin/ManageUsers";
+import { ManageAdmins } from "./pages/admin/ManageAdmins";
+import { ReportedPosts } from "./pages/admin/ReportedPosts";
 
 function App() {
   return (
@@ -57,6 +61,11 @@ function App() {
             <Route path="/search/results/all/:query" element={<Searchs />} />
             <Route path="/messaging" element={<Messaging />} />
             <Route path="/job-detail/:id" element={<JobsDetail />} />
+          </Route>
+          <Route element={<SideBar />}>
+            <Route path="/admin/users" element={<ManageUsers />} />
+            <Route path="/admin/admins" element={<ManageAdmins />} />
+            <Route path="/admin/posts" element={<ReportedPosts />} />
           </Route>
         </Route>
       </Routes>
