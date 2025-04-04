@@ -34,9 +34,11 @@ export const Table = ({ heads, data, keys }) => {
                   {keys &&
                     keys.map((key, colIndex) => (
                       <td key={colIndex} className="py-1 text-center">
-                        {key
-                          .split(".")
-                          .reduce((obj, prop) => obj?.[prop], dataVar)}
+                        {key === "followers"
+                          ? dataVar.followers.length
+                          : key
+                              .split(".")
+                              .reduce((obj, prop) => obj?.[prop], dataVar)}
                       </td>
                     ))}
                   {
