@@ -137,6 +137,7 @@ export const Profil = () => {
               showIcon={showIcon}
               multualFollowing={multualFollowing}
               userData={userData._id === id ? userData : userInfo}
+              isAdmin={userData.role === "admin"}
             />
           }
 
