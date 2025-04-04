@@ -1,12 +1,82 @@
-import moment from "moment";
 import { ButtonSvg } from "../UI/ButtonSvg";
 import { EyeIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { DeleteModal } from "../modals/DeleteModal";
-import { useState } from "react";
-// import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Pagination } from "../UI/Pagination";
+import { Notification } from "../UI/Notification";
+import { deleteReportPosts, deleteUser } from "../../services/admin";
+import { useNavigate } from "react-router-dom";
 
-export const Table = ({ heads, data, keys }) => {
+export const Table = ({
+  heads,
+  data,
+  keys,
+  chowBtnDetail,
+  pagination,
+  getData,
+  toDelete,
+}) => {
   const [openDelete, setOpenDelete] = useState(false);
+  const [idForDelete, setIdForDelete] = useState(null);
+  const [notification, setNotification] = useState({});
+  const [loadingDelete, setLoadingDelete] = useState(false);
+  const navigate = useNavigate();
+
+  const nextData = async () => {
+    if (pagination.lastPage <= pagination.currentPage) {
+      return;
+    }
+    await getData(pagination.currentPage + 1);
+  };
+
+  const prevData = async () => {
+    if (pagination.currentPage == 1) {
+      return;
+    }
+    await getData(pagination.currentPage - 1);
+  };
+
+  const _delete_Function = async () => {
+    setNotification(null);
+    setLoadingDelete(true);
+    try {
+      let response;
+      switch (toDelete) {
+        case "user":
+          response = await deleteUser(
+            localStorage.getItem("token"),
+            idForDelete
+          );
+          setLoadingDelete(false);
+          setOpenDelete(false);
+          setNotification({ type: "success", message: response.data.message });
+          break;
+        case "post":
+          response = await deleteReportPosts(
+            localStorage.getItem("token"),
+            idForDelete
+          );
+          setLoadingDelete(false);
+          setOpenDelete(false);
+          setNotification({ type: "success", message: response.data.message });
+          break;
+      }
+    } catch (error) {
+      setLoadingDelete(false);
+      error.response
+        ? setNotification({
+            type: "error",
+            message: error.response.data.message,
+          })
+        : setNotification({
+            type: "error",
+            message: ERROR_MESSAGES.TRY_AGAIN,
+          });
+    }
+  };
+  useEffect(() => {
+    setNotification(null);
+  }, []);
 
   return (
     <div>
@@ -34,26 +104,31 @@ export const Table = ({ heads, data, keys }) => {
                   {keys &&
                     keys.map((key, colIndex) => (
                       <td key={colIndex} className="py-1 text-center">
-                        {key
-                          .split(".")
-                          .reduce((obj, prop) => obj?.[prop], dataVar)}
+                        {key === "followers"
+                          ? dataVar.followers.length
+                          : key
+                              .split(".")
+                              .reduce((obj, prop) => obj?.[prop], dataVar)}
                       </td>
                     ))}
                   {
                     <td className="flex space-x-2 justify-center">
-                      <ButtonSvg
-                        svg={<EyeIcon className="w-5 h-5 text-white" />}
-                        color={"green"}
-                        onclick={() => {
-                          console.log("fffftablz");
-                        }}
-                      />
+                      {chowBtnDetail && (
+                        <ButtonSvg
+                          svg={<EyeIcon className="w-5 h-5 text-white" />}
+                          color={"green"}
+                          onclick={() => {
+                            navigate(`/admin/profile/${dataVar._id}`);
+                          }}
+                        />
+                      )}
 
                       <ButtonSvg
                         svg={<TrashIcon className="w-5 h-5 text-white" />}
                         color={"red"}
                         onclick={() => {
                           setOpenDelete(true);
+                          setIdForDelete(dataVar._id);
                         }}
                       />
                     </td>
@@ -63,7 +138,7 @@ export const Table = ({ heads, data, keys }) => {
             : null}
         </tbody>
       </table>
-      {/* {pagination && paginate && (
+      {pagination && (
         <Pagination
           currentPage={pagination.currentPage}
           lastPage={pagination.lastPage}
@@ -71,10 +146,20 @@ export const Table = ({ heads, data, keys }) => {
           next={nextData}
           previus={prevData}
         />
-      )} */}
+      )}
 
       {/* {modal.type === "view" && navigate("/user/{}")} */}
-      {openDelete && <DeleteModal setOpen={setOpenDelete} />}
+      {openDelete && (
+        <DeleteModal
+          deleteItem={_delete_Function}
+          itemType={toDelete}
+          loading={loadingDelete}
+          setOpen={setOpenDelete}
+        />
+      )}
+      {notification && (
+        <Notification type={notification.type} message={notification.message} />
+      )}
     </div>
   );
 };

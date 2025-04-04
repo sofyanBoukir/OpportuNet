@@ -7,24 +7,28 @@ export const PersisReload = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [validToken, setValidToken] = useState(false);
-  const [loading,setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   const _getUserData = async () => {
     try {
       const response = await getUserData(localStorage.getItem("token"));
-      setLoading(false)
+      setLoading(false);
       if (response.data.userData) {
-        if(response.data.userData.role === 'admin'){
-          navigate('/admin/users')
+        if (response.data.userData.role === "admin") {
+          navigate("/admin/users");
+          dispatch({
+            type: "UPDATE_USERDATA",
+            payload: response.data.userData,
+          });
           return;
         }
         response.data.userData.isNewUser &&
           navigate("/user/completeRegistration");
-          dispatch({ type: "UPDATE_USERDATA", payload: response.data.userData });
-          setValidToken(true);
+        dispatch({ type: "UPDATE_USERDATA", payload: response.data.userData });
+        setValidToken(true);
       }
     } catch (err) {
-      setLoading(false)
+      setLoading(false);
       navigate("/user/sign_in");
     }
   };
@@ -33,20 +37,19 @@ export const PersisReload = () => {
     _getUserData();
   }, []);
 
-  if(loading) return null
+  if (loading) return null;
   return validToken ? <Outlet /> : <Navigate to={"/user/sign_in"} />;
 };
 
-
-export const isUserAuth = async () =>{
-    try {
-      const response = await getUserData(localStorage.getItem("token"));      
-      if (response.data.userData) {
-        return true;
-      }else{
-        return false;
-      }
-    } catch (err) {
-      return false
+export const isUserAuth = async () => {
+  try {
+    const response = await getUserData(localStorage.getItem("token"));
+    if (response.data.userData) {
+      return true;
+    } else {
+      return false;
     }
-}
+  } catch (err) {
+    return false;
+  }
+};

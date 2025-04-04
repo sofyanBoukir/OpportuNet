@@ -19,6 +19,7 @@ export const ProfilInfoModal = ({
   showIcon,
   userData,
   multualFollowing,
+  isAdmin,
 }) => {
   const styleCover = {
     backgroundImage: `url(${coverProfil})`,
@@ -172,7 +173,8 @@ export const ProfilInfoModal = ({
               {userData.followers ? userData.following?.length : "0"} following
             </span>
           </div>
-          {!showIcon && (
+
+          {!showIcon && !isAdmin && (
             <Follow
               userId={userData._id}
               className="bg-[#0A66C2] text-white w-[30%] sm:w-[15%] py-0.5 hover:bg-blue-900 px-7 rounded-full mb-2 mt-3"

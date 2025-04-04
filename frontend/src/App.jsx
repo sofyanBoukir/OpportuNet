@@ -66,6 +66,7 @@ function App() {
             <Route path="/admin/users" element={<ManageUsers />} />
             <Route path="/admin/admins" element={<ManageAdmins />} />
             <Route path="/admin/posts" element={<ReportedPosts />} />
+            <Route path="/admin/profile/:id" element={<Profil />} />
           </Route>
         </Route>
       </Routes>

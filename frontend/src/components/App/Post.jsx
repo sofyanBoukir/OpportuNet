@@ -48,10 +48,10 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
 
   const [openModalPost, setOpenModalPost] = useState(false);
   const [alreadyLiked, setAlreadyLiked] = useState(
-    userData.likedPosts.includes(post._id)
+    userData.likedPosts?.includes(post._id)
   );
   const [alreadySaved, setAlreadySaved] = useState(
-    userData.savedPosts.includes(post._id)
+    userData.savedPosts?.includes(post._id)
   );
   const [notification, setNotification] = useState();
   const [viewLikes, setViewLikes] = useState(false);

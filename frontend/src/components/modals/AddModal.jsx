@@ -170,6 +170,13 @@ export const AddModal = ({ toAdd, setOpen }) => {
                 />
                 <Input
                   type="text"
+                  placeholder={
+                    toAdd === _education
+                      ? "Ex: Ofppt"
+                      : toAdd === _experience
+                      ? "Ex: Full stack developer"
+                      : toAdd && "Ex: React js"
+                  }
                   name={
                     toAdd === _education
                       ? "institution"
@@ -198,6 +205,7 @@ export const AddModal = ({ toAdd, setOpen }) => {
                 />
                 <Input
                   type="text"
+                  placeholder="EX: Google"
                   name="company"
                   value={dataInfo.company}
                   onChange={handleChange}
@@ -218,6 +226,11 @@ export const AddModal = ({ toAdd, setOpen }) => {
                   />
                   <Input
                     type="text"
+                    placeholder={
+                      toAdd === _education
+                        ? "Ex: Technicien spécialisé"
+                        : toAdd === _experience && "Ex: USA"
+                    }
                     name={
                       toAdd === _education
                         ? "degree"
@@ -299,8 +312,8 @@ export const AddModal = ({ toAdd, setOpen }) => {
                   rows="8"
                   placeholder={
                     toAdd === _experience
-                      ? "description"
-                      : toAdd === _about && "about"
+                      ? "Description"
+                      : toAdd === _about && "About"
                   }
                   value={
                     toAdd === _experience
