@@ -53,7 +53,7 @@ export const SideBar = () => {
       </div>
       {dataSideBar && dataSideBar.length > 0 && (
         <div
-          className={`z-15 bg-dark bg-gray-200 shadow-lg font-[Poppins,sans-serif] w-[80%] 2xl:w-[14%] md:w-[250px] flex flex-col pl-1 absolute sm:translate-x-0 duration-500 ${
+          className={`z-15 bg-dark bg-gray-200 shadow-lg font-[Poppins,sans-serif] w-[80%] 2xl:w-[18%] md:w-[250px] flex flex-col pl-1 absolute sm:translate-x-0 duration-500 ${
             !isMenuOpen && "-translate-x-full"
           } sm:fixed sm:h-[100%] sm:justify-start gap-5 py-10`}
         >
@@ -81,9 +81,9 @@ export const SideBar = () => {
           })}
         </div>
       )}
-      {/* <div className="sm:relative md:pl-[250px] w-full md:w-[86%]"> */}
-      <Outlet />
-      {/* </div> */}
+      <div className="w-full md:w-[100%] mt-6 md:pl-[255px] 2xl:pl-[19%] sm:relative ">
+        <Outlet />
+      </div>
     </div>
   );
 };

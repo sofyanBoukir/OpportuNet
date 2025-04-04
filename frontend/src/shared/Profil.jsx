@@ -99,26 +99,6 @@ export const Profil = () => {
     userData._id !== id && _getMultualFollowing();
   }, [id, page]);
 
-  /*useEffect(() => {
-    const handleScroll = () => {
-      console.log("ffffscroDDl");
-      if (
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight
-      ) {
-        if (page <= totalPages) {
-          console.log("page", page);
-          const nextPage = page + 1;
-          setPage((prevPage) => prevPage + 1);
-          _getUserById(nextPage);
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [page]);*/
-
   const _deletePost = async () => {
     setNotification(null);
     setLoadingDelete(true);
@@ -145,7 +125,11 @@ export const Profil = () => {
   return (
     <div>
       <div className={`w-full flex flex-col gap-y-2 lg:flex-row justify-start`}>
-        <div className="w-full lg:w-[65%] pt-[55px] lg:pt-[80px] flex flex-col gap-y-2 lg:pb-4">
+        <div
+          className={`w-full lg:w-[65%] ${
+            userData.role !== "admin" && "pt-[55px] lg:pt-[80px]"
+          } flex flex-col gap-y-2 lg:pb-4`}
+        >
           {
             <ProfilInfoModal
               setShowModalUpdate={setShowUpdateModal}
@@ -238,9 +222,11 @@ export const Profil = () => {
             </div>
           )}
         </div>
-        <div className="lg:w-[20%] flex flex-col gap-2 lg:pt-[80px] lg:ml-[4%]">
-          {<SuggestionsModal />}
-        </div>
+        {userData.role !== "admin" && (
+          <div className="lg:w-[20%] flex flex-col gap-2 lg:pt-[80px] lg:ml-[4%]">
+            {<SuggestionsModal />}
+          </div>
+        )}
         {showUpdateModal && (
           <UpdateModal
             toUpdate={toUpdate}
@@ -248,7 +234,6 @@ export const Profil = () => {
             setOpen={setShowUpdateModal}
           />
         )}
-
         {showAddModal && <AddModal toAdd={toAdd} setOpen={setShowAddModal} />}
         {openDelete && (
           <DeleteModal
