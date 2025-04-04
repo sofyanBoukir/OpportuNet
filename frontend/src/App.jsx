@@ -6,10 +6,6 @@ import { Login } from "./pages/auth/Login";
 import { Layout } from "./layouts/Layout";
 import { Home } from "./shared/Home";
 import { Profil } from "./shared/Profil";
-
-// import { Post } from "./components/App/Post";
-// import { PostModal } from "./components/modals/PostModal";
-
 import { CompleteRegisration } from "./pages/auth/CompleteRegisration";
 import { IsNewUser } from "./protectedRoutes/CompleteReg";
 import { PersisReload } from "./protectedRoutes/PersisReload";
@@ -29,6 +25,7 @@ import { SideBar } from "./layouts/SideBar";
 import { ManageUsers } from "./pages/admin/ManageUsers";
 import { ManageAdmins } from "./pages/admin/ManageAdmins";
 import { ReportedPosts } from "./pages/admin/ReportedPosts";
+import { IsAdmin } from "./protectedRoutes/IsAdmin";
 
 function App() {
   return (
@@ -62,6 +59,9 @@ function App() {
             <Route path="/messaging" element={<Messaging />} />
             <Route path="/job-detail/:id" element={<JobsDetail />} />
           </Route>
+        </Route>
+
+        <Route element={<IsAdmin />}>
           <Route element={<SideBar />}>
             <Route path="/admin/users" element={<ManageUsers />} />
             <Route path="/admin/admins" element={<ManageAdmins />} />

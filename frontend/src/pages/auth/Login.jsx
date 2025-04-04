@@ -54,7 +54,7 @@ export const Login = () => {
                     localStorage.setItem('token',response.data.token)
                     console.log(response);
                     
-                    if(response.data.userData.isNewUser){
+                    if(response.data.userData?.isNewUser){
                         setExtraLoading(true)
                         setTimeout(() => {
                             setExtraLoading(false);
@@ -65,6 +65,11 @@ export const Login = () => {
                         break;
                     }
                     else{
+
+                        if(response.data.userData.role === 'admin'){
+                            navigate("/admin/users");
+                            break;
+                        }
                         dispatch({type:"UPDATE_USERDATA",payload:response.data.userData})
                         navigate('/feed')
                         break;

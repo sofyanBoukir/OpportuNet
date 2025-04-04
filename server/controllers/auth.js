@@ -108,8 +108,8 @@ const signIn = async (request, response) => {
       userData: userData,
       token: token,
       isVerified: userData.isVerified,
-    });
-  } catch (error) {
+    }); 
+   } catch (error) {
     return response.status(500).json({
       message: error.message,
     });
