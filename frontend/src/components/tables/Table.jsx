@@ -118,7 +118,11 @@ export const Table = ({
                           svg={<EyeIcon className="w-5 h-5 text-white" />}
                           color={"green"}
                           onclick={() => {
-                            navigate(`/admin/profile/${dataVar._id}`);
+                            navigate(
+                              `/admin/${
+                                toDelete === "user" ? "profile" : "post"
+                              }/${dataVar._id}`
+                            );
                           }}
                         />
                       )}
