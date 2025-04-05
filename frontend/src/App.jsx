@@ -67,6 +67,7 @@ function App() {
             <Route path="/admin/admins" element={<ManageAdmins />} />
             <Route path="/admin/posts" element={<ReportedPosts />} />
             <Route path="/admin/profile/:id" element={<Profil />} />
+            <Route path="/admin/post/:postId" element={<PostId />} />
           </Route>
         </Route>
       </Routes>

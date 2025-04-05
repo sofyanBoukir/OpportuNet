@@ -64,9 +64,9 @@ export const ManageAdmins = () => {
         {loading && <TableSkeletons />}
         {!loading && admins.length > 0 ? (
           <Table
-            heads={["name", "role", "email", "location"]}
+            heads={["name", "role", "email"]}
             data={admins}
-            keys={["name", "role", "followers", "location"]}
+            keys={["name", "role", "email"]}
             pagination={pagination}
             getData={getAllAdmins}
             toDelete={"user"}

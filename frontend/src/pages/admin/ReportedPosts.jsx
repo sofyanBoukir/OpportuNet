@@ -64,6 +64,7 @@ export const ReportedPosts = () => {
             pagination={pagination}
             getData={getAllReport}
             toDelete={"post"}
+            chowBtnDetail
           />
         ) : (
           <span className="text-red-300 text-xl font-semibold">

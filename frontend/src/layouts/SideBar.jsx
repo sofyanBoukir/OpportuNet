@@ -7,11 +7,20 @@ import {
   UserIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
+import { logout } from "../services/auth";
 
 export const SideBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const currentPath = window.location.pathname;
+
+  const logoutFromApp = async () => {
+    const response = await logout(localStorage.getItem("token"));
+    if (response.status === 200) {
+      navigate("/");
+      localStorage.clear();
+    }
+  };
 
   const dataSideBar = [
     {
@@ -64,7 +73,7 @@ export const SideBar = () => {
                 onClick={() => {
                   item.TEXT !== "Logout"
                     ? navigate(item.LINK)
-                    : console.log(item.TEXT);
+                    : logoutFromApp();
                 }}
                 className={`${
                   item.LINK === currentPath ? "text-blue-500" : null

@@ -83,7 +83,7 @@ export const AddAdminModal = ({ setOpen }) => {
               className="text-sm font-normal text-gray-600 mb-1"
             />
             <Input
-              type="number"
+              type="password"
               placeholder="********"
               name="password"
               value={dataAdmin.password}

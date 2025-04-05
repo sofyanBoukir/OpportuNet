@@ -180,7 +180,7 @@ export const ProfilInfoModal = ({
               className="bg-[#0A66C2] text-white w-[30%] sm:w-[15%] py-0.5 hover:bg-blue-900 px-7 rounded-full mb-2 mt-3"
             />
           )}
-          {!showIcon && (
+          {!showIcon && !isAdmin && (
             <Button
               text={"👋 Send hi"}
               className="bg-blue-900 text-white rounded-full cursor-pointer h-[45px] mt-1 py-1 px-3 flex justify-center items-center font-semibold"
