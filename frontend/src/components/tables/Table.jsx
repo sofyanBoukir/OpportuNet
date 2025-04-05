@@ -104,11 +104,11 @@ export const Table = ({
                   {keys &&
                     keys.map((key, colIndex) => (
                       <td key={colIndex} className="py-1 text-center">
-                        {key === "followers"
-                          ? dataVar.followers.length
+                        {key === "followers" || key !== 'postInfo.content'
+                          ? key === 'followers' ? dataVar.followers.length
                           : key
                               .split(".")
-                              .reduce((obj, prop) => obj?.[prop], dataVar)}
+                              .reduce((obj, prop) => obj?.[prop], dataVar) : dataVar.postInfo.content.substr(0,50)+"..."}
                       </td>
                     ))}
                   {

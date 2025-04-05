@@ -13,6 +13,7 @@ export const Signup = () => {
   const [sent, setSent] = useState(localStorage.getItem("isSent") || "");
   const [terms, setTerms] = useState(false);
   const [readTerms, setRedTerms] = useState(false);
+  
 
   const [formData, setFormData] = useState({
     name: "",
@@ -47,7 +48,7 @@ export const Signup = () => {
       setLoading(false);
       switch (response.status) {
         case 200:
-          // localStorage.setItem('token',response.data.token)
+          localStorage.setItem('token',response.data.token)
           // dispatch({type:"UPDATE_USERDATA",payload:response.data.userData})
           // break;
           setSent("true");
