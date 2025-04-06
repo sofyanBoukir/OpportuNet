@@ -6,6 +6,7 @@ import { Pagination } from "../UI/Pagination";
 import { Notification } from "../UI/Notification";
 import { deleteReportPosts, deleteUser } from "../../services/admin";
 import { useNavigate } from "react-router-dom";
+import { ERROR_MESSAGES } from "../../constants/Errors";
 
 export const Table = ({
   heads,

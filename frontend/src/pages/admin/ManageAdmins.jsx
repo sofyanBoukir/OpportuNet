@@ -49,7 +49,6 @@ export const ManageAdmins = () => {
 
   return (
     <div>
-      {/* className="w-full md:w-[100%] mt-6 md:pl-[255px] 2xl:pl-[15%] sm:relative " */}
       <div className="w-[100%] px-2">
         <div className="flex justify-between mb-5">
           <h1 className="text-3xl font-semibold">Manage admins</h1>

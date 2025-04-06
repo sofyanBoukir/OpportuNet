@@ -1,12 +1,10 @@
 import { ClockIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import profilDefault from "../../../public/images/profilDefault.png";
 import { useEffect, useState } from "react";
 import { getSuggesstedUsers } from "../../services/home";
 import { ERROR_MESSAGES } from "../../constants/Errors";
 
 import { getserachUsers } from "../../services/search";
 
-// import Cookie from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 const serverURL = import.meta.env.VITE_SERVER_URL;
@@ -153,12 +151,6 @@ export const SearchModal = ({ query, openSearchModal, valueSearchInput }) => {
                     ))}
                   </div>
                 </div>
-                {/* <div className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-900 duration-200 cursor-pointer ">
-                  <ClockIcon strokeWidth="2" className="w-5 h-5" />
-                  <h5 className="font-semibold text-md text-center">
-                    kachoud said
-                  </h5>
-                </div> */}
               </div>
             )}
 

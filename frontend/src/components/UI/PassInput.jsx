@@ -23,13 +23,6 @@ export const PassInput = () => {
             endAdornment={
               <InputAdornment position="end">
                 <EyeIcon onClick={handleClickShowPassword}
-                //   aria-label={
-                //     showPassword ? 'hide the password' : 'display the password'
-                //   }
-                //   onClick={handleClickShowPassword}
-                //   onMouseDown={handleMouseDownPassword}
-                //   onMouseUp={handleMouseUpPassword}
-                //   edge="end"
                 >
                 </EyeIcon>
               </InputAdornment>

@@ -281,12 +281,12 @@ export const AddJob = ({ setOpenAddJob}) => {
           <div className="flex justify-end w-full gap-3 mt-4">
             <button
               onClick={() => setOpenAddJob(false)}
-              className="bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-800 dark:text-white py-2 px-4 rounded-lg"
+              className="bg-gray-300 dark:bg-gray-700 cursor-pointer hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-800 dark:text-white py-2 px-4 rounded-lg"
             >
               Cancel
             </button>
             <button
-              className="bg-blue-600 hover:bg-blue-700 cursor-pointer cursor-pointer text-white py-2 px-4 rounded-lg"
+              className="bg-blue-600 hover:bg-blue-700 cursor-pointer  text-white py-2 px-4 rounded-lg"
               onClick={handlePostJob}
             >
               Post Job

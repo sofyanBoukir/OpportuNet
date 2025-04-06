@@ -44,7 +44,6 @@ export const SharePost = ({setSharePost,postId}) => {
             }
         }catch(err){
             setLoading(false)
-            //
         }
     }    
 
