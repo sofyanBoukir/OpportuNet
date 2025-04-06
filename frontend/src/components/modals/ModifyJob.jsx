@@ -9,7 +9,7 @@ export const ModifyJob = ({ setOpenAddJob, data }) => {
   const [skills, setSkills] = useState([]);
   const [skillInput, setSkillInput] = useState("");
   const [responsibilities, setResponsibilities] = useState([]);
-  const [responsibilityInput, setResponsibilityInput] = useState(""); // Corrected spelling
+  const [responsibilityInput, setResponsibilityInput] = useState("");
   const [salaryFrom, setSalaryFrom] = useState("");
   const [salaryTo, setSalaryTo] = useState("");
   const [salaryCurrency, setSalaryCurrency] = useState("");
@@ -65,7 +65,6 @@ export const ModifyJob = ({ setOpenAddJob, data }) => {
       setSkills(data.skills || []);
       setResponsibilities(data.responsibilities || []);
 
-      // Extract salary details if available
       const salaryParts = data.salaryRange ? data.salaryRange.split(" ") : [];
       setSalaryFrom(salaryParts[0] || "");
       setSalaryTo(salaryParts[2] || "");
@@ -286,12 +285,12 @@ export const ModifyJob = ({ setOpenAddJob, data }) => {
           <div className="flex justify-end w-full gap-3 mt-4">
             <button
               onClick={() => setOpenAddJob(false)}
-              className="bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-800 dark:text-white py-2 px-4 rounded-lg"
+              className="bg-gray-300 dark:bg-gray-700 cursor-pointer hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-800 dark:text-white py-2 px-4 rounded-lg"
             >
               Cancel
             </button>
             <button
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg"
+              className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white py-2 px-4 rounded-lg"
               onClick={handlePostJob}
             >
               Update Job

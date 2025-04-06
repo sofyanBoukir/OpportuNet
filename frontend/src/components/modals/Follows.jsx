@@ -1,12 +1,10 @@
-import { TrashIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 import React, { useEffect, useState } from 'react'
 import { getFollowers, getFollowing, removeFollower } from '../../services/follow'
 import { useNavigate } from 'react-router-dom';
 import { Follow } from '../UI/Follow';
 import { FollowsSkeleton } from '../skeletons/FollowsSkeleton';
-import { Button } from '../UI/Button';
 import { AppSelector } from '../../selectors/AppSelector';
-const serverURL = import.meta.env.VITE_SERVER_URL;
 
 export const Follows = ({toView,setToView,mutualFollowing}) => {
     const [follows,setFollowes] = useState(mutualFollowing || null)

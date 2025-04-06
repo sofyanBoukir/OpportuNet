@@ -212,11 +212,6 @@ export const AddPost = ({setAddPost}) => {
                             <ul className={`bg-white z-20 absolute ${hashTagResults?.length === 0 ? 'hidden' : null} top-[22%] rounded-md px-2 py-1 h-[200px] overflow-auto shadow-lg border border-gray-300`}>
                                 {hashTagResults.map((tag,index) => (
                                     <div key={index} onClick={() => selectHashtag(tag)} className={`py-1 px-2 text-lg cursor-pointer items-center flex gap-2 hover:bg-gray-300 duration-200 w-[600px]`}>
-                                        {/* <img src={`${authService}` + user.profile_picture} className='rounded-full w-10 h-10'/>
-                                        <div>
-                                            <p className='text-lg font-semibold'>{user.name}</p>
-                                            <span className='text-gray-600'>{user.headLine}</span>
-                                        </div> */}
                                         <span>{tag}</span>
                                     </div>
                                 ))}

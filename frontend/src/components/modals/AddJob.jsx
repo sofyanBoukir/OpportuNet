@@ -286,7 +286,7 @@ export const AddJob = ({ setOpenAddJob}) => {
               Cancel
             </button>
             <button
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg"
+              className="bg-blue-600 hover:bg-blue-700 cursor-pointer cursor-pointer text-white py-2 px-4 rounded-lg"
               onClick={handlePostJob}
             >
               Post Job
