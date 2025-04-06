@@ -5,18 +5,4 @@ const commentShema = new mongoose.Schema({
     comment : {type: String, required:true},
 },{timestamps:true});
 
-commentShema.pre("findOneAndDelete", async function (next) {
-    const commentId = this.getQuery()._id;
-
-    try {
-        await mongoose.model("Post").updateMany(
-            { comments: commentId }, 
-            { $pull: { comments: commentId } }
-        );
-        next();
-    } catch (err) {
-        next(err);
-    }
-});
-
 module.exports = mongoose.model('Comment',commentShema);
