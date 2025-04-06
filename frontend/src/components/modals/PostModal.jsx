@@ -41,7 +41,6 @@ export const PostModal = ({setOpenModalPost,post}) => {
     try{
       setCommentLoading(true)
       const response = await commentOnPost(localStorage.getItem('token'),post._id,comment);
-      console.log(response);
       
       setCommentLoading(false);
       if(response.status === 200){

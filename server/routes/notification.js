@@ -6,4 +6,5 @@ const router = express.Router();
 router.get("/getUserNotifications",isAuth,getUserNotifications)
 router.put("/makeNotificationsSeen",isAuth,makeNotificationsSeen)
 router.delete("/deleteNotification/:notificationId",isAuth,deleteNotification)
+
 module.exports = router;

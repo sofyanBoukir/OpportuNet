@@ -13,5 +13,4 @@ router.get('/searchConversations',isAuth,searchConversations)
 router.delete('/deleteMessage/:messageId',isAuth,deleteMessage)
 router.get('/getOnlineUsers',isAuth,getOnlineUsers)
 
-
 module.exports = router;

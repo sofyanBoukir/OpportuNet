@@ -8,4 +8,5 @@ router.get("/getFollowing",isAuth,getFollowing)
 router.get("/getMultualFollowing/:profileId",isAuth,getMultualFollows)
 router.put("/toggleFollow",isAuth,toggleFollow)
 router.delete("/removeFollower/:followerId",isAuth,removeFollower)
+
 module.exports = router;

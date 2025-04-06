@@ -11,8 +11,7 @@ const registerUser = (token,socketId) =>{
         const userId = decoded.id;
         
         users[userId] = socketId;
-
-        console.log('user ' + userId + ' is now online') ;
+        console.log('user ' + userId + ' is now online');
         
         return userId;
     }catch(err){

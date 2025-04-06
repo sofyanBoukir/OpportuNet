@@ -3,10 +3,6 @@ const dbConnect = require("./config/db");
 const cors = require("cors");
 require("dotenv").config();
 const http = require("http");
-const { Server } = require("socket.io");
-const { registerUser, users } = require("./sockets/connected-users");
-const getMissedNotifications = require("./sockets/missed-notifications");
-const eventListennerOnNotificationModel = require("./sockets/real-time-notifications");
 const { initialSocket } = require("./sockets/socket");
 
 const app = express();

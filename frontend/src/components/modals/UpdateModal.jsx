@@ -189,7 +189,6 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
             });
           }
 
-          console.log("after user interest");
           break;
 
         default:
@@ -200,7 +199,6 @@ export const UpdateModal = ({ idSelected, toUpdate, setOpen }) => {
       }
     } catch (error) {
       setLoading(false);
-      console.log("catch", error.response);
       error.response
         ? setNotification({
             type: "error",

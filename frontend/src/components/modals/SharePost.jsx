@@ -62,7 +62,6 @@ export const SharePost = ({setSharePost,postId}) => {
             setSendLoading(true);
             const response = await sendPostToMultipleUsers(localStorage.getItem('token'),postId,selectedConversations);
             setSendLoading(false)
-            console.log(response);
             if(response.status === 200){
                 setNotification({type:'success',message:response.data.message});
             }
