@@ -1,5 +1,4 @@
 import { Post } from "../../components/App/Post";
-import profilDefault from "../../../public/images/profilDefault.png";
 import { Link, useParams } from "react-router-dom";
 import { Follow } from "../../components/UI/Follow";
 import { useEffect, useState } from "react";

@@ -9,7 +9,6 @@ import { JobSearch } from '../../components/modals/JobSearch'
 import { ERROR_MESSAGES } from '../../constants/Errors'
 import { getJobs, searchForJobs } from '../../services/job'
 import { Notification } from '../../components/UI/Notification'
-import { copyText } from '../../functions/copyText'
 
 export const Jobs = () => {
 

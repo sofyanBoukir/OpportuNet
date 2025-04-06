@@ -7,7 +7,6 @@ export const NotFound = () => {
   const navigate = useNavigate()
   return (
     <div className='flex justify-center flex-col items-center'>
-        {/* <h1 className='text-3xl font-semibold flex mt-10'>Not found</h1> */}
         <Lottie animationData={AnimationError}  loop={true}/>
         <Button text={'Back to home page'} className={'bg-blue-500 text-white'} onClick={() => navigate('/feed')}/>
     </div>

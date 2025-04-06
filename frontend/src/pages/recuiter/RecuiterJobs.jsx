@@ -9,7 +9,6 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
-import { JobsDetail } from "../../shared/JobsDetail";
 import { useNavigate } from "react-router-dom";
 import { DeleteModal } from "../../components/modals/DeleteModal";
 

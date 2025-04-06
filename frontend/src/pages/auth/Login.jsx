@@ -8,7 +8,6 @@ import { ERROR_MESSAGES } from "../../constants/Errors";
 import { useDispatch } from "react-redux";
 import { VerifyCode } from "./VerifyCode";
 import { ExtraLoading } from "../../components/App/ExtraLoading";
-import ExtraLoader from "../../components/UI/ExtraLoader";
 
 export const Login = () => {
   const [loading, setLoading] = useState(false);

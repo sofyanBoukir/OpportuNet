@@ -49,8 +49,6 @@ export const Signup = () => {
       switch (response.status) {
         case 200:
           localStorage.setItem('token',response.data.token)
-          // dispatch({type:"UPDATE_USERDATA",payload:response.data.userData})
-          // break;
           setSent("true");
           localStorage.setItem("isSent", "true");
           localStorage.setItem("email", formData.email);
