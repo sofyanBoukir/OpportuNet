@@ -7,10 +7,6 @@ const searchUsers = async (request, response) => {
     const userId = request.user.id;
     const { query } = request.query;
 
-    // const page = parseInt(request.query.page) || 1;
-    // const pageSize = 4;
-    // const skip = (page - 1) * pageSize;
-
     const user = await User.findById(userId);
     if (!user) {
       return response.status(404).json({
@@ -32,21 +28,6 @@ const searchUsers = async (request, response) => {
       });
     }
 
-    // const posts = await Post.find({
-    //   $and: [
-    //     { user: { $ne: userId } },
-    //     { content: { $regex: query, $options: "i" } },
-    //   ],
-    // })
-    //   .skip(skip)
-    //   .limit(pageSize)
-    //   .populate("user", "name profile_picture headLine");
-
-    // if (!posts) {
-    //   return response.status(404).json({
-    //     message: "Posts Not Found",
-    //   });
-    // }
 
     return response.json({
       users,
@@ -104,19 +85,6 @@ const searchPosts = async (request, response) => {
         message: "user Invalid",
       });
     }
-
-    // const users = await User.find({
-    //   $and: [
-    //     { _id: { $ne: userId } },
-    //     { name: { $regex: query, $options: "i" } },
-    //   ],
-    // });
-
-    // if (!users) {
-    //   return response.status(404).json({
-    //     message: "Users Not Found",
-    //   });
-    // }
 
     const posts = await Post.find({
       $and: [

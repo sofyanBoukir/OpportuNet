@@ -141,27 +141,20 @@ const searchHashTags = async (request, response) => {
     });
 
     if (matchedInterests.length > 0) {
-      // Extract all matching hashtags from all documents
       const matchingHashtags = matchedInterests.flatMap((interest) =>
         interest.hashtags.filter((hashtag) =>
           hashtag.toLowerCase().includes(formattedQuery.toLowerCase())
         )
       );
 
-      // Return the matching hashtags as a response
       return response.json({
         hashTags: matchingHashtags,
       });
     } else {
-      // If no documents match, return an empty array
       return response.json({
         hashTags: [],
       });
     }
-
-    return response.json({
-      message: "hashTags not found",
-    });
   } catch (err) {
     return response.status(500).json({
       message: err.message,
@@ -169,22 +162,7 @@ const searchHashTags = async (request, response) => {
   }
 };
 
-// const addEducation = async (request,response) =>{
-//     try{
-//         const userId = request.user.id;
-//         const { degree,year,institution } = request.body;
 
-//     await user.save();
-
-//     return response.json({
-//       message: "Completed successfully",
-//     });
-//   } catch (err) {
-//     return response.status(500).json({
-//       message: err.message,
-//     });
-//   }
-// };
 
 const updateInfo = async (request, response) => {
   try {

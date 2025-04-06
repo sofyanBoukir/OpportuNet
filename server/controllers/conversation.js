@@ -141,10 +141,6 @@ const sendNewMessage = async (request,response) =>{
                 'message' : 'New message sended successfully!', 
                 'newMessage' : newMessage
             })
-        }else{
-            // return response.json({
-            //     'message' : 'New message sended successfully!'
-            // })
         }
 
     }catch(err){
