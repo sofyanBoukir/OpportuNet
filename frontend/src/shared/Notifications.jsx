@@ -98,9 +98,6 @@ export const Notifications = () => {
       <div className="flex justify-center gap-[1%]">
         <ProfileStatus />
         <div className="flex flex-col w-[100%] lg:w-[43%] h-max left-[13%] lg:relative bg-white dark:bg-black dark:text-white rounded-2xl ">
-          {/* <NotificationApp />
-          <NotificationApp />
-          <NotificationApp /> */}
           {!loading && notifications.length
             ? notifications.map((notification, index) => {
                 return (
@@ -119,7 +116,6 @@ export const Notifications = () => {
               className="flex mx-auto cursor-pointer my-3 text-blue-700 hover:text-blue-600 duration-200 w-12 h-12"
             />
           )}
-          {/* <Button type={'button'} text={'View more'} className={'bg-blue-500 text-white my-2'} onClick={() => setPage(page+1)}/> */}
           {loading && <NotificationsSkeleton />}
           {!loading && totalNotifications === 0 && (
             <div className="flex flex-col justify-center pb-6">

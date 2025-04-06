@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SuggestionsModal } from "../components/App/Suggestions";
 import { ProfileStatus } from "../components/App/ProfileStatus";
 import { getSavedPost } from "../services/saved";
