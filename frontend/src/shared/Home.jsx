@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Post } from "../components/App/Post";
 import { Input } from "../components/UI/Input";
-import { Profile } from "../components/App/Profile";
 import { AppSelector } from "../selectors/AppSelector";
-import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { SuggestionsModal } from "../components/App/Suggestions";
 import { ProfileStatus } from "../components/App/ProfileStatus";
 import { AddPost } from "../components/modals/AddPost";

@@ -3,7 +3,7 @@ import { Input } from '../components/UI/Input'
 import { Conversation } from '../components/App/Conversation'
 import { Button } from '../components/UI/Button'
 import messageBg from '../../public/images/bgMessage.png'
-import { ArrowDownCircleIcon, ChatBubbleOvalLeftEllipsisIcon, CheckIcon } from '@heroicons/react/24/outline'
+import { ArrowDownCircleIcon, ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/outline'
 import { IncomingMessage } from '../components/App/IncomingMessage'
 import { OutgoingMessage } from '../components/App/OutgoingMessage'
 import { deleteMessage, getConversations, getMessagesByConversation, getOnlineUsers, searchConversations, sendNewMessage, updateConversationLastMessageStatus } from '../services/conversation'
@@ -11,7 +11,6 @@ import { AppSelector } from '../selectors/AppSelector'
 import { Link, useNavigate } from 'react-router-dom'
 import socket from '../functions/socket'
 import { useDispatch } from 'react-redux'
-import defaultUser from '../../public/images/profilDefault.png'
 
 
 export const Messaging = () => {
