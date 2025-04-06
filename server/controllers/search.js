@@ -21,6 +21,7 @@ const searchUsers = async (request, response) => {
     const users = await User.find({
       $and: [
         { _id: { $ne: userId } },
+        { role : {$ne: 'admin'}},
         { name: { $regex: query, $options: "i" } },
       ],
     });

@@ -81,7 +81,6 @@ export const CompleteRegisration = () => {
         _getInterests()
     },[])
 
-    console.log(activeStep);
     
     const handleNext = () => {
         

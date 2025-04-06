@@ -50,6 +50,8 @@ const getSuggesstedUsers = async (request, response) => {
       $and: [
         { _id: { $ne: userId } },
         { _id: { $nin: user.following } },
+        { role : {$ne: 'admin'}},
+        { isVerified : true},
         {
           $or: [
             { interests: { $in: user.interests } },
