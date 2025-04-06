@@ -21,7 +21,6 @@ export const Follow = ({ type, disabled, userId, text, className }) => {
         localStorage.getItem("token"),
         userId
       );
-      console.log(response);
 
       setLoading(false);
       if (response.status === 200) {

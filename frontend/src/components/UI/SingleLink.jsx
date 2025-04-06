@@ -11,7 +11,6 @@ export const SingleLink = ({ link, svg, text }) => {
     <div
       onClick={() => {
         navigate(link);
-        console.log(link);
       }}
       className={`${
         link === currentPath ? "text-black dark:text-white sm:border-b-2" : null

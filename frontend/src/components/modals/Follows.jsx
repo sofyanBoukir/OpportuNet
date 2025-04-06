@@ -18,7 +18,6 @@ export const Follows = ({toView,setToView,mutualFollowing}) => {
 
     const _getFollowers = async ()=>{
         const response = await getFollowers(localStorage.getItem('token'))
-        console.log(response);
         setTimeout(() => {
             setLoading(false)
         }, 3000);
@@ -50,7 +49,6 @@ export const Follows = ({toView,setToView,mutualFollowing}) => {
 
     const _removeFollower = async (followerId) =>{
         const response = await removeFollower(localStorage.getItem('token'),followerId)
-        console.log(response);
         
         if(response.status === 200){
             if(response.data.deleted === true){

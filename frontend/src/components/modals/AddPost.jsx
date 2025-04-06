@@ -57,7 +57,6 @@ export const AddPost = ({setAddPost}) => {
                 return;
             }
             const response = await searchHashTags(token, query);
-            console.log(response);
             
             if (response?.data) {
                 setHashTagResults(response.data.hashTags);
@@ -150,7 +149,6 @@ export const AddPost = ({setAddPost}) => {
             setNotification(null);
             setLoading(true)
             const response = await addPost(localStorage.getItem('token'),postData);
-            console.log(response);
             
             setLoading(false)
             if(response.status === 200){

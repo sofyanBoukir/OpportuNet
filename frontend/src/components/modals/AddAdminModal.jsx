@@ -23,7 +23,6 @@ export const AddAdminModal = ({ setOpen }) => {
     try {
       const response = await AddAdmin(localStorage.getItem("token"), dataAdmin);
       setLoading(false);
-      console.log(response);
       setNotification({ type: "success", message: response.data.message });
     } catch (err) {
       setLoading(false);
