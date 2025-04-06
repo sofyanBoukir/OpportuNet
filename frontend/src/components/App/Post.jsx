@@ -132,7 +132,7 @@ export const Post = ({ post, showIcon, postSelected, openDelete }) => {
           <div className="px-3">
             <div className="flex flex-row items-center">
               <Link
-                className="text-xl font-semibold dark:text-white"
+                className="text-xl font-semibold dark:text-white hover:underline duration-200 hover:text-blue-700"
                 to={`/user/profile/${post.user?._id}`}
               >
                 {post.user?.name}
