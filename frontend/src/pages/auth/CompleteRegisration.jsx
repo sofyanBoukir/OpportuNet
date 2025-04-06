@@ -54,7 +54,7 @@ export const CompleteRegisration = () => {
         try{
             setLoading(true);
             const response = await completeRegistration(localStorage.getItem('token'),formData);
-                        
+
             setLoading(false);
             if(response.status === 200){
                 setExtraLoading(true);

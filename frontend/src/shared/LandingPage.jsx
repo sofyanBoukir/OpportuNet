@@ -12,17 +12,23 @@ export const LandingPage = () => {
   const navigate = useNavigate();
   const [isAuth, setIsAuth] = useState(false);
 
+  const [subject,setSubject] = useState('')
+  const [message,setMessage] = useState('')
+
   useEffect(() => {
     const isUserAuthenticated = async () => {
       const isAuthenticated = await isUserAuth();
-      console.log(isAuthenticated);
-
       if (isAuthenticated) {
         setIsAuth(true);
       }
     };
     isUserAuthenticated();
   }, []);
+
+  const sendMail = (e) =>{
+      e.preventDefault()
+      window.location.href = `mailto:soufianeboukir0@gmail.com?subject=${subject}&body=${message}`;
+  }
 
   return (
     <div className="bg-white font-sans">
@@ -243,13 +249,14 @@ export const LandingPage = () => {
 
           <div className="flex flex-col lg:flex-row gap-12">
             <div className="lg:w-1/2">
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={sendMail}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="name" className="block text-white mb-2">
                       Name
                     </label>
                     <input
+                      required
                       type="text"
                       id="name"
                       className="w-full px-4 py-2 border border-gray-300 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -261,6 +268,7 @@ export const LandingPage = () => {
                       Email
                     </label>
                     <input
+                      required
                       type="email"
                       id="email"
                       className="w-full px-4 py-2 border border-gray-300 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -274,7 +282,10 @@ export const LandingPage = () => {
                   </label>
                   <input
                     type="text"
+                    required
                     id="subject"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Subject"
                   />
@@ -285,13 +296,17 @@ export const LandingPage = () => {
                   </label>
                   <textarea
                     id="message"
+                    required
                     rows="5"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Your message"
                   ></textarea>
                 </div>
                 <Button
                   text={"Send Message"}
+                  type={'submit'}
                   className={
                     "px-8 py-3 bg-blue-600 text-white hover:bg-blue-400 font-medium"
                   }
