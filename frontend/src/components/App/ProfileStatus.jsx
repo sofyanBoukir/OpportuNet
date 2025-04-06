@@ -86,11 +86,6 @@ export const ProfileStatus = () => {
                 <span className='text-lg font-semibold'>Saved posts</span>
                 <span>{userData?.savedPosts.length}</span>
               </div>
-{/* 
-              <div className='flex justify-between'>
-                <span className='text-lg font-semibold'>Seen posts</span>
-                <span>{0}</span>
-              </div> */}
             </div>
           </div>
         </div>
