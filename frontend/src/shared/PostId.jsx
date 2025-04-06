@@ -15,7 +15,6 @@ export const PostId = () => {
   const getPostById = async (postId) => {
     try {
       const response = await getPost(localStorage.getItem("token"), postId);
-      console.log(response);
       if (response.data.post) {
         setLoading(false);
         setPostData(response.data.post);

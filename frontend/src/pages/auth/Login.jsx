@@ -35,7 +35,6 @@ export const Login = () => {
     try {
       setLoading(true);
       const response = await login(formData);
-      console.log(response);
 
       switch (response.status) {
         case 200:

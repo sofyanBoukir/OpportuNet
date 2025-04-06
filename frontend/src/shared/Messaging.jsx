@@ -107,7 +107,6 @@ export const Messaging = () => {
                 setMessages([...messages,
                     newMessage
                 ])
-                console.log(newMessage);
                 
                 setMessage('')
                 setConversations([])

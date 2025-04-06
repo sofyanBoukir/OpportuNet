@@ -23,7 +23,6 @@ export const ManageAdmins = () => {
     try {
       const response = await getAdmins(localStorage.getItem("token"), page);
       setLoading(false);
-      console.log(response);
       setAdmins(response.data.admins);
       setPagination({
         currentPage: page,
