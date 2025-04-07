@@ -77,7 +77,7 @@ export const LandingPage = () => {
               <Button
                 text={"Join Now"}
                 onClick={() => navigate("/user/sign_up")}
-                className={"px-4 py-2 bg-blue-600 text-white hover:bg-blue-200"}
+                className={"px-4 py-2 bg-blue-600 text-white hover:bg-blue-500"}
               />
             </div>
           ) : null}
@@ -106,12 +106,12 @@ export const LandingPage = () => {
                   "px-8 py-3 bg-blue-600 text-white hover:bg-blue-700 font-medium"
                 }
               />
-              <Link
-                to="/features"
-                className="px-8 py-1 border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium rounded-md inline-flex items-center justify-center"
+              <a
+                href="#solutions"
+                className="px-8 py-1 border cursor-pointer border-gray-300 text-gray-700 hover:bg-gray-100 font-medium rounded-md inline-flex items-center justify-center"
               >
                 Learn More
-              </Link>
+              </a>
             </div>
           </div>
           <div className="md:w-1/2">
@@ -159,23 +159,22 @@ export const LandingPage = () => {
             </div>
 
             <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-              <div className="text-4xl mb-4">📚</div>
+              <div className="text-4xl mb-4">📝</div>
               <h3 className="text-xl font-semibold text-gray-800 mb-3">
-                Skill Development
+                Professional Profile Building
               </h3>
               <p className="text-gray-600">
-                Access courses and resources to enhance your professional
-                skills.
+              Add experience, education, and skills to highlight your professional background.
               </p>
             </div>
 
             <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
               <div className="text-4xl mb-4">📊</div>
               <h3 className="text-xl font-semibold text-gray-800 mb-3">
-                Career Insights
+                Job Insights
               </h3>
               <p className="text-gray-600">
-                Get valuable data and trends about your industry and role.
+              Explore job trends, and relevant opportunities in your field.
               </p>
             </div>
           </div>
@@ -202,24 +201,24 @@ export const LandingPage = () => {
               </li>
               <li className="flex items-start">
                 <span className="text-blue-500 mr-2">✓</span>
-                <span className="text-gray-700">Employer branding tools</span>
+                <span className="text-gray-700">Create and publish posts with text, images, hashtags, and mentions</span>
               </li>
               <li className="flex items-start">
                 <span className="text-blue-500 mr-2">✓</span>
                 <span className="text-gray-700">
-                  Diversity and inclusion analytics
+                Send and receive private messages between users
                 </span>
               </li>
               <li className="flex items-start">
                 <span className="text-blue-500 mr-2">✓</span>
                 <span className="text-gray-700">
-                  Streamlined interview scheduling
+                Follow other users and view their content
                 </span>
               </li>
               <li className="flex items-start">
                 <span className="text-blue-500 mr-2">✓</span>
                 <span className="text-gray-700">
-                  Comprehensive talent analytics
+                Like, comment, share, report, and save posts
                 </span>
               </li>
             </ul>

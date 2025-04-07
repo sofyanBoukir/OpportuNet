@@ -89,7 +89,7 @@ export const SharePost = ({setSharePost,postId}) => {
                     </div>
                 </div>
             </div>
-            <div className='flex flex-row gap-4 md:gap-6 lg:gap-8 flex-wrap justify-center md:justify-start'>
+            <div className='flex flex-row gap-2 flex-wrap justify-center md:justify-start'>
                 {
                     loading && <div className='w-full text-center py-4'>...Loading</div>
                 }

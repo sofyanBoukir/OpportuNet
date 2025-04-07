@@ -99,7 +99,7 @@ export const SavedPosts = () => {
                         <img
                           src={saved.imageUrl}
                           alt="image not found"
-                          className="w-[40%] rounded-2xl"
+                          className="w-52 rounded-2xl"
                         />
                       )}
 

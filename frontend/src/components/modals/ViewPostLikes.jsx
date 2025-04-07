@@ -45,25 +45,43 @@ export const ViewPostLikes = ({setViewLikes,postId}) => {
                     </div>
                 </div>
             </div>
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-4 md:gap-3'>
                 {
                     !loading && postLikes && postLikes.length ?
-                        postLikes.map((user) =>{
-                            return <div className='flex justify-between items-center'>
-                                    <div className='flex gap-2 items-center'>
-                                        <div className='relative'>
-                                            <img src={user.profilePictureUrl} className='w-14 h-14 border border-white rounded-full'/>
-                                            <HeartIcon className='w-5 h-5 text-red-500 absolute bottom-[-8px] right-[-6px]'/>
+                        postLikes.map((user) => {
+                            return (
+                                <div key={user._id} className='flex justify-between items-center p-2 hover:bg-gray-50 rounded-lg transition-colors'>
+                                    <div className='flex gap-3 md:gap-4 items-center flex-1 min-w-0'>
+                                        <div className='relative flex-shrink-0'>
+                                            <img 
+                                                src={user.profilePictureUrl} 
+                                                className='w-12 h-12 sm:w-14 sm:h-14 border-2 border-white rounded-full object-cover'
+                                                alt={`${user.name}'s profile`}
+                                            />
+                                            <HeartIcon className='w-4 h-4 sm:w-5 sm:h-5 text-red-500 absolute bottom-[-6px] right-[-4px] sm:bottom-[-5px] sm:right-[-5px]'/>
                                         </div>
-                                        <div>
-                                            <Link className='text-lg font-semibold hover:text-blue-500' to={`/user/profile/${user._id}`}>{user.name}</Link>
-                                            <p>{user.headLine}</p>
+                                        <div className='min-w-0'>
+                                            <Link 
+                                                className='text-base sm:text-lg font-semibold hover:text-blue-500 truncate block' 
+                                                to={`/user/profile/${user._id}`}
+                                            >
+                                                {user.name}
+                                            </Link>
+                                            <p className='text-sm text-gray-600 truncate'>{user.headLine}</p>
                                         </div>
                                     </div>
-                                    {userData._id !== user._id && <Follow userId={user._id} className={'bg-blue-500 text-white rounded-sm w-[140px]'}/>}
+                                    {userData._id !== user._id && (
+                                        <div className='flex-shrink-0 ml-2'>
+                                            <Follow 
+                                                userId={user._id} 
+                                                className={'text-sm sm:text-base bg-blue-500 hover:bg-blue-600 text-white rounded-md px-3 py-1 sm:px-4 sm:py-2 w-[100px] sm:w-[140px] transition-colors'}
+                                            />
+                                        </div>
+                                    )}
                                 </div>
+                            )
                         })
-                    :null
+                    : null
                 }
             </div>
         </div>

@@ -33,6 +33,22 @@ export const Layout = () => {
 
   const [searchInput, setSearchInput] = useState("");
 
+  const profileRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setShowProfil(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showProfil]);
+
   useEffect(() => {
     notifiedTimesRef.current = notifiedTimes;
   }, [notifiedTimes]);
@@ -232,29 +248,31 @@ export const Layout = () => {
               </span>
             </div>
           </div>
-          <div className="mt-2">
-            <button
-              onClick={() => {
-                setShowProfil(false);
-                navigate(`/user/profile/${userData._id}`);
-              }}
-              className="rounded-2xl font-semibold w-[100%] cursor-pointer border-2 border-blue-600 text-[#0A66C2] bg-gray-100 hover:bg-blue-50 duration-200 dark:bg-black dark:hover:bg-gray-950"
-            >
-              View profile
-            </button>
-          </div>
-          <div className="mt-2">
-            <hr className="text-gray-300"></hr>
-          </div>
-          <div className="mt-2 flex gap-2 flex-col">
-            <div className="flex gap-2 items-center py-1 rounded-md cursor-pointer px-2 hover:bg-gray-100 duration-200 dark:hover:bg-gray-900" onClick={logoutFromApp}>
-              <ArrowRightOnRectangleIcon
-                className="w-6 h-6 text-gray-700 dark:text-white"
-                strokeWidth={1.1}
-              />
-              <span className="text-gray-700 text-lg dark:text-white">
-                Sign out
-              </span>
+          <div ref={profileRef}>
+            <div className="mt-2">
+              <button
+                onClick={() => {
+                  setShowProfil(false);
+                  navigate(`/user/profile/${userData._id}`);
+                }}
+                className="rounded-2xl font-semibold w-[100%] cursor-pointer border-2 border-blue-600 text-[#0A66C2] bg-gray-100 hover:bg-blue-50 duration-200 dark:bg-black dark:hover:bg-gray-950"
+              >
+                View profile
+              </button>
+            </div>
+            <div className="mt-2">
+              <hr className="text-gray-300"></hr>
+            </div>
+            <div className="mt-2 flex gap-2 flex-col">
+              <div className="flex gap-2 items-center py-1 rounded-md cursor-pointer px-2 hover:bg-gray-100 duration-200 dark:hover:bg-gray-900" onClick={logoutFromApp}>
+                <ArrowRightOnRectangleIcon
+                  className="w-6 h-6 text-gray-700 dark:text-white"
+                  strokeWidth={1.1}
+                />
+                <span className="text-gray-700 text-lg dark:text-white">
+                  Sign out
+                </span>
+              </div>
             </div>
           </div>
         </div>

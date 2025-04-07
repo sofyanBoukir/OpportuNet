@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import {
-  BookmarkIcon,
   ChatBubbleBottomCenterIcon,
   EllipsisHorizontalIcon,
   FlagIcon,
@@ -12,14 +11,13 @@ import {
 } from "@heroicons/react/24/outline";
 import { PostModal } from "../modals/PostModal";
 import moment from "moment/moment";
-// import HeartIcon from '@heroicons/react/24/outline';
 import { HeartIcon as SolidHeart } from "@heroicons/react/16/solid";
 import { HeartIcon as OutlineHeart } from "@heroicons/react/24/outline";
 
 import { BookmarkIcon as SolidBookMark } from "@heroicons/react/16/solid";
 import { BookmarkIcon as OutlineBookMark } from "@heroicons/react/24/outline";
 import { FiSend } from "react-icons/fi";
-import { markPostAsSeen, toggleLike, toggleSave } from "../../services/post";
+import { toggleLike, toggleSave } from "../../services/post";
 import { AppSelector } from "../../selectors/AppSelector";
 import { Link } from "react-router-dom";
 import { copyText } from "../../functions/copyText";
